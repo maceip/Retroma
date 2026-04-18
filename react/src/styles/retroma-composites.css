@@ -1,0 +1,292 @@
+/*
+ * Retroma composites — structural CSS for the higher-level workspace
+ * scaffolding (RetromaApp, WorkspaceSplit, AppRibbon, FileExplorer, …).
+ *
+ * Theme.css handles the decorative styling (borders, shadows, tabs,
+ * colors). This file provides the layout + pieces that Obsidian itself
+ * would normally render, so the composites work standalone in a browser.
+ */
+
+/* ----- Size scale mirrors Obsidian's Atlas sizes. ----- */
+:root {
+  --size-2-1: 2px;
+  --size-2-2: 4px;
+  --size-2-3: 6px;
+  --size-4-1: 4px;
+  --size-4-2: 8px;
+  --size-4-3: 12px;
+  --size-4-4: 16px;
+  --size-4-5: 20px;
+  --size-4-6: 24px;
+  --size-4-8: 32px;
+  --size-4-12: 48px;
+  --size-4-16: 64px;
+
+  --icon-xs: 12px;
+  --icon-s: 14px;
+  --icon-m: 16px;
+  --icon-l: 20px;
+  --icon-xl: 24px;
+
+  --font-interface: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-text: "Inter", Georgia, "Times New Roman", serif;
+  --font-monospace: "Cascadia Code", "JetBrains Mono", "Fira Code", ui-monospace, Menlo, Monaco, Consolas, monospace;
+  --font-ui-small: 13px;
+  --font-ui-smaller: 12px;
+  --font-ui-medium: 14px;
+  --font-ui-larger: 16px;
+  --font-smaller: 0.875em;
+  --font-bold: 700;
+  --font-normal: 400;
+  --font-semibold: 600;
+  --font-medium: 500;
+
+  --interactive-accent: #2196f3;
+
+  --text-normal: #1f2328;
+  --text-muted: #57606a;
+  --text-faint: #8c959f;
+  --text-on-accent: #ffffff;
+
+  --tab-stacked-header-width: 160px;
+  --safe-area-inset-top: 0px;
+  --safe-area-inset-bottom: 0px;
+}
+
+.theme-dark {
+  --text-normal: #dadde1;
+  --text-muted: #a5abb4;
+  --text-faint: #6a7280;
+}
+
+/* ----- App shell grid ----- */
+.retroma-app {
+  font-family: var(--font-interface);
+  color: var(--text-normal);
+  background: var(--background-primary);
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 48px 280px 1fr 280px;
+  grid-template-rows: 1fr 24px;
+  grid-template-areas:
+    "ribbon left main right"
+    "status status status status";
+  gap: 0;
+}
+.retroma-app[data-left-collapsed="true"] {
+  grid-template-columns: 48px 0 1fr 280px;
+}
+.retroma-app[data-right-collapsed="true"] {
+  grid-template-columns: 48px 280px 1fr 0;
+}
+.retroma-app > [data-slot="app-ribbon"] { grid-area: ribbon; }
+.retroma-app > .workspace-split.mod-left-split { grid-area: left; }
+.retroma-app > .workspace-split.mod-root { grid-area: main; }
+.retroma-app > .workspace-split.mod-right-split { grid-area: right; }
+.retroma-app > .status-bar { grid-area: status; }
+
+.workspace-split {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--background-secondary);
+}
+
+.workspace-leaf {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.view-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 8px;
+}
+.view-content {
+  flex: 1;
+  overflow: auto;
+  padding: 8px;
+}
+
+/* ----- Ribbon ----- */
+.workspace-ribbon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  gap: 4px;
+  background: var(--ribbon-background);
+}
+.side-dock-ribbon-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+}
+.side-dock-ribbon-action {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.side-dock-ribbon-separator {
+  width: 60%;
+  height: 1px;
+  margin: 6px auto;
+  background: var(--hr-color);
+}
+
+/* ----- Tabs ----- */
+.workspace-tab-container {
+  display: flex;
+  align-items: center;
+  padding: 6px 4px 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.workspace-tab-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  min-width: 100px;
+  max-width: 220px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.workspace-tab-header-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+}
+.workspace-tab-header-inner-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.workspace-tab-header-close {
+  margin-left: auto;
+  display: inline-flex;
+  border-radius: var(--button-border-radius);
+  padding: 2px;
+  cursor: pointer;
+}
+
+/* ----- File explorer ----- */
+.nav-folder-title,
+.nav-file-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+  text-align: start;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  color: inherit;
+}
+.nav-folder-children {
+  margin-left: 16px;
+}
+.nav-folder.is-collapsed .nav-folder-children {
+  display: none;
+}
+.collapse-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-flex;
+  transition: transform 120ms ease;
+}
+.nav-folder.is-collapsed .collapse-icon {
+  transform: rotate(-90deg);
+}
+
+/* ----- Editor ----- */
+.markdown-source-view {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  font-family: var(--font-text);
+  background: var(--background-paper);
+  border-radius: var(--window-border-radius);
+  overflow: hidden;
+  min-height: 100%;
+}
+.cm-gutters {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 4px;
+  background: var(--background-secondary);
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  font-size: var(--font-ui-smaller);
+  user-select: none;
+  text-align: right;
+}
+.cm-gutterElement {
+  padding: 0 6px;
+  line-height: 1.6;
+}
+.cm-content {
+  padding: 12px 16px;
+  line-height: 1.6;
+}
+.cm-line {
+  min-height: 1.6em;
+}
+
+/* ----- Properties view ----- */
+.metadata-property {
+  display: grid;
+  grid-template-columns: var(--metadata-label-width, 8em) 1fr;
+  gap: var(--metadata-gap, 8px);
+  padding: 4px 8px;
+  align-items: center;
+}
+.metadata-property-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--metadata-label-text-color, var(--text-muted));
+  font-weight: var(--metadata-label-font-weight, 700);
+}
+.metadata-property-icon {
+  display: inline-flex;
+  width: var(--icon-s);
+  height: var(--icon-s);
+}
+.metadata-property-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* ----- Status bar ----- */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 12px;
+  font-size: var(--font-ui-smaller);
+  background: var(--status-bar-background);
+}
+.status-bar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+}
+.status-bar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

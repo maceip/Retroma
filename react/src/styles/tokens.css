@@ -1,0 +1,54 @@
+/*
+ * Retroma design tokens — extracted from theme.css.
+ *
+ * Import this file if you want the Retroma color / sizing variables
+ * without pulling in the full Obsidian selector surface. Every custom
+ * property here also exists in the full theme.
+ */
+
+:root {
+  /* Base hues */
+  --hue-red: #d32f2f;
+  --hue-orange: #ff9800;
+  --hue-yellow: #ffeb3b;
+  --hue-green: #4caf50;
+  --hue-blue: #2196f3;
+  --hue-indigo: #3f51b5;
+  --hue-violet: #9c27b0;
+  --hue-vermillion: #ff5722;
+  --hue-amber: #ffb300;
+  --hue-lime: #8bc34a;
+  --hue-teal: #009688;
+  --hue-purple: #673ab7;
+  --hue-magenta: #e91e63;
+  --hue-rose: #f48fb1;
+  --hue-cyan: #00bcd4;
+
+  /* Layout */
+  --header-height: 48px;
+  --window-border-radius: 12px;
+  --button-border-radius: 8px;
+  --border-width: 1px;
+
+  /* Rotations driving the accent algorithm */
+  --rotation-1: 30;
+  --rotation-2: 330;
+
+  /* Interactive accent (override this one to re-skin the whole UI) */
+  --interactive-accent: #2196f3;
+}
+
+.theme-light {
+  --lightness: 50%;
+  --chroma: 30%;
+  --chroma-folder: 30%;
+  --chroma-accent: 0.4;
+}
+
+.theme-dark {
+  --lightness: 70%;
+  --lightness-accent: 0.24;
+  --chroma: 20%;
+  --chroma-folder: 20%;
+  --chroma-accent: 0.3;
+}

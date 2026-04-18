@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@retroma/react": ["../src/index.ts"],
+      "@retroma/react/composites": ["../src/composites/index.ts"],
+      "@retroma/react/styles.css": ["../src/styles/retroma.css"],
+      "@retroma/react/components/*": ["../src/components/*"]
+    }
+  },
+  "include": ["./**/*.ts", "./**/*.tsx"]
+}

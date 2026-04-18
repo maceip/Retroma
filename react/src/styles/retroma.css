@@ -1,0 +1,23 @@
+/*
+ * Retroma React — full theme stylesheet.
+ *
+ * Imports the base COSS Tailwind v4 globals (primitives + tokens) and
+ * then layers the Retroma / Obsidian theme on top so:
+ *
+ *   1. All base components (Button, Dialog, Tooltip, …) pick up the
+ *      Retroma palette via the shared token names COSS already uses
+ *      (`--primary`, `--background`, `--border`, …).
+ *   2. The Retroma composites (AppRibbon, FileExplorer, …) and the
+ *      canonical `theme.css` that targets Obsidian's DOM class names
+ *      (`.workspace-tab-header`, `.nav-folder`, …) still apply.
+ *
+ * Import order matters: globals first (defines tokens + Tailwind layers),
+ * then the Retroma re-skin overrides, then the legacy theme.css.
+ *
+ *   import "@retroma/react/styles.css";
+ */
+
+@import "./globals.css";
+@import "./retroma-skin.css";
+@import "./retroma-composites.css";
+@import "../../../theme.css";
