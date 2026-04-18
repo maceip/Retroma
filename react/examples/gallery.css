@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@source "./**/*.{ts,tsx}";
-@source "../src/**/*.{ts,tsx}";
+@source "./";
+@source "../src/";
 
 .gallery {
   min-height: 100vh;

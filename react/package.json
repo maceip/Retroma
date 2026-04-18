@@ -23,7 +23,7 @@
     },
     "./styles.css": "./src/styles/retroma.css",
     "./globals.css": "./src/styles/globals.css",
-    "./theme.css": "../theme.css",
+    "./theme.css": "./src/styles/theme.css",
     "./tokens.css": "./src/styles/tokens.css",
     "./components/*": "./src/components/*.tsx",
     "./base-ui/*": "./src/base-ui/*.ts",
@@ -39,8 +39,11 @@
     "src/lib"
   ],
   "scripts": {
+    "dev": "vite",
     "build": "tsup",
-    "dev": "tsup --watch",
+    "build:gallery": "vite build",
+    "preview": "vite preview",
+    "watch": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -48,13 +51,17 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.17",
+    "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.1.17",
     "tsup": "^8.2.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vite": "^6.0.0"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
