@@ -1,0 +1,18 @@
+/*
+ * Retroma React — full theme stylesheet.
+ *
+ * This re-exports the canonical Retroma Obsidian theme so React components
+ * that render Obsidian-compatible class names (e.g. `workspace-tab-header`,
+ * `nav-folder`, `metadata-property`) get identical styling to the original
+ * Obsidian vault.
+ *
+ * Import once at your app root:
+ *
+ *   import "@retroma/react/styles.css";
+ *
+ * If you want only the design tokens (CSS custom properties) without the
+ * Obsidian-specific selectors, use `@retroma/react/tokens.css` instead.
+ */
+
+@import url("../../../theme.css");
+@import url("./base.css");
