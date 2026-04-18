@@ -1,8 +1,11 @@
 import { useState } from "react";
+
+/* ----- Tier 1 — base UI catalog (COSS-compatible) ------------------------- */
+import { Badge, Button } from "@retroma/react";
+
+/* ----- Tier 2 — Retroma composites --------------------------------------- */
 import {
   AppRibbon,
-  Badge,
-  Button,
   CommandPalette,
   EditorCanvas,
   Gutter,
@@ -24,7 +27,6 @@ import {
   TabList,
   TabTrigger,
   TextLine,
-  Tooltip,
   TreeFile,
   TreeFolder,
   TreeItemIcon,
@@ -33,12 +35,21 @@ import {
   WorkspaceLeaf,
   WorkspaceSplit,
   type Command,
-} from "@retroma/react";
+} from "@retroma/react/composites";
 
 import "@retroma/react/styles.css";
 
 const icon = (path: string) => (
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    viewBox="0 0 24 24"
+    width="16"
+    height="16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d={path} />
   </svg>
 );
@@ -86,7 +97,7 @@ export default function ExampleApp() {
         <RibbonSeparator />
         <RibbonAction
           label="Settings"
-          icon={icon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z")}
+          icon={icon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z")}
           onClick={() => setSettingsOpen(true)}
         />
       </AppRibbon>
@@ -102,12 +113,16 @@ export default function ExampleApp() {
               <TreeFile
                 id="welcome"
                 label={<TreeItemLabel>Welcome to Retroma.md</TreeItemLabel>}
-                icon={<TreeItemIcon>{icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}</TreeItemIcon>}
+                icon={
+                  <TreeItemIcon>
+                    {icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}
+                  </TreeItemIcon>
+                }
               />
               <TreeFile
                 id="todo"
                 label={<TreeItemLabel>todo.md</TreeItemLabel>}
-                adornment={<Badge color="blue">3</Badge>}
+                adornment={<Badge variant="secondary">3</Badge>}
               />
             </TreeFolder>
             <TreeFolder id="archive" label="Archive">
@@ -127,7 +142,9 @@ export default function ExampleApp() {
               onClose={() => {}}
             >
               <TabTrigger id="welcome" label="Welcome to Retroma.md">
-                <TabFavicon>{icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}</TabFavicon>
+                <TabFavicon>
+                  {icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}
+                </TabFavicon>
               </TabTrigger>
               <TabTrigger id="todo" label="todo.md">
                 <TabFavicon>{icon("M9 11l3 3 8-8")}</TabFavicon>
@@ -176,17 +193,13 @@ export default function ExampleApp() {
             <PropertyRow>
               <PropertyKey icon={<PropertyIcon type="tags" />} name="tags" />
               <PropertyValue type="multiselect">
-                <Badge color="purple">theme</Badge>
-                <Badge color="blue">react</Badge>
+                <Badge variant="secondary">theme</Badge>
+                <Badge variant="secondary">react</Badge>
               </PropertyValue>
             </PropertyRow>
           </PropertiesView>
           <div style={{ padding: 12 }}>
-            <Tooltip content="Opens the command palette">
-              <Button variant="primary" onClick={() => setPaletteOpen(true)}>
-                Open palette
-              </Button>
-            </Tooltip>
+            <Button onClick={() => setPaletteOpen(true)}>Open palette</Button>
           </div>
         </WorkspaceLeaf>
       </WorkspaceSplit>

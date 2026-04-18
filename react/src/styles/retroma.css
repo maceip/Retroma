@@ -1,18 +1,23 @@
 /*
  * Retroma React — full theme stylesheet.
  *
- * This re-exports the canonical Retroma Obsidian theme so React components
- * that render Obsidian-compatible class names (e.g. `workspace-tab-header`,
- * `nav-folder`, `metadata-property`) get identical styling to the original
- * Obsidian vault.
+ * Imports the base COSS Tailwind v4 globals (primitives + tokens) and
+ * then layers the Retroma / Obsidian theme on top so:
  *
- * Import once at your app root:
+ *   1. All base components (Button, Dialog, Tooltip, …) pick up the
+ *      Retroma palette via the shared token names COSS already uses
+ *      (`--primary`, `--background`, `--border`, …).
+ *   2. The Retroma composites (AppRibbon, FileExplorer, …) and the
+ *      canonical `theme.css` that targets Obsidian's DOM class names
+ *      (`.workspace-tab-header`, `.nav-folder`, …) still apply.
+ *
+ * Import order matters: globals first (defines tokens + Tailwind layers),
+ * then the Retroma re-skin overrides, then the legacy theme.css.
  *
  *   import "@retroma/react/styles.css";
- *
- * If you want only the design tokens (CSS custom properties) without the
- * Obsidian-specific selectors, use `@retroma/react/tokens.css` instead.
  */
 
-@import url("../../../theme.css");
-@import url("./base.css");
+@import "./globals.css";
+@import "./retroma-skin.css";
+@import "./retroma-composites.css";
+@import "../../../theme.css";

@@ -1,7 +1,7 @@
 {
   "name": "@retroma/react",
-  "version": "0.1.0",
-  "description": "Retroma Obsidian theme as a React component library.",
+  "version": "0.2.0",
+  "description": "Retroma design system — full base-UI catalog (COSS-compatible) plus Obsidian-style composites.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -16,13 +16,27 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./composites": {
+      "types": "./dist/composites/index.d.ts",
+      "import": "./dist/composites/index.js",
+      "require": "./dist/composites/index.cjs"
+    },
     "./styles.css": "./src/styles/retroma.css",
+    "./globals.css": "./src/styles/globals.css",
     "./theme.css": "../theme.css",
-    "./tokens.css": "./src/styles/tokens.css"
+    "./tokens.css": "./src/styles/tokens.css",
+    "./components/*": "./src/components/*.tsx",
+    "./base-ui/*": "./src/base-ui/*.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./lib/*": "./src/lib/*.ts"
   },
   "files": [
     "dist",
-    "src/styles"
+    "src/styles",
+    "src/components",
+    "src/base-ui",
+    "src/hooks",
+    "src/lib"
   ],
   "scripts": {
     "build": "tsup",
@@ -34,14 +48,21 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "clsx": "^2.1.1"
+    "@base-ui/react": "^1.4.0",
+    "@hugeicons/core-free-icons": "^2.0.0",
+    "@hugeicons/react": "^1.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.555.0",
+    "react-day-picker": "^9.0.0",
+    "tailwind-merge": "^3.4.0"
   }
 }

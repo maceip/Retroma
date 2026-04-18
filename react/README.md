@@ -1,206 +1,162 @@
 # @retroma/react
 
-The [Retroma](https://github.com/emarpiee/Retroma) Obsidian theme, refactored
-into a **composable React component library**. Every component renders the same
-DOM structure and class names that Retroma's `theme.css` already targets, so
-the look is pixel-identical to the original Obsidian experience — no re-writing
-of styles, no design drift.
+A two-tier React design system:
 
-> **Why?** Retroma was originally a single `theme.css` file plus Obsidian's
-> built-in DOM. This package decomposes the DOM into reusable React primitives
-> (`RibbonAction`, `TabTrigger`, `TreeFolder`, …) so you can build pages and
-> tools that reuse Retroma's aesthetic outside Obsidian.
+1. **Base UI** — a full catalog of 52 headless, accessible primitives with the
+   exact folder layout, file names, and public API of the
+   [COSS](https://github.com/cosscom/coss) UI package
+   (`packages/ui/src/components/*.tsx`). Each primitive is built on
+   [`@base-ui/react`](https://base-ui.com) and styled with Tailwind v4.
+2. **Retroma composites** — higher-level workspace pieces (`AppRibbon`,
+   `FileExplorer`, `WorkspaceTabs`, `EditorCanvas`, `PropertiesView`,
+   `CommandPalette`, `StatusBar`, …) that reproduce the Retroma / Obsidian
+   visual language by composing the base primitives.
 
 ## Install
 
 ```bash
-npm install @retroma/react clsx react react-dom
+npm install @retroma/react react react-dom
 ```
 
 ## Use
 
 ```tsx
-import "@retroma/react/styles.css";
+/* Tier 1 — base UI (same API as @coss/ui) */
+import { Button, Tooltip, TooltipPopup, TooltipTrigger } from "@retroma/react";
 
+/* Tier 2 — Retroma composites */
 import {
   RetromaApp, WorkspaceSplit, WorkspaceLeaf,
   AppRibbon, RibbonAction, RibbonSeparator,
-  TreeRoot, TreeFolder, TreeFile, TreeItemIcon, TreeItemLabel,
-  TabList, TabTrigger, TabFavicon,
+  TabList, TabTrigger,
   EditorCanvas, Gutter, GutterElement, TextLine, SyntaxToken,
-  PropertiesView, PropertyRow, PropertyKey, PropertyValue, PropertyIcon,
-  CommandPalette, SettingsModal,
   StatusBar, StatusGroup, StatusItem,
-  Button, Badge, Tooltip,
-} from "@retroma/react";
+} from "@retroma/react/composites";
 
-export function App() {
-  return (
-    <RetromaApp theme="light">
-      <AppRibbon>
-        <RibbonAction label="Open file" icon={<FileIcon />} />
-        <RibbonSeparator />
-        <RibbonAction label="Settings" icon={<GearIcon />} />
-      </AppRibbon>
-
-      <WorkspaceSplit side="left">
-        <WorkspaceLeaf header={<span>Files</span>}>
-          <TreeRoot defaultOpen={["notes"]}>
-            <TreeFolder id="notes" label="Notes">
-              <TreeFile id="todo" label={<TreeItemLabel>todo.md</TreeItemLabel>} />
-            </TreeFolder>
-          </TreeRoot>
-        </WorkspaceLeaf>
-      </WorkspaceSplit>
-
-      <WorkspaceSplit side="main">
-        <WorkspaceLeaf
-          header={
-            <TabList defaultActiveId="todo">
-              <TabTrigger id="todo" label="todo.md">
-                <TabFavicon />
-              </TabTrigger>
-            </TabList>
-          }
-        >
-          <EditorCanvas>
-            <Gutter>
-              <GutterElement>1</GutterElement>
-              <GutterElement>2</GutterElement>
-            </Gutter>
-            <div className="cm-scroller">
-              <div className="cm-content">
-                <TextLine headerLevel={1}>
-                  <SyntaxToken kind="strong">Today</SyntaxToken>
-                </TextLine>
-                <TextLine>
-                  Try <SyntaxToken kind="link">[[Retroma]]</SyntaxToken>
-                  &nbsp;with <SyntaxToken kind="hashtag" tag="todo">#todo</SyntaxToken>
-                </TextLine>
-              </div>
-            </div>
-          </EditorCanvas>
-        </WorkspaceLeaf>
-      </WorkspaceSplit>
-
-      <WorkspaceSplit side="right">
-        <WorkspaceLeaf header={<span>Properties</span>}>
-          <PropertiesView>
-            <PropertyRow>
-              <PropertyKey icon={<PropertyIcon type="text" />} name="title" />
-              <PropertyValue type="text">Retroma</PropertyValue>
-            </PropertyRow>
-          </PropertiesView>
-        </WorkspaceLeaf>
-      </WorkspaceSplit>
-
-      <StatusBar>
-        <StatusItem>117 words</StatusItem>
-        <StatusGroup align="end">
-          <StatusItem>Markdown</StatusItem>
-          <StatusItem>UTF-8</StatusItem>
-        </StatusGroup>
-      </StatusBar>
-    </RetromaApp>
-  );
-}
+import "@retroma/react/styles.css";
 ```
 
-## Component map
+## Folder layout
 
-The library decomposes Retroma into the following surfaces. Each component
-renders the Obsidian class names the theme already targets.
+Mirrors COSS's `packages/ui/src/` one-to-one, plus a `composites/` folder for
+the Retroma layer:
 
-### Layout
+```
+react/src/
+├── base-ui/            # base-ui helpers (csp, direction, merge-props, use-render)
+├── components/         # ← 52 primitives, one file per component
+│   ├── accordion.tsx
+│   ├── alert.tsx
+│   ├── alert-dialog.tsx
+│   ├── autocomplete.tsx
+│   ├── avatar.tsx
+│   ├── badge.tsx
+│   ├── breadcrumb.tsx
+│   ├── button.tsx
+│   ├── calendar.tsx
+│   ├── card.tsx
+│   ├── checkbox.tsx
+│   ├── checkbox-group.tsx
+│   ├── collapsible.tsx
+│   ├── combobox.tsx
+│   ├── command.tsx
+│   ├── dialog.tsx
+│   ├── drawer.tsx
+│   ├── empty.tsx
+│   ├── field.tsx
+│   ├── fieldset.tsx
+│   ├── form.tsx
+│   ├── frame.tsx
+│   ├── group.tsx
+│   ├── input.tsx
+│   ├── input-group.tsx
+│   ├── kbd.tsx
+│   ├── label.tsx
+│   ├── menu.tsx
+│   ├── meter.tsx
+│   ├── number-field.tsx
+│   ├── otp-field.tsx
+│   ├── pagination.tsx
+│   ├── popover.tsx
+│   ├── preview-card.tsx
+│   ├── progress.tsx
+│   ├── radio-group.tsx
+│   ├── scroll-area.tsx
+│   ├── select.tsx
+│   ├── separator.tsx
+│   ├── sheet.tsx
+│   ├── sidebar.tsx
+│   ├── skeleton.tsx
+│   ├── slider.tsx
+│   ├── spinner.tsx
+│   ├── switch.tsx
+│   ├── table.tsx
+│   ├── tabs.tsx
+│   ├── textarea.tsx
+│   ├── toast.tsx
+│   ├── toggle.tsx
+│   ├── toggle-group.tsx
+│   ├── toolbar.tsx
+│   └── tooltip.tsx
+├── composites/         # Retroma-specific arrangements
+│   ├── ribbon/         # AppRibbon, RibbonAction, RibbonSeparator, RibbonTooltip
+│   ├── file-explorer/  # TreeRoot, TreeFolder, TreeFile, TreeItemIcon, TreeItemLabel
+│   ├── workspace-tabs/ # TabList, TabTrigger, TabCloseButton, TabFavicon
+│   ├── editor/         # EditorCanvas, Gutter, GutterElement, TextLine, SyntaxToken
+│   ├── properties-view/# PropertyRow, PropertyKey, PropertyValue, PropertyIcon
+│   ├── modal/          # ModalOverlay, ModalContent, CommandPalette, SettingsModal
+│   ├── status-bar/     # StatusBar, StatusGroup, StatusItem
+│   └── layout/         # RetromaApp, WorkspaceSplit, WorkspaceLeaf
+├── hooks/              # use-copy-to-clipboard, use-media-query
+├── lib/
+│   └── utils.ts        # cn()
+└── styles/
+    ├── globals.css             # Tailwind v4 + COSS tokens (from COSS upstream)
+    ├── retroma-skin.css        # Re-maps COSS tokens onto Retroma palette
+    ├── retroma-composites.css  # Layout for the composites tier
+    ├── retroma.css             # ← public entry. imports all of the above.
+    └── tokens.css              # Retroma-only design tokens
+```
 
-| Component        | Class names applied                   |
-| ---------------- | ------------------------------------- |
-| `RetromaApp`     | `.app-container .workspace`           |
-| `WorkspaceSplit` | `.workspace-split .mod-left-split` …  |
-| `WorkspaceLeaf`  | `.workspace-leaf` + `.view-header`    |
+## Import subpaths
 
-### AppRibbon
+| Subpath                     | What you get                                |
+| --------------------------- | ------------------------------------------- |
+| `@retroma/react`            | **Tier 1** — the entire base UI catalog.    |
+| `@retroma/react/composites` | **Tier 2** — Retroma composites.            |
+| `@retroma/react/styles.css` | Complete stylesheet (skin + theme + layout). |
+| `@retroma/react/globals.css`| Just the COSS globals (tokens + Tailwind).  |
+| `@retroma/react/theme.css`  | The raw Retroma Obsidian theme.             |
+| `@retroma/react/tokens.css` | Retroma palette only, no selectors.         |
+| `@retroma/react/components/<name>` | Cherry-pick a single base primitive.  |
+| `@retroma/react/hooks/<name>`      | Individual hook file.                 |
 
-| Component         | Class names                                    |
-| ----------------- | ---------------------------------------------- |
-| `AppRibbon`       | `.workspace-ribbon .side-dock-ribbon`          |
-| `RibbonAction`    | `.side-dock-ribbon-action .clickable-icon`     |
-| `RibbonTooltip`   | (re-export of shared `Tooltip`)                |
-| `RibbonSeparator` | `.side-dock-ribbon-separator`                  |
+## Retroma composites
 
-### FileExplorer
+Every composite renders the same Obsidian class names `theme.css` already
+targets, so the visual output is byte-identical to the upstream Retroma vault:
 
-| Component       | Class names                                     |
-| --------------- | ----------------------------------------------- |
-| `TreeRoot`      | `.nav-files-container`                          |
-| `TreeFolder`    | `.nav-folder` (+ `.is-collapsed` / `.mod-root`) |
-| `TreeFile`      | `.nav-file`                                     |
-| `TreeItemIcon`  | `.nav-file-icon`                                |
-| `TreeItemLabel` | `.nav-file-title-content`                       |
+| Composite family | Exposed parts                                                 |
+| ---------------- | ------------------------------------------------------------- |
+| Layout           | `RetromaApp`, `WorkspaceSplit`, `WorkspaceLeaf`               |
+| App Ribbon       | `AppRibbon`, `RibbonAction`, `RibbonSeparator`, `RibbonTooltip` |
+| File Explorer    | `TreeRoot`, `TreeFolder`, `TreeFile`, `TreeItemIcon`, `TreeItemLabel` |
+| Workspace Tabs   | `TabList`, `TabTrigger`, `TabCloseButton`, `TabFavicon`       |
+| Editor           | `EditorCanvas`, `Gutter`, `GutterElement`, `TextLine`, `SyntaxToken` |
+| Properties View  | `PropertiesView`, `PropertyRow`, `PropertyKey`, `PropertyValue`, `PropertyIcon` |
+| Modal family     | `ModalOverlay`, `ModalContent`, `CommandPalette`, `CommandInput`, `CommandList`, `CommandItem`, `SettingsModal` |
+| Status Bar       | `StatusBar`, `StatusGroup`, `StatusItem`                      |
 
-### WorkspaceTabs
+## Licensing
 
-| Component        | Class names                        |
-| ---------------- | ---------------------------------- |
-| `TabList`        | `.workspace-tab-container`         |
-| `TabTrigger`     | `.workspace-tab-header`            |
-| `TabCloseButton` | `.workspace-tab-header-close`      |
-| `TabFavicon`     | `.workspace-tab-header-inner-icon` |
-
-### Editor
-
-| Component       | Class names                                       |
-| --------------- | ------------------------------------------------- |
-| `EditorCanvas`  | `.markdown-source-view .cm-s-obsidian`            |
-| `Gutter`        | `.cm-gutters .cm-gutter .cm-lineNumbers`          |
-| `GutterElement` | `.cm-gutterElement`                               |
-| `TextLine`      | `.cm-line` (`HyperMD-header-N`, `cm-active`, …)   |
-| `SyntaxToken`   | `.cm-strong`, `.cm-em`, `.cm-link`, `.cm-hashtag` |
-
-### PropertiesView
-
-| Component       | Class names              |
-| --------------- | ------------------------ |
-| `PropertyRow`   | `.metadata-property`     |
-| `PropertyKey`   | `.metadata-property-key` |
-| `PropertyValue` | `.metadata-property-value` |
-| `PropertyIcon`  | `.metadata-property-icon` |
-
-### Modal / CommandPalette / SettingsModal
-
-| Component        | Class names                 |
-| ---------------- | --------------------------- |
-| `ModalOverlay`   | `.modal-bg + .modal-container` |
-| `ModalContent`   | `.modal` / `.prompt`        |
-| `CommandInput`   | `.prompt-input-container`   |
-| `CommandList`    | `.prompt-results`           |
-| `CommandItem`    | `.suggestion-item`          |
-| `SettingsModal`  | `.modal` variant of the above |
-
-### StatusBar
-
-| Component     | Class names         |
-| ------------- | ------------------- |
-| `StatusBar`   | `.status-bar`       |
-| `StatusGroup` | `.status-bar-group` |
-| `StatusItem`  | `.status-bar-item`  |
-
-### Shared atomic ("Shadcn") layer
-
-| Component    | Notes                                              |
-| ------------ | -------------------------------------------------- |
-| `Button`     | Supports `primary`, `ghost`, `warning`, `outline`. |
-| `Input`      | Baseline styled input.                             |
-| `Textarea`   | Baseline styled textarea.                          |
-| `ScrollArea` | Vertical/horizontal scroll container.              |
-| `Badge`      | Tag / pill with accent color prop.                 |
-| `Separator`  | Horizontal or vertical divider.                    |
-| `Tooltip`    | Hover/focus tooltip with side + delay.             |
+The base-UI catalog is copied from COSS and remains under
+**AGPL-3.0-or-later**. The Retroma composites, theme CSS, tokens, build
+configuration, and docs are **MIT**-licensed. See [`NOTICE.md`](./NOTICE.md)
+for the full rundown and `LICENSE-COSS` for the AGPL text.
 
 ## Theming
 
-`@retroma/react/styles.css` imports the original `theme.css` from this repo
-plus a small base reset. Override the driving accent with one CSS variable:
+Override the one driving accent and the entire palette re-flows:
 
 ```css
 :root {
@@ -208,13 +164,6 @@ plus a small base reset. Override the driving accent with one CSS variable:
 }
 ```
 
-That single variable powers the oklch algorithm for the entire palette.
-
-### Tokens-only mode
-
-If you want just the Retroma tokens (no Obsidian-specific selectors), import
-`@retroma/react/tokens.css` instead and style your own primitives.
-
-## License
-
-MIT — same as the upstream Retroma theme.
+Because the Retroma tokens map onto the same COSS token names (`--primary`,
+`--background`, `--ring`, …), changing this single variable propagates through
+every base primitive (Button, Card, Dialog, Tabs, …) _and_ every composite.

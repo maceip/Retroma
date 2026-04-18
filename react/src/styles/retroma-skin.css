@@ -1,0 +1,111 @@
+/*
+ * Retroma skin — re-maps the tokens COSS components use
+ * (`--primary`, `--background`, `--border`, `--ring`, …) onto the
+ * Retroma / Obsidian custom properties (`--interactive-accent`,
+ * `--background-primary`, `--outline-color`, …) so every primitive in
+ * the base-UI catalog automatically adopts the retro visual language.
+ */
+
+:root {
+  /* Retroma base palette (kept in sync with theme.css). */
+  --retroma-accent: var(--interactive-accent, #2196f3);
+  --retroma-paper: var(--background-paper, #f4f6fa);
+  --retroma-primary-bg: var(--background-primary, #e6ecf3);
+  --retroma-secondary-bg: var(--background-secondary, #d6e0eb);
+  --retroma-tertiary-bg: var(--background-tertiary, #a8b5c1);
+  --retroma-text: var(--text-normal, #1f2328);
+  --retroma-text-muted: var(--text-muted, #57606a);
+  --retroma-text-faint: var(--text-faint, #8c959f);
+  --retroma-outline: var(--outline-color, rgba(0, 0, 0, 0.2));
+}
+
+/* ==== Light tokens ======================================================= */
+:root,
+.theme-light {
+  --background: var(--retroma-paper);
+  --foreground: var(--retroma-text);
+  --card: var(--retroma-paper);
+  --card-foreground: var(--retroma-text);
+  --popover: var(--retroma-paper);
+  --popover-foreground: var(--retroma-text);
+  --primary: var(--retroma-accent);
+  --primary-foreground: var(--text-on-accent, #ffffff);
+  --secondary: var(--retroma-secondary-bg);
+  --secondary-foreground: var(--retroma-text);
+  --muted: var(--retroma-secondary-bg);
+  --muted-foreground: var(--retroma-text-muted);
+  --accent: var(--retroma-secondary-bg);
+  --accent-foreground: var(--retroma-text);
+  --destructive: var(--color-red, #d32f2f);
+  --destructive-foreground: #ffffff;
+  --border: var(--retroma-outline);
+  --input: var(--retroma-outline);
+  --ring: var(--retroma-accent);
+
+  --sidebar: var(--retroma-secondary-bg);
+  --sidebar-foreground: var(--retroma-text);
+  --sidebar-primary: var(--retroma-accent);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--retroma-primary-bg);
+  --sidebar-accent-foreground: var(--retroma-text);
+  --sidebar-border: var(--retroma-outline);
+  --sidebar-ring: var(--retroma-accent);
+
+  --code: var(--code-background, rgba(0, 0, 0, 0.04));
+  --code-foreground: var(--retroma-text);
+  --code-highlight: rgba(0, 0, 0, 0.06);
+
+  --radius: var(--window-border-radius, 12px);
+}
+
+/* ==== Dark tokens ======================================================== */
+.theme-dark,
+.dark {
+  --background: var(--retroma-paper);
+  --foreground: var(--retroma-text);
+  --card: var(--retroma-paper);
+  --card-foreground: var(--retroma-text);
+  --popover: var(--retroma-paper);
+  --popover-foreground: var(--retroma-text);
+  --primary: var(--retroma-accent);
+  --primary-foreground: #ffffff;
+  --secondary: var(--retroma-secondary-bg);
+  --secondary-foreground: var(--retroma-text);
+  --muted: var(--retroma-secondary-bg);
+  --muted-foreground: var(--retroma-text-muted);
+  --accent: var(--retroma-secondary-bg);
+  --accent-foreground: var(--retroma-text);
+  --destructive: var(--color-red, #ff6b6b);
+  --destructive-foreground: #ffffff;
+  --border: var(--retroma-outline);
+  --input: var(--retroma-outline);
+  --ring: var(--retroma-accent);
+
+  --sidebar: var(--retroma-secondary-bg);
+  --sidebar-foreground: var(--retroma-text);
+  --sidebar-primary: var(--retroma-accent);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--retroma-primary-bg);
+  --sidebar-accent-foreground: var(--retroma-text);
+  --sidebar-border: var(--retroma-outline);
+  --sidebar-ring: var(--retroma-accent);
+}
+
+/* Give every base-UI Button, Card, Dialog, … the Retroma chunky
+ * bevel / groove look by default. Consumers can override with Tailwind
+ * utility classes on the component. */
+[data-slot="button"]:not([data-slot="button"][data-variant="ghost"]) {
+  border-radius: var(--button-border-radius, 8px);
+  box-shadow: var(--box-shadow-sm, none);
+}
+[data-slot="button"][data-pressed],
+[data-slot="button"]:active {
+  box-shadow: var(--box-shadow-active-sm, none);
+}
+
+[data-slot="card"],
+[data-slot="dialog-content"],
+[data-slot="popover-content"],
+[data-slot="menu-popup"] {
+  border-radius: var(--window-border-radius, 12px);
+}
