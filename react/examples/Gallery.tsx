@@ -48,6 +48,7 @@ import { Tooltip, TooltipTrigger, TooltipPopup, TooltipProvider } from "@retroma
 import {
   AppRibbon, RibbonAction, RibbonSeparator,
   TreeRoot, TreeFolder, TreeFile, TreeItemIcon, TreeItemLabel,
+  FileExplorerToolbar, FileExplorerToolbarAction,
   TabList, TabTrigger, TabFavicon,
   EditorCanvas, Gutter, GutterElement, TextLine, SyntaxToken,
   PropertiesView, PropertyRow, PropertyKey, PropertyValue, PropertyIcon,
@@ -131,10 +132,29 @@ export default function Gallery() {
 
             <WorkspaceSplit side="left">
               <WorkspaceLeaf header={<span>Files</span>}>
-                <TreeRoot defaultOpen={["notes"]} selectedId={selectedFile} onSelect={setSelectedFile}>
+                <FileExplorerToolbar>
+                  <FileExplorerToolbarAction label="New note" icon={icon("M12 5v14M5 12h14")} />
+                  <FileExplorerToolbarAction label="New folder" icon={icon("M3 7h5l2 2h11v11H3z")} />
+                  <FileExplorerToolbarAction label="Sort" icon={icon("M3 6h18M6 12h12M10 18h4")} />
+                  <FileExplorerToolbarAction label="Collapse all" icon={icon("M7 11l5-5 5 5M7 17l5-5 5 5")} />
+                  <FileExplorerToolbarAction label="Change view" icon={icon("M3 6h18M3 12h18M3 18h18")} />
+                </FileExplorerToolbar>
+                <TreeRoot defaultOpen={["notes", "atlas", "cards"]} selectedId={selectedFile} onSelect={setSelectedFile}>
+                  <TreeFolder id="encounters" label="00-encounters">
+                    <TreeFile id="e1" label={<TreeItemLabel>dragons.md</TreeItemLabel>} />
+                  </TreeFolder>
+                  <TreeFolder id="atlas" label="01-atlas">
+                    <TreeFile id="a1" label={<TreeItemLabel>regions.md</TreeItemLabel>} />
+                  </TreeFolder>
+                  <TreeFolder id="calendar" label="02-calendar">
+                    <TreeFile id="c1" label={<TreeItemLabel>events.md</TreeItemLabel>} />
+                  </TreeFolder>
+                  <TreeFolder id="cards" label="03-cards">
+                    <TreeFile id="d1" label={<TreeItemLabel>deck.md</TreeItemLabel>} adornment={<Badge variant="secondary">3</Badge>} />
+                  </TreeFolder>
                   <TreeFolder id="notes" label="Notes">
                     <TreeFile id="welcome" label={<TreeItemLabel>Welcome.md</TreeItemLabel>} icon={<TreeItemIcon>{icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}</TreeItemIcon>} />
-                    <TreeFile id="todo" label={<TreeItemLabel>todo.md</TreeItemLabel>} adornment={<Badge variant="secondary">3</Badge>} />
+                    <TreeFile id="todo" label={<TreeItemLabel>todo.md</TreeItemLabel>} adornment={<Badge variant="secondary">2</Badge>} />
                   </TreeFolder>
                   <TreeFolder id="archive" label="Archive">
                     <TreeFile id="old" label={<TreeItemLabel>old-note.md</TreeItemLabel>} />
@@ -159,15 +179,32 @@ export default function Gallery() {
               >
                 <EditorCanvas>
                   <Gutter>
-                    {Array.from({ length: 6 }).map((_, i) => (
+                    {Array.from({ length: 10 }).map((_, i) => (
                       <GutterElement key={i}>{i + 1}</GutterElement>
                     ))}
                   </Gutter>
                   <div className="cm-scroller" style={{ overflow: "auto" }}>
                     <div className="cm-content">
-                      <TextLine headerLevel={1}><SyntaxToken kind="strong">Welcome to Retroma</SyntaxToken></TextLine>
-                      <TextLine>A tribute to the past with an eye toward the future.</TextLine>
-                      <TextLine>Check <SyntaxToken kind="link">[[todo]]</SyntaxToken> or tag <SyntaxToken kind="hashtag" tag="todo">#todo</SyntaxToken>.</TextLine>
+                      <TextLine headerLevel={1}>Obsidian Markdown</TextLine>
+                      <TextLine>
+                        <SyntaxToken kind="hashtag" tag="tags">#tags</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="work">#work</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="home">#home</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="test">#test</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="todo">#todo</SyntaxToken>
+                      </TextLine>
+                      <TextLine>
+                        <SyntaxToken kind="hashtag" tag="low">#low</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="medium">#medium</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="obsidian">#obsidian</SyntaxToken>
+                      </TextLine>
+                      <TextLine headerLevel={2}>Retroma Theme</TextLine>
+                      <TextLine>
+                        A tribute to the past with an eye toward the future —
+                        try <SyntaxToken kind="strong">bold</SyntaxToken>,{" "}
+                        <SyntaxToken kind="em">italic</SyntaxToken>, and{" "}
+                        <SyntaxToken kind="link">[[wiki-links]]</SyntaxToken>.
+                      </TextLine>
                       <TextLine><SyntaxToken kind="code">npm install @retroma/react</SyntaxToken></TextLine>
                     </div>
                   </div>

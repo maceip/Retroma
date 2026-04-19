@@ -47,17 +47,20 @@
 
 /* A mini Retroma workspace embedded in a row. */
 .lab-workspace {
-  height: 480px;
+  height: 640px;
   display: grid;
-  grid-template-columns: 48px minmax(180px, 220px) minmax(0, 1fr) minmax(220px, 280px);
-  grid-template-rows: minmax(0, 1fr) 24px;
+  grid-template-columns: 64px minmax(240px, 300px) minmax(0, 1fr) minmax(260px, 320px);
+  grid-template-rows: minmax(0, 1fr) 28px;
   grid-template-areas:
     "ribbon left main right"
     "status status status status";
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  border: 1px solid var(--retroma-outline, rgba(0, 0, 0, 0.08));
+  border: 4px ridge var(--background-primary, #d6e0eb);
   background: var(--background-primary, #e6ecf3);
+  gap: 6px;
+  padding: 6px;
+  box-shadow: 0 2px 12px oklch(from black l c h / 15%);
 }
 .lab-workspace .metadata-property {
   grid-template-columns: 5em 1fr;
