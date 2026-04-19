@@ -44,6 +44,25 @@ import { Toggle } from "@retroma/react/components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@retroma/react/components/toggle-group";
 import { Tooltip, TooltipTrigger, TooltipPopup, TooltipProvider } from "@retroma/react/components/tooltip";
 
+/* ---- Retroma composites (Tier 2) ---------------------------------------- */
+import {
+  AppRibbon, RibbonAction, RibbonSeparator,
+  TreeRoot, TreeFolder, TreeFile, TreeItemIcon, TreeItemLabel,
+  TabList, TabTrigger, TabFavicon,
+  EditorCanvas, Gutter, GutterElement, TextLine, SyntaxToken,
+  PropertiesView, PropertyRow, PropertyKey, PropertyValue, PropertyIcon,
+  StatusBar, StatusGroup, StatusItem,
+  CommandPalette, SettingsModal,
+  WorkspaceSplit, WorkspaceLeaf,
+  type Command,
+} from "@retroma/react/composites";
+
+const icon = (path: string) => (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d={path} />
+  </svg>
+);
+
 function Row({ name, file, children }: { name: string; file: string; children: ReactNode }) {
   return (
     <div className="gallery-row" data-component={name}>
@@ -68,18 +87,212 @@ export default function Gallery() {
   const [toggle, setToggle] = useState(false);
   const [toggleGroup, setToggleGroup] = useState<string[]>(["bold"]);
   const [textareaVal, setTextareaVal] = useState("Retroma is cozy.");
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("welcome");
+  const [selectedFile, setSelectedFile] = useState("welcome");
+
+  const commands: Command[] = [
+    { id: "toggle-theme", label: "Toggle theme", hotkey: "⌘T" },
+    { id: "open-settings", label: "Open settings", hotkey: "⌘,", onSelect: () => setSettingsOpen(true) },
+    { id: "new-note", label: "Create new note", hotkey: "⌘N" },
+  ];
 
   return (
     <TooltipProvider>
-      <div className="gallery">
+      <div className="gallery theme-light">
         <div className="gallery-header">
           <h1>Retroma UI — Component Gallery</h1>
           <p>
-            One row per primitive. Base layer is sourced from the COSS
-            catalog and skinned with Retroma tokens.
+            Top section: the Retroma composites wired up as a mini workspace.
+            Below: one row per base UI primitive (COSS catalog, skinned).
           </p>
         </div>
 
+        {/* ================================================================ */}
+        {/*   RETROMA COMPOSITES — "The Lab"                                 */}
+        {/* ================================================================ */}
+        <div className="gallery-section-title">Retroma composites — the lab</div>
+        <div className="gallery-lab">
+
+          <div className="lab-workspace theme-light is-focused">
+            <AppRibbon>
+              <RibbonAction label="Search" icon={icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3")} onClick={() => setPaletteOpen(true)} />
+              <RibbonAction label="New note" icon={icon("M12 5v14M5 12h14")} />
+              <RibbonSeparator />
+              <RibbonAction label="Settings" icon={icon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z")} onClick={() => setSettingsOpen(true)} />
+            </AppRibbon>
+
+            <WorkspaceSplit side="left">
+              <WorkspaceLeaf header={<span>Files</span>}>
+                <TreeRoot defaultOpen={["notes"]} selectedId={selectedFile} onSelect={setSelectedFile}>
+                  <TreeFolder id="notes" label="Notes">
+                    <TreeFile id="welcome" label={<TreeItemLabel>Welcome.md</TreeItemLabel>} icon={<TreeItemIcon>{icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}</TreeItemIcon>} />
+                    <TreeFile id="todo" label={<TreeItemLabel>todo.md</TreeItemLabel>} adornment={<Badge variant="secondary">3</Badge>} />
+                  </TreeFolder>
+                  <TreeFolder id="archive" label="Archive">
+                    <TreeFile id="old" label={<TreeItemLabel>old-note.md</TreeItemLabel>} />
+                  </TreeFolder>
+                </TreeRoot>
+              </WorkspaceLeaf>
+            </WorkspaceSplit>
+
+            <WorkspaceSplit side="main">
+              <WorkspaceLeaf
+                active
+                header={
+                  <TabList activeId={activeTab} onActiveIdChange={setActiveTab}>
+                    <TabTrigger id="welcome" label="Welcome.md">
+                      <TabFavicon>{icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}</TabFavicon>
+                    </TabTrigger>
+                    <TabTrigger id="todo" label="todo.md">
+                      <TabFavicon>{icon("M9 11l3 3 8-8")}</TabFavicon>
+                    </TabTrigger>
+                  </TabList>
+                }
+              >
+                <EditorCanvas>
+                  <Gutter>
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <GutterElement key={i}>{i + 1}</GutterElement>
+                    ))}
+                  </Gutter>
+                  <div className="cm-scroller" style={{ overflow: "auto" }}>
+                    <div className="cm-content">
+                      <TextLine headerLevel={1}><SyntaxToken kind="strong">Welcome to Retroma</SyntaxToken></TextLine>
+                      <TextLine>A tribute to the past with an eye toward the future.</TextLine>
+                      <TextLine>Check <SyntaxToken kind="link">[[todo]]</SyntaxToken> or tag <SyntaxToken kind="hashtag" tag="todo">#todo</SyntaxToken>.</TextLine>
+                      <TextLine><SyntaxToken kind="code">npm install @retroma/react</SyntaxToken></TextLine>
+                    </div>
+                  </div>
+                </EditorCanvas>
+              </WorkspaceLeaf>
+            </WorkspaceSplit>
+
+            <WorkspaceSplit side="right">
+              <WorkspaceLeaf header={<span>Properties</span>}>
+                <PropertiesView>
+                  <PropertyRow>
+                    <PropertyKey icon={<PropertyIcon type="text" />} name="title" />
+                    <PropertyValue type="text">Welcome to Retroma</PropertyValue>
+                  </PropertyRow>
+                  <PropertyRow>
+                    <PropertyKey icon={<PropertyIcon type="date" />} name="created" />
+                    <PropertyValue type="date">2025-10-01</PropertyValue>
+                  </PropertyRow>
+                  <PropertyRow>
+                    <PropertyKey icon={<PropertyIcon type="tags" />} name="tags" />
+                    <PropertyValue type="multiselect">
+                      <Badge variant="secondary">theme</Badge>
+                      <Badge variant="secondary">react</Badge>
+                    </PropertyValue>
+                  </PropertyRow>
+                </PropertiesView>
+              </WorkspaceLeaf>
+            </WorkspaceSplit>
+
+            <StatusBar>
+              <StatusItem>117 words</StatusItem>
+              <StatusItem>Line 1, Col 1</StatusItem>
+              <StatusGroup align="end">
+                <StatusItem>Markdown</StatusItem>
+                <StatusItem>UTF-8</StatusItem>
+              </StatusGroup>
+            </StatusBar>
+          </div>
+
+          <Row name="AppRibbon" file="composites/ribbon/">
+            <AppRibbon collapsed={false}>
+              <RibbonAction label="Search" icon={icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3")} />
+              <RibbonAction label="New" icon={icon("M12 5v14M5 12h14")} />
+              <RibbonSeparator />
+              <RibbonAction label="Settings" icon={icon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z")} />
+            </AppRibbon>
+          </Row>
+
+          <Row name="FileExplorer" file="composites/file-explorer/">
+            <div style={{ width: 220 }}>
+              <TreeRoot defaultOpen={["demo"]}>
+                <TreeFolder id="demo" label="demo">
+                  <TreeFile id="a" label={<TreeItemLabel>notes.md</TreeItemLabel>} />
+                  <TreeFile id="b" label={<TreeItemLabel>todo.md</TreeItemLabel>} adornment={<Badge variant="secondary">2</Badge>} />
+                </TreeFolder>
+                <TreeFolder id="archive" label="archive">
+                  <TreeFile id="c" label={<TreeItemLabel>old.md</TreeItemLabel>} />
+                </TreeFolder>
+              </TreeRoot>
+            </div>
+          </Row>
+
+          <Row name="WorkspaceTabs" file="composites/workspace-tabs/">
+            <TabList defaultActiveId="welcome">
+              <TabTrigger id="welcome" label="Welcome.md" />
+              <TabTrigger id="todo" label="todo.md" />
+              <TabTrigger id="archive" label="archive.md" />
+            </TabList>
+          </Row>
+
+          <Row name="EditorCanvas + Gutter + SyntaxToken" file="composites/editor/">
+            <div style={{ width: 520, height: 160 }}>
+              <EditorCanvas>
+                <Gutter>
+                  {[1, 2, 3, 4, 5].map((n) => <GutterElement key={n}>{n}</GutterElement>)}
+                </Gutter>
+                <div className="cm-content">
+                  <TextLine headerLevel={1}><SyntaxToken kind="strong">Hello</SyntaxToken></TextLine>
+                  <TextLine>Write in <SyntaxToken kind="em">style</SyntaxToken>.</TextLine>
+                  <TextLine>Link: <SyntaxToken kind="link">[[Retroma]]</SyntaxToken></TextLine>
+                  <TextLine>Tag: <SyntaxToken kind="hashtag" tag="todo">#todo</SyntaxToken></TextLine>
+                </div>
+              </EditorCanvas>
+            </div>
+          </Row>
+
+          <Row name="PropertiesView" file="composites/properties-view/">
+            <div style={{ width: 360 }}>
+              <PropertiesView>
+                <PropertyRow>
+                  <PropertyKey icon={<PropertyIcon type="text" />} name="title" />
+                  <PropertyValue type="text">Retroma</PropertyValue>
+                </PropertyRow>
+                <PropertyRow>
+                  <PropertyKey icon={<PropertyIcon type="tags" />} name="tags" />
+                  <PropertyValue type="multiselect">
+                    <Badge variant="secondary">obsidian</Badge>
+                    <Badge variant="secondary">react</Badge>
+                  </PropertyValue>
+                </PropertyRow>
+              </PropertiesView>
+            </div>
+          </Row>
+
+          <Row name="CommandPalette" file="composites/modal/">
+            <Button onClick={() => setPaletteOpen(true)}>Open command palette</Button>
+          </Row>
+
+          <Row name="SettingsModal" file="composites/modal/">
+            <Button variant="outline" onClick={() => setSettingsOpen(true)}>Open settings</Button>
+          </Row>
+
+          <Row name="StatusBar" file="composites/status-bar/">
+            <div style={{ width: 520 }}>
+              <StatusBar>
+                <StatusItem>117 words</StatusItem>
+                <StatusItem>Line 1, Col 1</StatusItem>
+                <StatusGroup align="end">
+                  <StatusItem>Markdown</StatusItem>
+                  <StatusItem>UTF-8</StatusItem>
+                </StatusGroup>
+              </StatusBar>
+            </div>
+          </Row>
+
+        </div>
+
+        {/* ================================================================ */}
+        {/*   BASE UI PRIMITIVES                                             */}
+        {/* ================================================================ */}
+        <div className="gallery-section-title">Base UI — 52 primitives</div>
         <div className="gallery-list">
 
           <Row name="Accordion" file="components/accordion.tsx">
@@ -487,6 +700,14 @@ export default function Gallery() {
           </Row>
 
         </div>
+
+        {/* Mounted modals used by the Lab section. */}
+        <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} commands={commands} />
+        <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} title="Settings">
+          <div style={{ padding: 16 }}>
+            <p>Theme settings, plugin management, etc. would live here.</p>
+          </div>
+        </SettingsModal>
       </div>
     </TooltipProvider>
   );
