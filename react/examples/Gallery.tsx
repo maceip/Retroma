@@ -64,7 +64,22 @@ import {
   KanbanBoard, KanbanColumn, KanbanCard,
   NotePreviewCard,
   BasesView, BasesRow, BasesCell, BasesHeader,
+  /* --- Custom retroma composites --- */
+  TerminalFrame, TerminalLine, TerminalCursor,
+  ChatContainer, ChatMessageList, ChatMessage, ChatCopyButton,
+  ChatInput, ChatModelPicker, ChatSendButton,
+  CodeLine, CodeBlock, CodeToken,
+  RepoCard,
+  CommitGraph, generateDemoCommits,
+  FileTree, FileTreeFolder, FileTreeFile,
+  Carousel, CarouselViewport, CarouselItem, CarouselButton,
+  InfiniteSlider,
+  TextScramble,
+  TextShimmer,
+  AnimatedNumber,
+  SlidingNumber,
   type Command,
+  type ChatModel,
 } from "@retroma/react/composites";
 
 const icon = (path: string) => (
@@ -496,6 +511,173 @@ export default function Gallery() {
         </div>
 
         {/* ================================================================ */}
+        {/*   CUSTOM RETROMA COMPOSITES                                      */}
+        {/* ================================================================ */}
+        <div className="gallery-section-title">Custom retroma composites</div>
+        <div className="gallery-lab">
+
+          <Row name="TerminalFrame" file="composites/terminal-frame/">
+            <TerminalFrame title="retroma ~ zsh" tone="mint">
+              <TerminalLine prompt="$" kind="cmd">npm run dev</TerminalLine>
+              <TerminalLine kind="out">VITE v6.4.2  ready in 748 ms</TerminalLine>
+              <TerminalLine kind="ok">➜  Local:   http://127.0.0.1:5173/</TerminalLine>
+              <TerminalLine kind="warn">[warn] Some chunks are larger than 500 kB</TerminalLine>
+              <TerminalLine prompt="$" kind="cmd">
+                git push<TerminalCursor />
+              </TerminalLine>
+            </TerminalFrame>
+          </Row>
+
+          <Row name="Chat" file="composites/chat/">
+            <ShowcaseChat />
+          </Row>
+
+          <Row name="CodeLine / CodeBlock" file="composites/code-line/">
+            <div style={{ width: 560 }}>
+              <CodeBlock
+                title="src/composites/editor/Editor.tsx"
+                actions={<ChatCopyButton value={`export const EditorCanvas = ...`}>Copy</ChatCopyButton>}
+              >
+                <CodeLine number={1}>
+                  <CodeToken kind="keyword">import</CodeToken>{" "}
+                  {"{ "}<CodeToken kind="prop">forwardRef</CodeToken>{" }"}{" "}
+                  <CodeToken kind="keyword">from</CodeToken>{" "}
+                  <CodeToken kind="string">"react"</CodeToken>;
+                </CodeLine>
+                <CodeLine number={2}></CodeLine>
+                <CodeLine number={3}>
+                  <CodeToken kind="comment">// retroma editor canvas</CodeToken>
+                </CodeLine>
+                <CodeLine number={4} kind="remove">
+                  <CodeToken kind="keyword">const</CodeToken>{" "}
+                  <CodeToken kind="fn">Canvas</CodeToken> ={" "}
+                  <CodeToken kind="string">"old"</CodeToken>;
+                </CodeLine>
+                <CodeLine number={5} kind="add">
+                  <CodeToken kind="keyword">const</CodeToken>{" "}
+                  <CodeToken kind="fn">EditorCanvas</CodeToken> ={" "}
+                  <CodeToken kind="string">"new"</CodeToken>;
+                </CodeLine>
+                <CodeLine number={6} kind="highlight">
+                  <CodeToken kind="keyword">export default</CodeToken>{" "}
+                  <CodeToken kind="fn">EditorCanvas</CodeToken>;
+                </CodeLine>
+              </CodeBlock>
+            </div>
+          </Row>
+
+          <Row name="RepoCard" file="composites/repo-card/">
+            <RepoCard
+              owner="emarpiee"
+              name="Retroma"
+              href="#"
+              description="A tribute to the past with an eye toward the future — an Obsidian theme + React design system."
+              stars={1245}
+              forks={82}
+              issues={14}
+              language="CSS"
+              languageColor="#563d7c"
+              visibility="public"
+              topics={["obsidian", "theme", "react", "tailwind"]}
+            />
+          </Row>
+
+          <Row name="CommitGraph" file="composites/commit-graph/">
+            <div style={{ width: 720 }}>
+              <CommitGraph days={generateDemoCommits(26, 13)} />
+            </div>
+          </Row>
+
+          <Row name="FileTree" file="composites/file-tree/">
+            <FileTree defaultOpen={["src", "composites"]}>
+              <FileTreeFolder id="src" name="src">
+                <FileTreeFolder id="composites" name="composites">
+                  <FileTreeFile id="ribbon" name="ribbon/" icon="📂" />
+                  <FileTreeFile id="chat" name="chat/" icon="📂" />
+                  <FileTreeFile id="editor" name="editor/" icon="📂" />
+                </FileTreeFolder>
+                <FileTreeFile id="index" name="index.ts" adornment="1.2 kb" />
+              </FileTreeFolder>
+              <FileTreeFile id="pkg" name="package.json" adornment="3.4 kb" />
+              <FileTreeFile id="readme" name="README.md" adornment="2.1 kb" />
+            </FileTree>
+          </Row>
+
+          <Row name="Carousel" file="composites/carousel/">
+            <div style={{ width: 560 }}>
+              <Carousel>
+                <CarouselButton direction="prev" />
+                <CarouselViewport>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <CarouselItem key={i}>
+                      <div
+                        style={{
+                          width: 160,
+                          height: 100,
+                          borderRadius: 12,
+                          border: "1px solid var(--outline-color)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: 700,
+                          background: `oklch(from var(--base-accent) l c calc(h + ${i * 40}) / 18%)`,
+                        }}
+                      >
+                        Slide {i + 1}
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselViewport>
+                <CarouselButton direction="next" />
+              </Carousel>
+            </div>
+          </Row>
+
+          <Row name="InfiniteSlider" file="composites/infinite-slider/">
+            <div style={{ width: 560 }}>
+              <InfiniteSlider duration={24}>
+                {["Retroma", "React", "Obsidian", "Tailwind", "Vite", "OKLCH", "Typescript"].map(
+                  (t) => (
+                    <span
+                      key={t}
+                      style={{
+                        padding: "8px 16px",
+                        borderRadius: 999,
+                        border: "1px solid var(--outline-color)",
+                        background: "var(--background-paper)",
+                        fontWeight: 700,
+                        fontFamily: "var(--font-monospace)",
+                      }}
+                    >
+                      {t}
+                    </span>
+                  ),
+                )}
+              </InfiniteSlider>
+            </div>
+          </Row>
+
+          <Row name="TextScramble" file="composites/text-scramble/">
+            <ShowcaseScramble />
+          </Row>
+
+          <Row name="TextShimmer" file="composites/text-shimmer/">
+            <TextShimmer style={{ fontSize: 24, fontWeight: 700 }}>
+              thinking about the palette…
+            </TextShimmer>
+          </Row>
+
+          <Row name="AnimatedNumber" file="composites/animated-number/">
+            <ShowcaseAnimatedNumber />
+          </Row>
+
+          <Row name="SlidingNumber" file="composites/sliding-number/">
+            <ShowcaseSlidingNumber />
+          </Row>
+
+        </div>
+
+        {/* ================================================================ */}
         {/*   BASE UI PRIMITIVES                                             */}
         {/* ================================================================ */}
         <div className="gallery-section-title">Base UI — 52 primitives</div>
@@ -917,5 +1099,133 @@ export default function Gallery() {
       </div>
     </TooltipProvider>
     </ThemeTunerProvider>
+  );
+}
+
+/* ------------------------------------------------------------------------ */
+/*  Local showcase helpers                                                  */
+/* ------------------------------------------------------------------------ */
+
+function ShowcaseChat() {
+  const models: ChatModel[] = [
+    { id: "sonnet", label: "Claude Sonnet 4.6" },
+    { id: "opus", label: "Claude Opus 4.7" },
+    { id: "haiku", label: "Claude Haiku 4.5" },
+  ];
+  const [model, setModel] = useState("sonnet");
+  const [messages, setMessages] = useState<
+    Array<{ id: string; role: "user" | "assistant" | "system"; content: string; t: string }>
+  >([
+    { id: "s", role: "system", content: "Retroma Chat — a cozy place to think.", t: "13:02" },
+    { id: "u1", role: "user", content: "How do I override the accent?", t: "13:03" },
+    { id: "a1", role: "assistant", content: "Set `--interactive-accent` on body — the oklch algorithm derives the whole palette.", t: "13:03" },
+  ]);
+  const send = (value: string) => {
+    const userMsg = {
+      id: String(Date.now()),
+      role: "user" as const,
+      content: value,
+      t: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+    setMessages((ms) => [...ms, userMsg]);
+    setTimeout(() => {
+      setMessages((ms) => [
+        ...ms,
+        {
+          id: String(Date.now() + 1),
+          role: "assistant",
+          content: `Thought about "${value}". (${models.find((m) => m.id === model)?.label})`,
+          t: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ]);
+    }, 500);
+  };
+  return (
+    <div style={{ width: 560 }}>
+      <ChatContainer>
+        <ChatMessageList>
+          {messages.map((m) => (
+            <ChatMessage
+              key={m.id}
+              role={m.role}
+              avatar={m.role === "assistant" ? "🤖" : m.role === "user" ? "🧑" : "ⓘ"}
+              sender={m.role === "assistant" ? models.find((x) => x.id === model)?.label : m.role}
+              timestamp={m.t}
+              actions={
+                m.role !== "system" && (
+                  <ChatCopyButton value={m.content}>Copy</ChatCopyButton>
+                )
+              }
+            >
+              {m.content}
+            </ChatMessage>
+          ))}
+        </ChatMessageList>
+        <ChatInput
+          onSend={send}
+          leading={
+            <ChatModelPicker
+              models={models}
+              value={model}
+              onChange={setModel}
+              label="Model"
+            />
+          }
+          trailing={<ChatSendButton>Send ↵</ChatSendButton>}
+        />
+      </ChatContainer>
+    </div>
+  );
+}
+
+function ShowcaseScramble() {
+  const phrases = ["Retroma React", "One color, many vibes", "Ship your vault", "Obsidian, better"];
+  const [i, setI] = useState(0);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontSize: 22, fontWeight: 700 }}>
+        <TextScramble trigger={i}>{phrases[i]}</TextScramble>
+      </span>
+      <Button variant="outline" size="sm" onClick={() => setI((n) => (n + 1) % phrases.length)}>
+        Scramble
+      </Button>
+    </div>
+  );
+}
+
+function ShowcaseAnimatedNumber() {
+  const [n, setN] = useState(1_245);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontSize: 28 }}>
+        <AnimatedNumber value={n} />
+      </span>
+      <Button variant="outline" size="sm" onClick={() => setN((v) => v + Math.floor(Math.random() * 5000))}>
+        +random
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => setN(0)}>
+        reset
+      </Button>
+    </div>
+  );
+}
+
+function ShowcaseSlidingNumber() {
+  const [n, setN] = useState(42);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontSize: 36 }}>
+        <SlidingNumber value={n} minDigits={4} />
+      </span>
+      <Button variant="outline" size="sm" onClick={() => setN((v) => v + 1)}>
+        +1
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => setN((v) => v + 37)}>
+        +37
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => setN(0)}>
+        reset
+      </Button>
+    </div>
   );
 }

@@ -22,3 +22,17 @@ export * from "./task-card";
 export * from "./kanban";
 export * from "./note-preview";
 export * from "./bases-view";
+
+/* Custom retroma composites */
+export * from "./terminal-frame";
+export * from "./chat";
+export * from "./code-line";
+export * from "./repo-card";
+export * from "./commit-graph";
+export * from "./file-tree";
+export * from "./carousel";
+export * from "./infinite-slider";
+export * from "./text-scramble";
+export * from "./text-shimmer";
+export * from "./animated-number";
+export * from "./sliding-number";
