@@ -5,14 +5,19 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const src = (p: string) => path.resolve(here, "..", "src", p);
+const src = (p: string) => path.resolve(here, "src", p);
 
 export default defineConfig({
+  /* index.html lives in examples/; src/ and node_modules/ sit alongside this
+   * config so the whole project is one self-contained package. */
+  root: path.resolve(here, "examples"),
   plugins: [react(), tailwind()],
   resolve: {
     /* Order matters — put the more specific aliases before the catch-all. */
     alias: [
       { find: /^@retroma\/react\/styles\.css$/, replacement: src("styles/retroma.css") },
+      { find: /^@retroma\/react\/globals\.css$/, replacement: src("styles/globals.css") },
+      { find: /^@retroma\/react\/tokens\.css$/, replacement: src("styles/tokens.css") },
       { find: /^@retroma\/react\/composites$/, replacement: src("composites/index.ts") },
       { find: /^@retroma\/react\/components\/(.*)$/, replacement: src("components/$1.tsx") },
       { find: /^@retroma\/react\/base-ui\/(.*)$/, replacement: src("base-ui/$1.ts") },
@@ -26,5 +31,13 @@ export default defineConfig({
     port: 5173,
     strictPort: false,
     host: "127.0.0.1",
+    fs: {
+      /* Allow Vite to serve files from src/ (one level up from root). */
+      allow: [path.resolve(here)],
+    },
+  },
+  build: {
+    outDir: path.resolve(here, "dist-gallery"),
+    emptyOutDir: true,
   },
 });

@@ -17,9 +17,22 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
-    "rootDir": "src"
+    "noEmit": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@retroma/react": ["./src/index.ts"],
+      "@retroma/react/composites": ["./src/composites/index.ts"],
+      "@retroma/react/components/*": ["./src/components/*"],
+      "@retroma/react/base-ui/*": ["./src/base-ui/*"],
+      "@retroma/react/hooks/*": ["./src/hooks/*"],
+      "@retroma/react/lib/*": ["./src/lib/*"],
+      "@retroma/react/styles.css": ["./src/styles/retroma.css"],
+      "@retroma/react/globals.css": ["./src/styles/globals.css"],
+      "@retroma/react/tokens.css": ["./src/styles/tokens.css"],
+      "@retroma/react/theme.css": ["./src/styles/theme.css"]
+    }
   },
-  "include": ["src"],
-  "exclude": ["dist", "node_modules", "examples"]
+  "include": ["src", "examples"],
+  "exclude": ["dist", "dist-gallery", "node_modules"]
 }
