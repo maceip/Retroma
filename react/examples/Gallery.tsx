@@ -111,7 +111,7 @@ export default function Gallery() {
   return (
     <ThemeTunerProvider>
     <TooltipProvider>
-      <div className="gallery theme-light">
+      <div className="gallery">
         <div className="gallery-header">
           <h1>Retroma UI — Component Gallery</h1>
           <p>
@@ -130,7 +130,7 @@ export default function Gallery() {
             <ThemeTunerPanel />
           </Row>
 
-          <div className="lab-workspace theme-light is-focused">
+          <div className="lab-workspace is-focused">
             <AppRibbon>
               <RibbonAction label="Search" icon={icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3")} onClick={() => setPaletteOpen(true)} />
               <RibbonAction label="New note" icon={icon("M12 5v14M5 12h14")} />

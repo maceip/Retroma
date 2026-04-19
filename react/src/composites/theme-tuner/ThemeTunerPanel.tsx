@@ -74,28 +74,52 @@ const schemeRotations: Record<
 };
 
 const radiusValues: Record<RetromaRadiusSize, { window: string; button: string }> = {
-  sharp: { window: "4px", button: "2px" },
+  sharp: { window: "2px", button: "2px" },
   large: { window: "12px", button: "8px" },
 };
 
 const variantTokens: Record<
   RetromaVariant,
-  { ridge: string; groove: string; shadow: string }
+  {
+    ridge: string;
+    groove: string;
+    shadow: string;
+    shadowSm: string;
+    shadowActive: string;
+    shadowActiveSm: string;
+    borderWidth: string;
+  }
 > = {
   groovy: {
     ridge: "4px ridge var(--background-primary)",
     groove: "4px groove var(--background-primary-alt)",
-    shadow: "var(--box-shadow)",
+    shadow:
+      "inset -2px -2px oklch(from var(--background-secondary) 50% c h), inset 2px 2px oklch(from var(--background-secondary) 100% c h)",
+    shadowSm:
+      "inset -1px -1px oklch(from var(--background-secondary) 50% c h), inset 1px 1px oklch(from var(--background-secondary) 100% c h)",
+    shadowActive:
+      "inset 2px 2px oklch(from var(--background-secondary) 50% c h), inset -2px -2px oklch(from var(--background-secondary) 100% c h)",
+    shadowActiveSm:
+      "inset 1px 1px oklch(from var(--background-secondary) 50% c h), inset -1px -1px oklch(from var(--background-secondary) 100% c h)",
+    borderWidth: "1px",
   },
   simple: {
     ridge: "2px solid var(--background-primary)",
     groove: "2px solid var(--background-primary-alt)",
     shadow: "0 1px 2px oklch(from black l c h / 20%)",
+    shadowSm: "0 1px 1px oklch(from black l c h / 14%)",
+    shadowActive: "inset 0 1px 2px oklch(from black l c h / 20%)",
+    shadowActiveSm: "inset 0 1px 1px oklch(from black l c h / 14%)",
+    borderWidth: "1px",
   },
   minimalist: {
     ridge: "1px solid var(--outline-color)",
     groove: "1px solid var(--outline-color)",
     shadow: "none",
+    shadowSm: "none",
+    shadowActive: "none",
+    shadowActiveSm: "none",
+    borderWidth: "1px",
   },
 };
 
@@ -104,23 +128,40 @@ const variantTokens: Record<
 /* -------------------------------------------------------------------------- */
 
 function applyTheme(host: HTMLElement, state: RetromaThemeState) {
+  /* theme.css's `.theme-light { ... }` and `.theme-dark { ... }` blocks
+   * hold the palette tokens. Toggle both the host (e.g. <body>) and
+   * <html> so descendants match regardless of which ancestor is queried. */
   host.classList.toggle("theme-light", state.mode === "light");
   host.classList.toggle("theme-dark", state.mode === "dark");
+  if (typeof document !== "undefined" && host !== document.documentElement) {
+    document.documentElement.classList.toggle("theme-light", state.mode === "light");
+    document.documentElement.classList.toggle("theme-dark", state.mode === "dark");
+  }
   host.dataset.retromaVariant = state.variant;
 
-  const { window: w, button: b } = radiusValues[state.windowRadius];
-  const btn = radiusValues[state.buttonRadius].button;
+  const windowR = radiusValues[state.windowRadius].window;
+  const buttonR = radiusValues[state.buttonRadius].button;
+
+  /* Inline style on `host` (body) beats theme.css's
+   * `body { --rotation-1: 30 }` rule so the tuner actually drives things. */
   host.style.setProperty("--interactive-accent", state.accent);
   host.style.setProperty("--rotation-1", String(state.minorRotation));
   host.style.setProperty("--rotation-2", String(state.mainRotation));
-  host.style.setProperty("--window-border-radius", w);
-  host.style.setProperty("--button-border-radius", btn === b ? btn : btn);
+  host.style.setProperty("--window-border-radius", windowR);
+  host.style.setProperty("--button-border-radius", buttonR);
+  host.style.setProperty("--radius-m", buttonR);
+  host.style.setProperty("--radius-s", buttonR);
+  host.style.setProperty("--radius-xs", buttonR);
   host.style.setProperty("--lightness-accent", String(state.darkLightness));
 
   const v = variantTokens[state.variant];
   host.style.setProperty("--border-ridge", v.ridge);
   host.style.setProperty("--border-groove", v.groove);
   host.style.setProperty("--box-shadow", v.shadow);
+  host.style.setProperty("--box-shadow-sm", v.shadowSm);
+  host.style.setProperty("--box-shadow-active", v.shadowActive);
+  host.style.setProperty("--box-shadow-active-sm", v.shadowActiveSm);
+  host.style.setProperty("--border-width", v.borderWidth);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -142,8 +183,10 @@ function useTuner() {
 }
 
 export interface ThemeTunerProviderProps {
-  /** Element receiving the CSS variable overrides. Defaults to `document.documentElement`. */
-  target?: "document" | "parent";
+  /** Where to write the CSS custom properties. Defaults to `document.body`
+   * because theme.css declares its `--rotation-*` / `--base-accent` tokens
+   * at `body`, and inline style on body wins the cascade. */
+  target?: "body" | "document" | HTMLElement | null;
   /** Initial state. */
   initial?: Partial<RetromaThemeState>;
   /** Controlled state. */
@@ -154,7 +197,7 @@ export interface ThemeTunerProviderProps {
 }
 
 export function ThemeTunerProvider({
-  target = "document",
+  target = "body",
   initial,
   value: controlled,
   onValueChange,
@@ -178,8 +221,13 @@ export function ThemeTunerProvider({
   );
 
   useEffect(() => {
-    if (target !== "document" || typeof document === "undefined") return;
-    applyTheme(document.documentElement, state);
+    if (typeof document === "undefined") return;
+    let host: HTMLElement | null = null;
+    if (target === "body") host = document.body;
+    else if (target === "document") host = document.documentElement;
+    else if (target instanceof HTMLElement) host = target;
+    if (!host) return;
+    applyTheme(host, state);
   }, [state, target]);
 
   const ctx = useMemo(() => ({ state, setState }), [state, setState]);

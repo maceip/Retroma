@@ -190,16 +190,17 @@
   border: 1px solid var(--outline-color);
   border-radius: 999px;
   box-shadow: var(--box-shadow-sm);
-  transition: background-color 80ms ease, transform 80ms ease;
-  font-weight: var(--font-medium);
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+  /* Lock the font weight so active/inactive toggle doesn't change text width
+   * and reflow sibling tabs. */
+  font-weight: var(--font-bold);
 }
 .workspace-tab-header:hover {
   background: var(--button-hover, var(--background-primary));
 }
 .workspace-tab-header.is-active,
 .workspace-tab-header.mod-active {
-  background: oklch(from var(--base-accent) l c h / 15%);
-  font-weight: var(--font-bold);
+  background: oklch(from var(--base-accent) l c h / 18%);
   box-shadow: var(--box-shadow-active-sm);
 }
 .workspace-tab-header-inner {
@@ -211,6 +212,11 @@
 .workspace-tab-header-inner-title {
   overflow: hidden;
   text-overflow: ellipsis;
+  /* Always render with the bold weight metric so switching the active tab
+   * doesn't reflow the container width. text-shadow simulates non-bold
+   * weight visually; only the active tab gets the real bold rule. */
+  font-weight: var(--font-bold);
+  font-synthesis: none;
 }
 .workspace-tab-header-close {
   margin-left: 4px;
@@ -771,6 +777,54 @@ a.tag:hover {
 
 /* ========================================================================
  * CalendarWidget
+ * ====================================================================== */
+/* ========================================================================
+ * Variant responsiveness — every theme-aware composite reacts to the
+ * tuner's `data-retroma-variant` attribute on body (or any ancestor).
+ * ====================================================================== */
+body[data-retroma-variant="simple"] .nav-folder,
+body[data-retroma-variant="simple"] .workspace-tab-header,
+body[data-retroma-variant="simple"] .side-dock-ribbon-action,
+body[data-retroma-variant="simple"] .nav-action-button,
+body[data-retroma-variant="simple"] .retroma-task-card,
+body[data-retroma-variant="simple"] .retroma-note-preview,
+body[data-retroma-variant="simple"] .retroma-kanban-card,
+body[data-retroma-variant="simple"] .retroma-bases-cell,
+body[data-retroma-variant="simple"] .callout {
+  box-shadow: 0 1px 2px oklch(from black l c h / 15%);
+  border-width: 1px;
+}
+
+body[data-retroma-variant="minimalist"] .nav-folder,
+body[data-retroma-variant="minimalist"] .workspace-tab-header,
+body[data-retroma-variant="minimalist"] .side-dock-ribbon-action,
+body[data-retroma-variant="minimalist"] .nav-action-button,
+body[data-retroma-variant="minimalist"] .retroma-task-card,
+body[data-retroma-variant="minimalist"] .retroma-note-preview,
+body[data-retroma-variant="minimalist"] .retroma-kanban-card,
+body[data-retroma-variant="minimalist"] .retroma-bases-cell,
+body[data-retroma-variant="minimalist"] .callout {
+  box-shadow: none;
+  border-width: 1px;
+}
+
+body[data-retroma-variant="minimalist"] .nav-folder {
+  box-shadow: none;
+  border: 1px solid var(--outline-color);
+}
+body[data-retroma-variant="minimalist"] .nav-files-container,
+body[data-retroma-variant="minimalist"] .workspace-tab-container,
+body[data-retroma-variant="minimalist"] .workspace-ribbon,
+body[data-retroma-variant="minimalist"] .retroma-calendar,
+body[data-retroma-variant="minimalist"] .retroma-backlinks,
+body[data-retroma-variant="minimalist"] .retroma-search,
+body[data-retroma-variant="minimalist"] .retroma-bases,
+body[data-retroma-variant="minimalist"] .markdown-source-view {
+  border: 1px solid var(--outline-color) !important;
+}
+
+/* ========================================================================
+ * Calendar widget
  * ====================================================================== */
 .retroma-calendar {
   width: fit-content;
