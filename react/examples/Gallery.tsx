@@ -56,6 +56,14 @@ import {
   CommandPalette, SettingsModal,
   WorkspaceSplit, WorkspaceLeaf,
   ThemeTunerProvider, ThemeTunerPanel,
+  Callout, CalloutTitle, CalloutContent,
+  CalendarWidget,
+  BacklinksPanel, BacklinkItem, BacklinksSection,
+  SearchPanel, SearchInput, SearchToolbar, SearchResult,
+  TaskCard, TaskItem,
+  KanbanBoard, KanbanColumn, KanbanCard,
+  NotePreviewCard,
+  BasesView, BasesRow, BasesCell, BasesHeader,
   type Command,
 } from "@retroma/react/composites";
 
@@ -327,6 +335,161 @@ export default function Gallery() {
                   <StatusItem>UTF-8</StatusItem>
                 </StatusGroup>
               </StatusBar>
+            </div>
+          </Row>
+
+          <Row name="Callout" file="composites/callout/">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, width: 520 }}>
+              <Callout variant="note">
+                <CalloutTitle>Note</CalloutTitle>
+                <CalloutContent>Leave a reminder for future you.</CalloutContent>
+              </Callout>
+              <Callout variant="warning">
+                <CalloutTitle>Warning</CalloutTitle>
+                <CalloutContent>Here be dragons.</CalloutContent>
+              </Callout>
+              <Callout variant="success">
+                <CalloutTitle>Success</CalloutTitle>
+                <CalloutContent>Tests passing, vibes intact.</CalloutContent>
+              </Callout>
+              <Callout variant="quote">
+                <CalloutTitle>Quote</CalloutTitle>
+                <CalloutContent>"Choose one color to rule them all."</CalloutContent>
+              </Callout>
+            </div>
+          </Row>
+
+          <Row name="CalendarWidget" file="composites/calendar-widget/">
+            <CalendarWidget />
+          </Row>
+
+          <Row name="BacklinksPanel" file="composites/backlinks/">
+            <div style={{ width: 320 }}>
+              <BacklinksPanel title="Links" count={6}>
+                <BacklinkItem>mark-ryan-perez</BacklinkItem>
+                <BacklinkItem snippet="The way light moves through a prism…">
+                  color-and-light-introduction
+                </BacklinkItem>
+                <BacklinkItem>how-we-perceive-colors</BacklinkItem>
+                <BacklinkItem>Color — Elements of Art</BacklinkItem>
+                <BacklinkItem>psychophysical-color</BacklinkItem>
+                <BacklinkItem>perceived-color</BacklinkItem>
+                <BacklinksSection title="Unlinked mentions">
+                  <BacklinkItem snippet="At its most basic, color is a property of light.">
+                    color-introduction
+                  </BacklinkItem>
+                </BacklinksSection>
+              </BacklinksPanel>
+            </div>
+          </Row>
+
+          <Row name="SearchPanel" file="composites/search-panel/">
+            <div style={{ width: 320 }}>
+              <SearchPanel>
+                <SearchInput
+                  placeholder="Search…"
+                  defaultValue="tag:Art"
+                  adornments={<><span title="Match case">Aa</span><span>⚙</span></>}
+                />
+                <SearchToolbar count="131 results" controls={<span>↕</span>} />
+                <SearchResult title="art-is-a-process" meta={<span>tags: Zettels, Art</span>} />
+                <SearchResult title="art-is-an-expression-of-humanness" meta={<span>tags: Zettels, Art</span>} />
+                <SearchResult title="art-is-communication" meta={<span>tags: Zettels, Art</span>} />
+              </SearchPanel>
+            </div>
+          </Row>
+
+          <Row name="TaskCard" file="composites/task-card/">
+            <TaskCard
+              title="Tasks"
+              controls={<span>⋯</span>}
+              footer={
+                <>
+                  <Badge variant="secondary">#inbox</Badge>
+                  <Badge variant="secondary">#today</Badge>
+                </>
+              }
+            >
+              <TaskItem>Port Retroma theme to React</TaskItem>
+              <TaskItem checked>Build Tier-1 base UI</TaskItem>
+              <TaskItem>Ship Kanban + Bases composites</TaskItem>
+              <TaskItem>Docs and playground</TaskItem>
+            </TaskCard>
+          </Row>
+
+          <Row name="KanbanBoard" file="composites/kanban/">
+            <div style={{ width: 720 }}>
+              <KanbanBoard>
+                <KanbanColumn title="Backlog" count={3}>
+                  <KanbanCard title="Dark mode lightness tuner" footer={<Badge variant="secondary">#theme</Badge>}>
+                    Slider from 0.1 to 0.4.
+                  </KanbanCard>
+                  <KanbanCard title="Typography variants">
+                    Cascadia / W95 / Excalifont.
+                  </KanbanCard>
+                  <KanbanCard title="Mobile polish" />
+                </KanbanColumn>
+                <KanbanColumn title="In Progress" count={2}>
+                  <KanbanCard title="Color Scheme Tuner" footer={<><Badge variant="secondary">#theme</Badge><Badge variant="secondary">#today</Badge></>}>
+                    Analogous / Split / Mono / Triadic.
+                  </KanbanCard>
+                  <KanbanCard title="Retro composites" />
+                </KanbanColumn>
+                <KanbanColumn title="Done" count={5}>
+                  <KanbanCard title="Gallery page">Base + Lab sections</KanbanCard>
+                  <KanbanCard title="Base UI skinning" />
+                </KanbanColumn>
+              </KanbanBoard>
+            </div>
+          </Row>
+
+          <Row name="NotePreviewCard" file="composites/note-preview/">
+            <NotePreviewCard
+              path="07-zettels / what-is-color"
+              controls={<><span>⤓</span><span>↗</span></>}
+              title="What is Color?"
+              image={
+                <div
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcB77, #4d96ff, #9b5de5)",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
+              }
+            >
+              At its most basic, <strong>color is a property of light</strong>.
+              Light is made up of different wavelengths, each corresponding to a
+              different color. When light hits an object, some wavelengths are
+              absorbed and others are reflected.
+            </NotePreviewCard>
+          </Row>
+
+          <Row name="BasesView" file="composites/bases-view/">
+            <div style={{ width: 520 }}>
+              <BasesView toolbar={<span>Table · 70 results · ↕ · ⚙</span>}>
+                <BasesHeader>
+                  <div>Note</div>
+                  <div>Topic</div>
+                </BasesHeader>
+                <BasesRow>
+                  <BasesCell>The Three Aspe…</BasesCell>
+                  <BasesCell>Turn Traditional…</BasesCell>
+                </BasesRow>
+                <BasesRow>
+                  <BasesCell>Value Grouping</BasesCell>
+                  <BasesCell>Value in Art</BasesCell>
+                </BasesRow>
+                <BasesRow>
+                  <BasesCell>Value Keying</BasesCell>
+                  <BasesCell>Value Scale</BasesCell>
+                </BasesRow>
+                <BasesRow>
+                  <BasesCell>Vision is Subjec…</BasesCell>
+                  <BasesCell active>Visual Language</BasesCell>
+                </BasesRow>
+              </BasesView>
             </div>
           </Row>
 

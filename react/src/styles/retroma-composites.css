@@ -726,3 +726,576 @@ a.tag:hover {
   align-items: center;
   gap: 8px;
 }
+
+/* ========================================================================
+ * Callout
+ * ====================================================================== */
+.callout {
+  --callout-color: var(--color-blue, #2196f3);
+  --callout-bg: oklch(from var(--callout-color) l c h / 10%);
+  position: relative;
+  background: var(--callout-bg);
+  border: 1px solid oklch(from var(--callout-color) l c h / 40%);
+  border-left: 4px solid var(--callout-color);
+  border-radius: var(--window-border-radius, 12px);
+  padding: 10px 14px;
+  color: var(--text-normal);
+  margin: 10px 0;
+}
+.callout-note     { --callout-color: var(--color-blue,    #2196f3); }
+.callout-info     { --callout-color: var(--color-cyan,    #00bcd4); }
+.callout-tip      { --callout-color: var(--color-teal,    #009688); }
+.callout-success  { --callout-color: var(--color-green,   #4caf50); }
+.callout-warning  { --callout-color: var(--color-orange,  #ff9800); }
+.callout-error    { --callout-color: var(--color-red,     #d32f2f); }
+.callout-quote    { --callout-color: var(--color-purple,  #673ab7); }
+.callout-example  { --callout-color: var(--color-violet,  #9c27b0); }
+.callout-question { --callout-color: var(--color-indigo,  #3f51b5); }
+.callout-abstract { --callout-color: var(--color-rose,    #f48fb1); }
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: var(--font-bold);
+  color: var(--callout-color);
+  margin-bottom: 4px;
+}
+.callout-icon {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+}
+.callout-content {
+  color: var(--text-normal);
+}
+
+/* ========================================================================
+ * CalendarWidget
+ * ====================================================================== */
+.retroma-calendar {
+  width: fit-content;
+  min-width: 240px;
+  padding: 10px;
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  box-shadow: 0 1px 2px oklch(from black l c h / 10%);
+}
+.retroma-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.retroma-calendar-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: var(--font-bold);
+}
+.retroma-calendar-month { font-size: 15px; }
+.retroma-calendar-year {
+  color: var(--base-accent, var(--interactive-accent));
+  font-size: 15px;
+}
+.retroma-calendar-nav { display: inline-flex; gap: 4px; }
+.retroma-calendar-nav .nav-action-button {
+  min-width: 28px;
+  width: auto;
+  height: 28px;
+  padding: 0 8px;
+  font-weight: var(--font-bold);
+}
+.retroma-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(32px, 1fr));
+  gap: 2px;
+}
+.retroma-calendar-wkday {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: var(--font-bold);
+  padding: 4px 0;
+}
+.retroma-calendar-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--button-border-radius, 8px);
+  color: var(--text-normal);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 80ms ease;
+}
+.retroma-calendar-cell:hover {
+  background: oklch(from var(--base-accent) l c h / 15%);
+}
+.retroma-calendar-cell.is-today {
+  border-color: var(--base-accent, var(--interactive-accent));
+  font-weight: var(--font-bold);
+}
+.retroma-calendar-cell.is-selected {
+  background: oklch(from var(--base-accent) l c h / 25%);
+  font-weight: var(--font-bold);
+}
+.retroma-calendar-cell.is-empty {
+  visibility: hidden;
+  cursor: default;
+}
+
+/* ========================================================================
+ * Backlinks panel
+ * ====================================================================== */
+.retroma-backlinks {
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-interface);
+}
+.retroma-backlinks > .tree-item-self {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: oklch(from var(--titlebar-background, var(--background-secondary)) l c h / 70%);
+  font-weight: var(--font-bold);
+  color: var(--text-normal);
+  border-bottom: 1px solid var(--outline-color);
+}
+.retroma-backlinks-count {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 1px 8px;
+  border: 1px solid var(--outline-color);
+  border-radius: 999px;
+  background: var(--background-paper);
+  color: var(--text-muted);
+  font-weight: var(--font-bold);
+}
+.retroma-backlinks .search-result-container {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.retroma-backlink-item {
+  border-radius: var(--window-border-radius, 12px);
+  padding: 6px 8px;
+  cursor: pointer;
+}
+.retroma-backlink-item:hover {
+  background: oklch(from var(--background-secondary) l c h / 30%);
+}
+.retroma-backlink-item .search-result-file-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--link-color, var(--text-normal));
+  font-weight: var(--font-medium);
+  text-decoration: none;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+.retroma-backlink-item .search-result-file-title::before { content: "🔗"; opacity: 0.55; font-size: 0.85em; }
+.retroma-backlink-snippet {
+  background: oklch(from var(--background-secondary) l c h / 20%);
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+.retroma-backlinks-section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--outline-color);
+}
+.retroma-backlinks-section-title {
+  font-weight: var(--font-bold);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 0 4px 4px;
+}
+
+/* ========================================================================
+ * Search panel
+ * ====================================================================== */
+.retroma-search {
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 260px;
+}
+.retroma-search-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--window-border-radius, 12px);
+  box-shadow: var(--box-shadow-active-sm);
+}
+.retroma-search-input-icon {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.retroma-search-input-field {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text-normal);
+  font: inherit;
+  min-width: 0;
+}
+.retroma-search-input-adornments {
+  display: inline-flex;
+  gap: 4px;
+  color: var(--text-muted);
+}
+.retroma-search-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+.retroma-search-count {
+  background: oklch(from var(--base-accent) l c h / 15%);
+  color: var(--text-normal);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: var(--font-bold);
+}
+.retroma-search-controls {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+}
+.retroma-search-result {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: oklch(from var(--background-secondary) l c h / 25%);
+  border-radius: var(--window-border-radius, 12px);
+  padding: 6px 8px;
+  box-shadow: 0 0 0 1px oklch(from var(--text-normal) l c h / 10%);
+}
+.retroma-search-result-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: oklch(from var(--base-accent) l c h / 20%);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: var(--font-bold);
+  color: var(--text-normal);
+  border: 0;
+  margin: 0;
+}
+.retroma-search-result-caret {
+  font-weight: var(--font-bold);
+  opacity: 0.6;
+}
+.retroma-search-result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.retroma-search-result-snippet {
+  padding: 4px 8px;
+  background: transparent !important;
+  border-radius: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  border: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+/* ========================================================================
+ * TaskCard
+ * ====================================================================== */
+.retroma-task-card {
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-normal);
+  min-width: 220px;
+  box-shadow: 0 1px 2px oklch(from black l c h / 10%);
+  font-family: var(--font-interface);
+}
+.retroma-task-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--outline-color);
+}
+.retroma-task-card-title { font-weight: var(--font-bold); }
+.retroma-task-card-controls {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+  color: var(--text-muted);
+}
+.retroma-task-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+.retroma-task-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--outline-color);
+}
+.retroma-task-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.retroma-task-item-checkbox {
+  accent-color: var(--base-accent, var(--interactive-accent));
+  width: 14px;
+  height: 14px;
+}
+.retroma-task-item-body.is-checked {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* ========================================================================
+ * Kanban board
+ * ====================================================================== */
+.retroma-kanban {
+  background: oklch(from var(--background-secondary) l c h / 40%);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  padding: 12px;
+  overflow-x: auto;
+}
+.retroma-kanban-columns {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.retroma-kanban-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 200px;
+  max-width: 260px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--window-border-radius, 12px);
+  padding: 10px;
+  box-shadow: var(--box-shadow-sm);
+}
+.retroma-kanban-column-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--outline-color);
+}
+.retroma-kanban-column-title { font-weight: var(--font-bold); }
+.retroma-kanban-column-count {
+  font-size: 11px;
+  padding: 1px 7px;
+  background: oklch(from var(--base-accent) l c h / 20%);
+  border-radius: 999px;
+  font-weight: var(--font-bold);
+}
+.retroma-kanban-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.retroma-kanban-card {
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 10px);
+  padding: 8px 10px;
+  box-shadow: var(--box-shadow-sm);
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.retroma-kanban-card:hover {
+  background: oklch(from var(--background-paper) l c h);
+  box-shadow: var(--box-shadow);
+}
+.retroma-kanban-card-title {
+  font-weight: var(--font-bold);
+  font-size: 13px;
+}
+.retroma-kanban-card-body {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.retroma-kanban-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ========================================================================
+ * NotePreviewCard
+ * ====================================================================== */
+.retroma-note-preview {
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  max-width: 320px;
+  font-family: var(--font-interface);
+  color: var(--text-normal);
+  box-shadow: 0 1px 2px oklch(from black l c h / 10%);
+}
+.retroma-note-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: oklch(from var(--background-secondary) l c h / 50%);
+  border-bottom: 1px solid var(--outline-color);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-monospace);
+}
+.retroma-note-preview-path {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.retroma-note-preview-controls {
+  display: inline-flex;
+  gap: 4px;
+  color: var(--text-muted);
+}
+.retroma-note-preview-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.retroma-note-preview-title {
+  margin: 0;
+  font-family: var(--font-text);
+  color: var(--h1-color, var(--color-red));
+  font-size: 18px;
+  font-weight: var(--font-bold);
+}
+.retroma-note-preview-excerpt {
+  font-size: 13px;
+  color: var(--text-normal);
+  line-height: 1.5;
+}
+.retroma-note-preview-image {
+  width: 100%;
+  height: 120px;
+  background: var(--background-secondary);
+  overflow: hidden;
+}
+.retroma-note-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ========================================================================
+ * BasesView (tabular database)
+ * ====================================================================== */
+.retroma-bases {
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-interface);
+  min-width: 280px;
+}
+.retroma-bases-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--outline-color);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.retroma-bases-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.retroma-bases-header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px;
+  background: oklch(from var(--accent-1, var(--base-accent)) l c h / 20%);
+  border-radius: var(--button-border-radius, 8px);
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: var(--font-bold);
+  color: var(--text-normal);
+}
+.retroma-bases-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px;
+}
+.retroma-bases-cell {
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--text-normal);
+  box-shadow: var(--box-shadow-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.retroma-bases-cell.is-active {
+  background: oklch(from var(--base-accent) l c h / 15%);
+  box-shadow: var(--box-shadow-active-sm);
+  font-weight: var(--font-bold);
+}
