@@ -36,3 +36,10 @@ export * from "./text-scramble";
 export * from "./text-shimmer";
 export * from "./animated-number";
 export * from "./sliding-number";
+
+/* BountyNet-spirit composites */
+export * from "./sparkline";
+export * from "./gauge";
+export * from "./popover-command-select";
+export * from "./pane-group";
+export * from "./status-rail";

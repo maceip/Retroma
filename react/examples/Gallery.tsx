@@ -78,8 +78,14 @@ import {
   TextShimmer,
   AnimatedNumber,
   SlidingNumber,
+  Sparkline,
+  Gauge,
+  PopoverCommandSelect,
+  Pane, PaneGroup,
+  StatusRail,
   type Command,
   type ChatModel,
+  type PopoverCommandOption,
 } from "@retroma/react/composites";
 
 const icon = (path: string) => (
@@ -675,6 +681,63 @@ export default function Gallery() {
             <ShowcaseSlidingNumber />
           </Row>
 
+          <Row name="Sparkline" file="composites/sparkline/">
+            <div style={{ width: 180, color: "var(--color-green, #4caf50)" }}>
+              <Sparkline values={[4, 2, 6, 5, 8, 6, 9, 7, 10, 14, 11, 15]} fill showEndDot />
+            </div>
+            <div style={{ width: 180, color: "var(--color-magenta, #e91e63)" }}>
+              <Sparkline values={[2, 3, 1, 4, 2, 5, 3, 4, 6, 4, 7, 5]} />
+            </div>
+          </Row>
+
+          <Row name="Gauge" file="composites/gauge/">
+            <Gauge value={72} label="CPU" suffix="%" />
+            <Gauge value={412} max={1024} label="Memory" suffix=" MB" size={72} />
+            <Gauge value={9.4} max={10} decimals={1} label="Score" size={72} thickness={8} />
+          </Row>
+
+          <Row name="PopoverCommandSelect" file="composites/popover-command-select/">
+            <ShowcasePopoverCommandSelect />
+          </Row>
+
+          <Row name="PaneGroup" file="composites/pane-group/">
+            <div style={{ width: 720, height: 260 }}>
+              <PaneGroup persistKey="gallery-demo" defaultSizes={[30, 45, 25]}>
+                <Pane>
+                  <strong>Left</strong>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                    Drag the dividers — widths persist to localStorage.
+                  </p>
+                </Pane>
+                <Pane>
+                  <strong>Main</strong>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                    The middle pane takes whatever space is left after its siblings.
+                  </p>
+                </Pane>
+                <Pane>
+                  <strong>Inspector</strong>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                    Resize, reload — the split stays.
+                  </p>
+                </Pane>
+              </PaneGroup>
+            </div>
+          </Row>
+
+          <Row name="StatusRail" file="composites/status-rail/">
+            <div style={{ width: 520 }}>
+              <StatusRail
+                label="voice"
+                showFab={false}
+                onTranscript={(t) => console.log("[voice]", t)}
+              />
+              <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6 }}>
+                Uses <code>window.SpeechRecognition</code> (or webkit prefix). Requires mic permission.
+              </p>
+            </div>
+          </Row>
+
         </div>
 
         {/* ================================================================ */}
@@ -1207,6 +1270,28 @@ function ShowcaseAnimatedNumber() {
         reset
       </Button>
     </div>
+  );
+}
+
+function ShowcasePopoverCommandSelect() {
+  const options: PopoverCommandOption[] = [
+    { value: "opus-4-7", label: "Claude Opus 4.7", description: "most capable" },
+    { value: "sonnet-4-6", label: "Claude Sonnet 4.6", description: "balanced" },
+    { value: "haiku-4-5", label: "Claude Haiku 4.5", description: "fastest" },
+    { value: "gpt-5", label: "OpenAI GPT-5" },
+    { value: "gemini-3", label: "Gemini 3", description: "beta" },
+    { value: "grok-4", label: "xAI Grok 4" },
+    { value: "mistral-3", label: "Mistral 3" },
+  ];
+  const [model, setModel] = useState("sonnet-4-6");
+  return (
+    <PopoverCommandSelect
+      label="Model"
+      value={model}
+      onChange={setModel}
+      options={options}
+      placeholder="pick a model"
+    />
   );
 }
 

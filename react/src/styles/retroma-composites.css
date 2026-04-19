@@ -2073,3 +2073,331 @@ body[data-retroma-variant="minimalist"] .markdown-source-view {
   width: 0.6ch;
   text-align: center;
 }
+
+/* ========================================================================
+ * Sparkline
+ * ====================================================================== */
+.retroma-sparkline {
+  width: 100%;
+  height: 40px;
+  color: var(--base-accent, var(--interactive-accent, #2196f3));
+}
+
+/* ========================================================================
+ * Gauge
+ * ====================================================================== */
+.retroma-gauge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--base-accent, var(--interactive-accent, #2196f3));
+}
+.retroma-gauge-dial {
+  display: block;
+  flex-shrink: 0;
+}
+.retroma-gauge-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--text-normal);
+}
+.retroma-gauge-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: var(--font-bold);
+}
+.retroma-gauge-value {
+  font-size: 20px;
+  font-weight: var(--font-bold);
+  font-family: var(--font-monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========================================================================
+ * PopoverCommandSelect
+ * ====================================================================== */
+.retroma-pcs {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 220px;
+  font-family: var(--font-interface);
+}
+.retroma-pcs-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: var(--font-bold);
+  color: var(--text-muted);
+}
+.retroma-pcs-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--background-paper);
+  color: var(--text-normal);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  box-shadow: var(--box-shadow-sm);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.retroma-pcs-trigger:hover {
+  background: var(--button-hover, var(--background-primary));
+}
+.retroma-pcs-trigger[data-open="true"] {
+  box-shadow: var(--box-shadow-active-sm);
+  border-color: oklch(from var(--base-accent) l c h / 60%);
+}
+.retroma-pcs-trigger-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.retroma-pcs-trigger-label.is-placeholder { color: var(--text-muted); }
+.retroma-pcs-trigger-caret {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.retroma-pcs-popup {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 20;
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 4px 16px oklch(from black l c h / 25%);
+}
+.retroma-pcs-filter {
+  background: var(--background-paper);
+  color: var(--text-normal);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  padding: 6px 10px;
+  font: inherit;
+  box-shadow: var(--box-shadow-active-sm);
+  outline: 0;
+}
+.retroma-pcs-filter:focus {
+  border-color: oklch(from var(--base-accent) l c h / 60%);
+}
+.retroma-pcs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.retroma-pcs-empty {
+  padding: 12px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.retroma-pcs-option {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--button-border-radius, 8px);
+  font: inherit;
+  color: var(--text-normal);
+  text-align: left;
+  cursor: pointer;
+}
+.retroma-pcs-option:hover {
+  background: oklch(from var(--background-secondary) l c h / 60%);
+}
+.retroma-pcs-option[data-active="true"] {
+  background: oklch(from var(--base-accent) l c h / 22%);
+  border-color: oklch(from var(--base-accent) l c h / 40%);
+  font-weight: var(--font-bold);
+}
+.retroma-pcs-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.retroma-pcs-option-label { font-size: 13px; }
+.retroma-pcs-option-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ========================================================================
+ * PaneGroup / Pane / PaneHandle
+ * ====================================================================== */
+.retroma-pane-group {
+  display: flex;
+  min-height: 240px;
+  gap: 0;
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  overflow: hidden;
+  min-width: 0;
+}
+.retroma-pane-group--vertical { flex-direction: column; }
+.retroma-pane-slot {
+  display: flex;
+  flex-direction: row;
+  min-width: 0;
+  min-height: 0;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+}
+.retroma-pane-group--vertical > .retroma-pane-slot {
+  flex-direction: column;
+}
+.retroma-pane {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 14px;
+  background: var(--background-paper);
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+}
+.retroma-pane-handle {
+  flex: 0 0 6px;
+  align-self: stretch;
+  background: var(--background-secondary);
+  border-left: 1px solid var(--outline-color);
+  border-right: 1px solid var(--outline-color);
+  cursor: col-resize;
+  transition: background-color 80ms ease;
+}
+.retroma-pane-group--vertical .retroma-pane-handle {
+  flex-basis: 6px;
+  border-left: 0;
+  border-right: 0;
+  border-top: 1px solid var(--outline-color);
+  border-bottom: 1px solid var(--outline-color);
+  cursor: row-resize;
+}
+.retroma-pane-handle:hover,
+.retroma-pane-handle:focus-visible {
+  background: oklch(from var(--base-accent) l c h / 30%);
+  outline: 0;
+}
+
+/* ========================================================================
+ * StatusRail
+ * ====================================================================== */
+.retroma-status-rail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--background-paper);
+  border: var(--border-ridge, 4px ridge var(--background-primary));
+  border-radius: var(--window-border-radius, 12px);
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  min-width: 280px;
+}
+.retroma-status-rail-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.retroma-status-rail-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-weight: var(--font-bold);
+}
+.retroma-status-rail-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 24px;
+}
+.retroma-status-rail-bar {
+  display: inline-block;
+  width: 3px;
+  min-height: 4px;
+  background: var(--base-accent, var(--interactive-accent));
+  border-radius: 2px;
+  transition: height 80ms ease;
+}
+.retroma-status-rail-message {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 32rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-monospace);
+}
+.retroma-status-rail-toggle {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: oklch(from var(--base-accent) l c h / 18%);
+  color: var(--text-normal);
+  border: 1px solid oklch(from var(--base-accent) l c h / 50%);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  box-shadow: var(--box-shadow-sm);
+}
+.retroma-status-rail-toggle:hover {
+  background: oklch(from var(--base-accent) l c h / 28%);
+}
+.retroma-status-rail-toggle.is-listening {
+  background: oklch(from var(--color-red, #d32f2f) l c h / 25%);
+  border-color: oklch(from var(--color-red, #d32f2f) l c h / 60%);
+  animation: retroma-status-rail-pulse 1.5s ease-in-out infinite;
+}
+@keyframes retroma-status-rail-pulse {
+  0%, 100% { box-shadow: var(--box-shadow-sm); }
+  50%      { box-shadow: 0 0 0 6px oklch(from var(--color-red, #d32f2f) l c h / 12%); }
+}
+.retroma-status-rail-fab {
+  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 200;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: var(--background-paper);
+  color: var(--text-normal);
+  border: 2px solid oklch(from var(--color-red, #d32f2f) l c h / 60%);
+  box-shadow: 0 4px 16px oklch(from black l c h / 30%);
+  font-weight: var(--font-bold);
+  font-size: 12px;
+  cursor: pointer;
+}
+.retroma-status-rail-fab.is-listening {
+  animation: retroma-status-rail-pulse 1.2s ease-in-out infinite;
+}
+@media (max-width: 700px) {
+  .retroma-status-rail-fab { display: inline-flex; align-items: center; justify-content: center; }
+}
