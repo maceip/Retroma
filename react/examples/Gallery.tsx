@@ -54,6 +54,7 @@ import {
   StatusBar, StatusGroup, StatusItem,
   CommandPalette, SettingsModal,
   WorkspaceSplit, WorkspaceLeaf,
+  ThemeTunerProvider, ThemeTunerPanel,
   type Command,
 } from "@retroma/react/composites";
 
@@ -99,6 +100,7 @@ export default function Gallery() {
   ];
 
   return (
+    <ThemeTunerProvider>
     <TooltipProvider>
       <div className="gallery theme-light">
         <div className="gallery-header">
@@ -114,6 +116,10 @@ export default function Gallery() {
         {/* ================================================================ */}
         <div className="gallery-section-title">Retroma composites — the lab</div>
         <div className="gallery-lab">
+
+          <Row name="ThemeTunerPanel" file="composites/theme-tuner/">
+            <ThemeTunerPanel />
+          </Row>
 
           <div className="lab-workspace theme-light is-focused">
             <AppRibbon>
@@ -710,5 +716,6 @@ export default function Gallery() {
         </SettingsModal>
       </div>
     </TooltipProvider>
+    </ThemeTunerProvider>
   );
 }

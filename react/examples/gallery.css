@@ -47,10 +47,10 @@
 
 /* A mini Retroma workspace embedded in a row. */
 .lab-workspace {
-  height: 420px;
+  height: 480px;
   display: grid;
-  grid-template-columns: 48px 220px 1fr 220px;
-  grid-template-rows: 1fr 24px;
+  grid-template-columns: 48px minmax(180px, 220px) minmax(0, 1fr) minmax(220px, 280px);
+  grid-template-rows: minmax(0, 1fr) 24px;
   grid-template-areas:
     "ribbon left main right"
     "status status status status";
@@ -58,6 +58,13 @@
   overflow: hidden;
   border: 1px solid var(--retroma-outline, rgba(0, 0, 0, 0.08));
   background: var(--background-primary, #e6ecf3);
+}
+.lab-workspace .metadata-property {
+  grid-template-columns: 5em 1fr;
+  --metadata-label-width: 5em;
+}
+.lab-workspace .metadata-property-value {
+  font-size: 13px;
 }
 .lab-workspace > [data-slot="app-ribbon"] { grid-area: ribbon; }
 .lab-workspace > .workspace-split.mod-left-split { grid-area: left; }

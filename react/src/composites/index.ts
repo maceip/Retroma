@@ -3,6 +3,7 @@
  * of the base UI primitives.
  */
 
+export * from "./theme-tuner";
 export * from "./ribbon";
 export * from "./file-explorer";
 export * from "./workspace-tabs";

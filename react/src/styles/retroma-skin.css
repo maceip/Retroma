@@ -91,21 +91,164 @@
   --sidebar-ring: var(--retroma-accent);
 }
 
-/* Give every base-UI Button, Card, Dialog, … the Retroma chunky
- * bevel / groove look by default. Consumers can override with Tailwind
- * utility classes on the component. */
-[data-slot="button"]:not([data-slot="button"][data-variant="ghost"]) {
-  border-radius: var(--button-border-radius, 8px);
-  box-shadow: var(--box-shadow-sm, none);
+/* ========================================================================
+ * Retro skinning overrides for the COSS primitives.
+ * Every selector uses a data-slot attribute so Tailwind utilities supplied
+ * by the consumer still win (they come later in the cascade).
+ * ====================================================================== */
+
+/* --- Buttons: stabilize press behavior so neighbors don't reflow --------- */
+[data-slot="button"] {
+  border-radius: var(--button-border-radius, 8px) !important;
+  /* Kill the COSS inset shadow transitions that cause sibling reflow. */
+  transition: background-color 80ms ease, transform 80ms ease !important;
+}
+[data-slot="button"]::before {
+  /* COSS stacks an inset box-shadow on ::before that changes on :active;
+   * disable it to prevent perceived layout shift. */
+  box-shadow: none !important;
 }
 [data-slot="button"][data-pressed],
-[data-slot="button"]:active {
-  box-shadow: var(--box-shadow-active-sm, none);
+[data-slot="button"]:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: var(--box-shadow-active-sm) !important;
 }
 
-[data-slot="card"],
-[data-slot="dialog-content"],
-[data-slot="popover-content"],
-[data-slot="menu-popup"] {
-  border-radius: var(--window-border-radius, 12px);
+/* --- Badge: tighten for single-digit / short labels -------------------- */
+[data-slot="badge"] {
+  padding: 1px 8px !important;
+  min-width: 20px;
+  text-align: center;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: var(--font-bold) !important;
+  line-height: 18px !important;
+  border: 1px solid var(--outline-color) !important;
+}
+
+/* --- Switch: retro pill with bevel thumb -------------------------------- */
+[data-slot="switch"] {
+  background: var(--background-secondary) !important;
+  box-shadow: var(--box-shadow-active-sm) !important;
+  border-radius: 999px !important;
+}
+[data-slot="switch"][data-checked] {
+  background: oklch(from var(--base-accent) l c h / 60%) !important;
+}
+[data-slot="switch-thumb"] {
+  background: var(--background-paper) !important;
+  box-shadow: var(--box-shadow-sm) !important;
+}
+
+/* --- Slider: retro grooved track + chunky thumb ------------------------- */
+[data-slot="slider-track"] {
+  background: var(--background-secondary) !important;
+  box-shadow: var(--box-shadow-active-sm) !important;
+  border-radius: 999px !important;
+}
+[data-slot="slider-track"]::before {
+  background: transparent !important;
+}
+[data-slot="slider-indicator"] {
+  background: var(--base-accent, var(--interactive-accent)) !important;
+}
+[data-slot="slider-thumb"] {
+  background: var(--background-paper) !important;
+  border: 1px solid var(--outline-color) !important;
+  box-shadow: var(--box-shadow-sm) !important;
+}
+[data-slot="slider-thumb"]::before {
+  box-shadow: none !important;
+}
+
+/* --- Radio: retro filled circle ---------------------------------------- */
+[data-slot="radio"] {
+  background: var(--background-paper) !important;
+  border: 1px solid var(--outline-color) !important;
+  box-shadow: var(--box-shadow-active-sm) !important;
+}
+[data-slot="radio"]::before { box-shadow: none !important; }
+[data-slot="radio-indicator"][data-checked] {
+  background: var(--base-accent, var(--interactive-accent)) !important;
+}
+[data-slot="radio-indicator"][data-checked]::before {
+  background: var(--background-paper) !important;
+}
+
+/* --- Checkbox ---------------------------------------------------------- */
+[data-slot="checkbox"] {
+  background: var(--background-paper) !important;
+  border: 1px solid var(--outline-color) !important;
+  box-shadow: var(--box-shadow-active-sm) !important;
+  border-radius: var(--button-border-radius, 8px) !important;
+}
+[data-slot="checkbox"][data-checked] {
+  background: oklch(from var(--base-accent) l c h / 60%) !important;
+}
+
+/* --- Progress + Meter: grooved rail, accent indicator ------------------ */
+[data-slot="progress-track"],
+[data-slot="meter-track"] {
+  background: var(--background-secondary) !important;
+  box-shadow: var(--box-shadow-active-sm) !important;
+  border-radius: 999px !important;
+  overflow: hidden;
+  height: 10px;
+}
+[data-slot="progress-indicator"],
+[data-slot="meter-indicator"] {
+  background: oklch(from var(--base-accent) l c h / 70%) !important;
+  border-radius: inherit;
+}
+
+/* --- Spinner: use accent color ----------------------------------------- */
+[data-slot="spinner"] {
+  color: var(--base-accent, var(--interactive-accent)) !important;
+}
+
+/* --- Dialog / popover surfaces: retro ridge + groove ------------------- */
+[data-slot="dialog-popup"],
+[data-slot="alert-dialog-popup"],
+[data-slot="popover-popup"],
+[data-slot="menu-popup"],
+[data-slot="preview-card-popup"],
+[data-slot="tooltip-popup"],
+[data-slot="sheet-popup"] {
+  background: var(--background-paper) !important;
+  color: var(--text-normal) !important;
+  border: var(--border-ridge, 4px ridge var(--background-primary)) !important;
+  border-radius: var(--window-border-radius, 12px) !important;
+  box-shadow: 0 0 16px oklch(from black l c h / 30%) !important;
+}
+[data-slot="dialog-backdrop"],
+[data-slot="alert-dialog-backdrop"],
+[data-slot="sheet-backdrop"],
+[data-slot="drawer-backdrop"] {
+  background: oklch(from black l c h / 50%) !important;
+}
+
+/* --- Card: retro groove ------------------------------------------------ */
+[data-slot="card"] {
+  background: var(--background-paper) !important;
+  border: var(--border-ridge, 4px ridge var(--background-primary)) !important;
+  border-radius: var(--window-border-radius, 12px) !important;
+}
+
+/* --- Input: grooved well ----------------------------------------------- */
+[data-slot="input-control"] {
+  background: var(--background-paper) !important;
+  border: 1px solid var(--outline-color) !important;
+  box-shadow: var(--box-shadow-active-sm) !important;
+  border-radius: var(--window-border-radius, 12px) !important;
+}
+
+/* --- Tabs (base UI, not the Retroma composite tabs) -------------------- */
+[data-slot="tabs-list"] {
+  background: var(--background-secondary) !important;
+  border-radius: var(--button-border-radius, 8px) !important;
+  padding: 2px;
+}
+[data-slot="tabs-tab"][data-selected] {
+  background: var(--background-paper) !important;
+  box-shadow: var(--box-shadow-sm) !important;
 }
