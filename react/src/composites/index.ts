@@ -43,3 +43,6 @@ export * from "./gauge";
 export * from "./popover-command-select";
 export * from "./pane-group";
 export * from "./status-rail";
+
+/* BountyNet app shell + page templates */
+export * as BountyNet from "./bountynet";

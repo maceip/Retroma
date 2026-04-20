@@ -44,6 +44,8 @@ import { Toggle } from "@retroma/react/components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@retroma/react/components/toggle-group";
 import { Tooltip, TooltipTrigger, TooltipPopup, TooltipProvider } from "@retroma/react/components/tooltip";
 
+import { BountyNetShowcase } from "./BountyNetShowcase";
+
 /* ---- Retroma composites (Tier 2) ---------------------------------------- */
 import {
   AppRibbon, RibbonAction, RibbonSeparator,
@@ -739,6 +741,11 @@ export default function Gallery() {
           </Row>
 
         </div>
+
+        {/* ================================================================ */}
+        {/*   BOUNTYNET — FULL APP REASSEMBLED                               */}
+        {/* ================================================================ */}
+        <BountyNetShowcase />
 
         {/* ================================================================ */}
         {/*   BASE UI PRIMITIVES                                             */}

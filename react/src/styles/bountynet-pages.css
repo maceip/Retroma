@@ -1,0 +1,196 @@
+/*
+ * BountyNet page-specific CSS (onboarding steps, settlements, incidents, …).
+ */
+
+/* ----- Onboarding steps ----- */
+.bn-onboarding-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bn-onboarding-step {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  box-shadow: var(--box-shadow-sm);
+}
+.bn-onboarding-step-num {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: oklch(from var(--base-accent) l c h / 22%);
+  color: var(--text-normal);
+  font-weight: var(--font-bold);
+  font-family: var(--font-monospace);
+  border: 1px solid oklch(from var(--base-accent) l c h / 40%);
+}
+.bn-onboarding-step-title {
+  font-weight: var(--font-bold);
+  font-size: 14px;
+  color: var(--text-normal);
+}
+.bn-onboarding-step-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.5;
+}
+.bn-onboarding-step code {
+  font-family: var(--font-monospace);
+  background: oklch(from var(--background-secondary) l c h / 60%);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+
+/* ----- Settlement table ----- */
+.bn-settlement-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bn-settlement-head,
+.bn-settlement-row {
+  display: grid;
+  grid-template-columns: 0.8fr 0.8fr 0.7fr 1.3fr 0.8fr 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+}
+.bn-settlement-head {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-weight: var(--font-bold);
+  border-bottom: 1px solid var(--outline-color);
+}
+.bn-settlement-row {
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  font-size: 13px;
+}
+.bn-settlement-row code {
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.bn-settlement-amount {
+  font-family: var(--font-monospace);
+  font-weight: var(--font-bold);
+  color: var(--base-accent, var(--interactive-accent));
+}
+.bn-settlement-actions {
+  display: inline-flex;
+  gap: 6px;
+  justify-self: end;
+}
+
+/* ----- Disputes ----- */
+.bn-dispute-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bn-dispute-row {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  font-size: 13px;
+}
+.bn-dispute-row code {
+  font-family: var(--font-monospace);
+  font-size: 12px;
+}
+
+/* ----- Incidents ----- */
+.bn-incident-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bn-incident-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  font-size: 13px;
+}
+.bn-incident-type {
+  font-weight: var(--font-bold);
+  color: var(--text-normal);
+  text-transform: lowercase;
+}
+.bn-incident-target {
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ----- Inline showcase switcher (used by the Gallery) ----- */
+.bn-showcase {
+  margin: 0 auto;
+  max-width: 1280px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 18px 0;
+}
+.bn-showcase-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+  background: var(--background-secondary);
+  border: 1px solid var(--outline-color);
+  border-radius: 999px;
+  width: fit-content;
+}
+.bn-showcase-nav-link {
+  appearance: none;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: var(--font-bold);
+  cursor: pointer;
+}
+.bn-showcase-nav-link[data-active="true"] {
+  background: var(--background-paper);
+  border-color: var(--outline-color);
+  color: var(--text-normal);
+  box-shadow: var(--box-shadow-sm);
+}
+.bn-showcase-frame {
+  background: var(--background-primary);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--window-border-radius, 12px);
+  overflow: hidden;
+  box-shadow: 0 2px 8px oklch(from black l c h / 10%);
+}
