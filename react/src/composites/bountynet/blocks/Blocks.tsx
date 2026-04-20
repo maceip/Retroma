@@ -537,6 +537,8 @@ export interface OfferItem {
   id: string;
   agent: string;
   amount: string;
+  /** ISO currency, e.g. "USD". Optional — defaults handled by the renderer. */
+  currency?: string;
   eta: string;
   notes?: string;
   status?: "open" | "awarded" | "withdrawn";
@@ -555,13 +557,14 @@ export const OfferBoard = forwardRef<HTMLDivElement, OfferBoardProps>(
   function OfferBoard({ offers, onSubmit, onAward, className, ...rest }, ref) {
     const [agent, setAgent] = useState("");
     const [amount, setAmount] = useState("0");
+    const [currency, setCurrency] = useState("USD");
     const [eta, setEta] = useState("PT24H");
     const [notes, setNotes] = useState("");
     const [award, setAward] = useState<string | undefined>(offers[0]?.id);
 
     const submit = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      onSubmit?.({ agent, amount, eta, notes });
+      onSubmit?.({ agent, amount, currency, eta, notes });
     };
 
     return (
@@ -575,8 +578,11 @@ export const OfferBoard = forwardRef<HTMLDivElement, OfferBoardProps>(
           <Field label="Agent">
             <TextInput value={agent} onChange={(e) => setAgent(e.target.value)} placeholder="agent slug" />
           </Field>
-          <Field label="Amount" hint="USD">
+          <Field label="Amount">
             <TextInput value={amount} onChange={(e) => setAmount(e.target.value)} />
+          </Field>
+          <Field label="Currency" hint="ISO 4217">
+            <TextInput value={currency} onChange={(e) => setCurrency(e.target.value)} />
           </Field>
           <Field label="ETA" hint="ISO 8601 duration">
             <TextInput value={eta} onChange={(e) => setEta(e.target.value)} />
@@ -595,7 +601,9 @@ export const OfferBoard = forwardRef<HTMLDivElement, OfferBoardProps>(
               <div key={o.id} className="bn-offer-row">
                 <div className="bn-offer-row-info">
                   <span className="bn-offer-row-agent">{o.agent}</span>
-                  <span className="bn-offer-row-amount">${o.amount}</span>
+                  <span className="bn-offer-row-amount">
+                    {o.amount} {o.currency ?? "USD"}
+                  </span>
                   <span className="bn-offer-row-eta">{o.eta}</span>
                 </div>
                 <span
@@ -687,3 +695,246 @@ export const CurlHint = forwardRef<HTMLDivElement, CurlHintProps>(
     );
   },
 );
+
+/* ========================================================================
+ *  AwardPanel — sibling of OfferBoard. Picks the offer to award.
+ * ====================================================================== */
+
+export interface AwardPanelProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
+  /** Open offers eligible to be awarded. */
+  offers: readonly OfferItem[];
+  value?: string;
+  onSelect?: (offerId: string) => void;
+  onAward?: (offerId: string) => void;
+  /** Disable the award button (e.g., when a request is in flight). */
+  busy?: boolean;
+}
+
+export const AwardPanel = forwardRef<HTMLDivElement, AwardPanelProps>(
+  function AwardPanel(
+    { offers, value, onSelect, onAward, busy, className, ...rest },
+    ref,
+  ) {
+    const open = offers.filter((o) => (o.status ?? "open") === "open");
+    const [picked, setPicked] = useState<string | undefined>(
+      value ?? open[0]?.id,
+    );
+    const current = picked ?? value;
+    const opts: PopoverCommandOption[] = [
+      { value: "", label: "— select offer —", disabled: true },
+      ...open.map((o) => ({
+        value: o.id,
+        label: `${o.id} · ${o.agent}`,
+        description: `${o.amount} ${o.currency ?? "USD"} · ${o.eta}`,
+      })),
+    ];
+    return (
+      <div
+        ref={ref}
+        data-slot="bn-award-panel"
+        className={cn("bn-award-panel", className)}
+        {...rest}
+      >
+        <PopoverCommandSelect
+          label="Offer ID"
+          options={opts}
+          value={current}
+          onChange={(v) => {
+            setPicked(v);
+            onSelect?.(v);
+          }}
+        />
+        <PrimaryButton
+          disabled={busy || !current}
+          onClick={() => current && onAward?.(current)}
+        >
+          award selected offer
+        </PrimaryButton>
+      </div>
+    );
+  },
+);
+
+/* ========================================================================
+ *  JobScopedSettlements — pay/refund per settlement (Marketplace inline)
+ * ====================================================================== */
+
+export interface JobSettlement {
+  id: string;
+  status: "open" | "paid" | "refunded" | "frozen" | "disputed";
+  amount: string;
+  currency?: string;
+  frozen?: boolean;
+}
+
+export interface JobScopedSettlementsProps extends HTMLAttributes<HTMLDivElement> {
+  settlements: readonly JobSettlement[];
+  /** ID of the job these settlements belong to (just for display). */
+  jobId?: string;
+  /** Fires with (settlementId, action). */
+  onAction?: (settlementId: string, action: "pay" | "refund") => void;
+  /** Disable while a request is in flight. */
+  busyId?: string;
+}
+
+export const JobScopedSettlements = forwardRef<
+  HTMLDivElement,
+  JobScopedSettlementsProps
+>(function JobScopedSettlements(
+  { settlements, jobId, onAction, busyId, className, ...rest },
+  ref,
+) {
+  return (
+    <div
+      ref={ref}
+      data-slot="bn-job-settlements"
+      className={cn("bn-job-settlements", className)}
+      {...rest}
+    >
+      {settlements.length === 0 ? (
+        <div className="bn-offer-empty">
+          No settlements yet{jobId ? ` for ${jobId}` : ""}.
+        </div>
+      ) : (
+        settlements.map((s) => (
+          <article key={s.id} className="bn-job-settlement-row">
+            <div className="bn-job-settlement-info">
+              <code className="bn-job-settlement-id">{s.id}</code>
+              <span className="bn-settlement-amount">
+                {s.amount} {s.currency ?? "USD"}
+              </span>
+              {s.frozen ? (
+                <span className="bn-status-pill bn-status-pill--frozen">frozen</span>
+              ) : null}
+              <span
+                className={cn("bn-status-pill", `bn-status-pill--${s.status}`)}
+              >
+                {s.status}
+              </span>
+            </div>
+            <div className="bn-job-settlement-actions">
+              <PrimaryButton
+                className="bn-btn--xs"
+                disabled={busyId === `pay-${s.id}`}
+                onClick={() => onAction?.(s.id, "pay")}
+              >
+                mark paid
+              </PrimaryButton>
+              <GhostButton
+                className="bn-btn--xs"
+                disabled={busyId === `refund-${s.id}`}
+                onClick={() => onAction?.(s.id, "refund")}
+              >
+                refund
+              </GhostButton>
+            </div>
+          </article>
+        ))
+      )}
+    </div>
+  );
+});
+
+/* ========================================================================
+ *  JobScopedDisputes — open dispute form + scoped dispute list
+ * ====================================================================== */
+
+export interface DisputeItem {
+  id: string;
+  status: "open" | "resolved" | "withdrawn";
+  reason?: string;
+  reason_code?: string;
+  settlement_id?: string;
+}
+
+export interface JobScopedDisputesProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onSubmit"> {
+  disputes: readonly DisputeItem[];
+  jobId?: string;
+  onOpen?: (data: {
+    settlement_id?: string;
+    reason_code: string;
+    reason: string;
+  }) => void;
+  busy?: boolean;
+}
+
+export const JobScopedDisputes = forwardRef<
+  HTMLDivElement,
+  JobScopedDisputesProps
+>(function JobScopedDisputes(
+  { disputes, jobId, onOpen, busy, className, ...rest },
+  ref,
+) {
+  const [settlementId, setSettlementId] = useState("");
+  const [reasonCode, setReasonCode] = useState("scope-mismatch");
+  const [reason, setReason] = useState("");
+
+  const submit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onOpen?.({
+      settlement_id: settlementId || undefined,
+      reason_code: reasonCode,
+      reason,
+    });
+  };
+
+  return (
+    <div
+      ref={ref}
+      data-slot="bn-job-disputes"
+      className={cn("bn-job-disputes", className)}
+      {...rest}
+    >
+      <form className="bn-form-grid" onSubmit={submit}>
+        <Field label="Settlement ID" hint="optional">
+          <TextInput
+            value={settlementId}
+            onChange={(e) => setSettlementId(e.target.value)}
+            placeholder={jobId ? `for ${jobId}` : "leave blank for job-scoped"}
+          />
+        </Field>
+        <Field label="Reason code">
+          <TextInput
+            value={reasonCode}
+            onChange={(e) => setReasonCode(e.target.value)}
+          />
+        </Field>
+        <Field label="Reason">
+          <TextInput
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="human-readable explanation"
+          />
+        </Field>
+        <PrimaryButton type="submit" disabled={busy}>
+          open dispute
+        </PrimaryButton>
+      </form>
+
+      <div className="bn-job-dispute-list">
+        {disputes.length === 0 ? (
+          <div className="bn-offer-empty">
+            No disputes yet{jobId ? ` for ${jobId}` : ""}.
+          </div>
+        ) : (
+          disputes.map((d) => (
+            <article key={d.id} className="bn-job-dispute-row">
+              <code className="bn-job-dispute-id">{d.id}</code>
+              <span className="bn-job-dispute-reason">{d.reason ?? d.reason_code ?? "—"}</span>
+              <span
+                className={cn(
+                  "bn-status-pill",
+                  `bn-status-pill--${d.status === "resolved" ? "paid" : d.status === "withdrawn" ? "withdrawn" : "disputed"}`,
+                )}
+              >
+                {d.status}
+              </span>
+            </article>
+          ))
+        )}
+      </div>
+    </div>
+  );
+});

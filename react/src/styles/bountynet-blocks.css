@@ -619,6 +619,90 @@
 }
 .bn-offer-award .retroma-pcs { flex: 1; min-width: 0; }
 
+/* ----- AwardPanel (sibling of OfferBoard) ----- */
+.bn-award-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap);
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--window-border-radius, 12px);
+  padding: var(--bn-pad-card);
+  min-height: var(--bn-row-min-height);
+}
+.bn-award-panel .bn-btn { align-self: flex-start; }
+
+/* ----- Job-scoped settlement rows ----- */
+.bn-job-settlements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap-xs);
+}
+.bn-job-settlement-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--bn-gap);
+  padding: var(--bn-pad-row-y) var(--bn-pad-row-x);
+  min-height: var(--bn-row-min-height);
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+}
+.bn-job-settlement-info {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--bn-gap);
+  min-width: 0;
+}
+.bn-job-settlement-id {
+  font-family: var(--font-monospace);
+  font-size: var(--bn-text-meta);
+  color: var(--text-muted);
+}
+.bn-job-settlement-actions {
+  display: inline-flex;
+  gap: var(--bn-gap-xs);
+  justify-self: end;
+}
+
+/* ----- Job-scoped dispute rows ----- */
+.bn-job-disputes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap);
+}
+.bn-job-dispute-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap-xs);
+}
+.bn-job-dispute-row {
+  display: grid;
+  grid-template-columns: minmax(80px, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--bn-gap);
+  padding: var(--bn-pad-row-y) var(--bn-pad-row-x);
+  min-height: var(--bn-row-min-height);
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  font-size: var(--bn-text-row);
+}
+.bn-job-dispute-id {
+  font-family: var(--font-monospace);
+  font-size: var(--bn-text-meta);
+  color: var(--text-muted);
+}
+.bn-job-dispute-reason {
+  color: var(--text-normal);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bn-job-dispute-row > .bn-status-pill { justify-self: end; }
+
 /* ----- RepositoryStream ----- */
 .bn-repo-stream {
   display: grid;

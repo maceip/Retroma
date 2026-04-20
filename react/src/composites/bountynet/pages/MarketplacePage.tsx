@@ -3,8 +3,10 @@ import { AppHeader, PageHero, PageLayout, PageSection } from "../shell";
 import {
   FormCard, Field, TextInput, PrimaryButton,
   JobsPanel, OfferBoard, OperatorStream, RepositoryStream,
+  AwardPanel, JobScopedSettlements, JobScopedDisputes,
   TerminalReadout,
   type JobItem, type OfferItem, type OperatorStreamItem, type RepoStreamItem,
+  type JobSettlement, type DisputeItem,
 } from "../blocks";
 import { PopoverCommandSelect } from "../../popover-command-select";
 
@@ -22,10 +24,32 @@ const DEMO_JOBS: JobItem[] = [
 ];
 
 const DEMO_OFFERS: OfferItem[] = [
-  { id: "o_1", agent: "alice-03", amount: "120", eta: "PT12H", status: "open", notes: "familiar with codebase" },
-  { id: "o_2", agent: "mallory-07", amount: "95", eta: "PT24H", status: "open" },
-  { id: "o_3", agent: "trent-01", amount: "140", eta: "PT6H", status: "awarded", notes: "fastest ETA" },
+  { id: "o_1", agent: "alice-03", amount: "120", currency: "USD", eta: "PT12H", status: "open", notes: "familiar with codebase" },
+  { id: "o_2", agent: "mallory-07", amount: "95", currency: "USD", eta: "PT24H", status: "open" },
+  { id: "o_3", agent: "trent-01", amount: "140", currency: "USD", eta: "PT6H", status: "awarded", notes: "fastest ETA" },
 ];
+
+/* Job-scoped settlements (Marketplace shows them for the selected job). */
+const DEMO_JOB_SETTLEMENTS: Record<string, JobSettlement[]> = {
+  j_281: [
+    { id: "s_471", status: "open", amount: "120", currency: "USD" },
+  ],
+  j_284: [
+    { id: "s_472", status: "paid", amount: "95",  currency: "USD" },
+  ],
+  j_286: [
+    { id: "s_473", status: "disputed", amount: "140", currency: "USD", frozen: true },
+  ],
+  j_288: [
+    { id: "s_474", status: "refunded", amount: "60", currency: "USD" },
+  ],
+};
+
+const DEMO_JOB_DISPUTES: Record<string, DisputeItem[]> = {
+  j_286: [
+    { id: "d_21", status: "open", reason: "Agent changed unrelated files.", reason_code: "scope-mismatch", settlement_id: "s_473" },
+  ],
+};
 
 const DEMO_OPERATORS: OperatorStreamItem[] = [
   { id: "op1", name: "cory", email: "cory@retroma.dev", status: "active" },
@@ -122,16 +146,69 @@ export function MarketplacePage() {
 
         <div className="bn-page-grid bn-page-grid--2">
           <PageSection title="offer board" hint={`for ${selectedJob ?? "—"}`}>
-            <OfferBoard offers={DEMO_OFFERS} />
+            <OfferBoard
+              offers={DEMO_OFFERS}
+              onSubmit={(o) =>
+                setLastOutput(
+                  `{ "ok": true, "offer": ${JSON.stringify(o)} }`,
+                )
+              }
+              onAward={(id) =>
+                setLastOutput(`{ "ok": true, "awarded": "${id}" }`)
+              }
+            />
           </PageSection>
-          <PageSection title="operator stream">
-            <OperatorStream operators={DEMO_OPERATORS} />
+          <PageSection title="award panel" hint="award the right offer">
+            <AwardPanel
+              offers={DEMO_OFFERS}
+              onAward={(id) =>
+                setLastOutput(`{ "ok": true, "awarded": "${id}" }`)
+              }
+            />
           </PageSection>
         </div>
 
-        <PageSection title="repository stream" hint="CommitGraphs are deterministic from repo name">
-          <RepositoryStream repos={DEMO_REPOS} />
-        </PageSection>
+        <div className="bn-page-grid bn-page-grid--2">
+          <PageSection
+            title="settlement controls"
+            hint={`scoped to ${selectedJob ?? "—"} — pay or refund per row`}
+          >
+            <JobScopedSettlements
+              jobId={selectedJob}
+              settlements={
+                selectedJob ? DEMO_JOB_SETTLEMENTS[selectedJob] ?? [] : []
+              }
+              onAction={(id, action) =>
+                setLastOutput(
+                  `{ "ok": true, "settlement": "${id}", "action": "${action}" }`,
+                )
+              }
+            />
+          </PageSection>
+          <PageSection
+            title="dispute panel"
+            hint={`scoped to ${selectedJob ?? "—"}`}
+          >
+            <JobScopedDisputes
+              jobId={selectedJob}
+              disputes={selectedJob ? DEMO_JOB_DISPUTES[selectedJob] ?? [] : []}
+              onOpen={(d) =>
+                setLastOutput(
+                  `{ "ok": true, "dispute": ${JSON.stringify(d)} }`,
+                )
+              }
+            />
+          </PageSection>
+        </div>
+
+        <div className="bn-page-grid bn-page-grid--2">
+          <PageSection title="operator stream">
+            <OperatorStream operators={DEMO_OPERATORS} />
+          </PageSection>
+          <PageSection title="repository stream" hint="CommitGraphs are deterministic from repo name">
+            <RepositoryStream repos={DEMO_REPOS} />
+          </PageSection>
+        </div>
       </PageLayout>
     </>
   );
