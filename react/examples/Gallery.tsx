@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 /* ---- Base UI primitives (the full COSS catalog) ------------------------- */
 import { Accordion, AccordionItem, AccordionTrigger, AccordionPanel } from "@retroma/react/components/accordion";
@@ -44,17 +44,69 @@ import { Toggle } from "@retroma/react/components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@retroma/react/components/toggle-group";
 import { Tooltip, TooltipTrigger, TooltipPopup, TooltipProvider } from "@retroma/react/components/tooltip";
 
+import { BountyNetShowcase } from "./BountyNetShowcase";
+
 /* ---- Retroma composites (Tier 2) ---------------------------------------- */
 import {
   AppRibbon, RibbonAction, RibbonSeparator,
   TreeRoot, TreeFolder, TreeFile, TreeItemIcon, TreeItemLabel,
+  FileExplorerToolbar, FileExplorerToolbarAction,
   TabList, TabTrigger, TabFavicon,
   EditorCanvas, Gutter, GutterElement, TextLine, SyntaxToken,
   PropertiesView, PropertyRow, PropertyKey, PropertyValue, PropertyIcon,
   StatusBar, StatusGroup, StatusItem,
   CommandPalette, SettingsModal,
   WorkspaceSplit, WorkspaceLeaf,
+  ThemeTunerProvider, ThemeTunerPanel,
+  Callout, CalloutTitle, CalloutContent,
+  CalendarWidget,
+  BacklinksPanel, BacklinkItem, BacklinksSection,
+  SearchPanel, SearchInput, SearchToolbar, SearchResult,
+  TaskCard, TaskItem,
+  KanbanBoard, KanbanColumn, KanbanCard,
+  NotePreviewCard,
+  BasesView, BasesRow, BasesCell, BasesHeader,
+  /* --- Custom retroma composites --- */
+  TerminalFrame, TerminalLine, TerminalCursor,
+  ChatContainer, ChatMessageList, ChatMessage, ChatCopyButton,
+  ChatInput, ChatModelPicker, ChatSendButton,
+  CodeLine, CodeBlock, CodeToken,
+  RepoCard,
+  CommitGraph, generateDemoCommits,
+  FileTree, FileTreeFolder, FileTreeFile,
+  Carousel, CarouselViewport, CarouselItem, CarouselButton,
+  InfiniteSlider,
+  TextScramble,
+  TextShimmer,
+  AnimatedNumber,
+  SlidingNumber,
+  Sparkline,
+  Gauge,
+  PopoverCommandSelect,
+  Pane, PaneGroup,
+  StatusRail,
+  /* new GitHub primitives */
+  StatusIndicator,
+  GithubButton, GithubButtonGroup, GithubStarsButton,
+  ContributorGrid,
+  ActivityGraph,
+  Stepper,
+  DiffViewer, WorktreeLineage, parseUnifiedDiff,
+  LogViewer,
+  JsonViewer,
+  EnvTable,
+  /* chat bolster */
+  Attachments,
+  Citation,
+  Message, MessageStack, MessageAvatar, MessageHeader, MessageContent, MessageActions, MessageAction,
+  PromptInput, PromptInputTextarea, PromptInputActions, PromptInputActionGroup, PromptInputAction,
+  Suggestions, Suggestion, SuggestionPanel,
+  Thread, ThreadContent, ThreadScrollToBottom,
+  ModelSelector,
   type Command,
+  type ChatModel,
+  type PopoverCommandOption,
+  type ModelItemData,
 } from "@retroma/react/composites";
 
 const icon = (path: string) => (
@@ -99,8 +151,9 @@ export default function Gallery() {
   ];
 
   return (
+    <ThemeTunerProvider>
     <TooltipProvider>
-      <div className="gallery theme-light">
+      <div className="gallery">
         <div className="gallery-header">
           <h1>Retroma UI — Component Gallery</h1>
           <p>
@@ -115,7 +168,11 @@ export default function Gallery() {
         <div className="gallery-section-title">Retroma composites — the lab</div>
         <div className="gallery-lab">
 
-          <div className="lab-workspace theme-light is-focused">
+          <Row name="ThemeTunerPanel" file="composites/theme-tuner/">
+            <ThemeTunerPanel />
+          </Row>
+
+          <div className="lab-workspace is-focused">
             <AppRibbon>
               <RibbonAction label="Search" icon={icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3")} onClick={() => setPaletteOpen(true)} />
               <RibbonAction label="New note" icon={icon("M12 5v14M5 12h14")} />
@@ -125,10 +182,29 @@ export default function Gallery() {
 
             <WorkspaceSplit side="left">
               <WorkspaceLeaf header={<span>Files</span>}>
-                <TreeRoot defaultOpen={["notes"]} selectedId={selectedFile} onSelect={setSelectedFile}>
+                <FileExplorerToolbar>
+                  <FileExplorerToolbarAction label="New note" icon={icon("M12 5v14M5 12h14")} />
+                  <FileExplorerToolbarAction label="New folder" icon={icon("M3 7h5l2 2h11v11H3z")} />
+                  <FileExplorerToolbarAction label="Sort" icon={icon("M3 6h18M6 12h12M10 18h4")} />
+                  <FileExplorerToolbarAction label="Collapse all" icon={icon("M7 11l5-5 5 5M7 17l5-5 5 5")} />
+                  <FileExplorerToolbarAction label="Change view" icon={icon("M3 6h18M3 12h18M3 18h18")} />
+                </FileExplorerToolbar>
+                <TreeRoot defaultOpen={["notes", "atlas", "cards"]} selectedId={selectedFile} onSelect={setSelectedFile}>
+                  <TreeFolder id="encounters" label="00-encounters">
+                    <TreeFile id="e1" label={<TreeItemLabel>dragons.md</TreeItemLabel>} />
+                  </TreeFolder>
+                  <TreeFolder id="atlas" label="01-atlas">
+                    <TreeFile id="a1" label={<TreeItemLabel>regions.md</TreeItemLabel>} />
+                  </TreeFolder>
+                  <TreeFolder id="calendar" label="02-calendar">
+                    <TreeFile id="c1" label={<TreeItemLabel>events.md</TreeItemLabel>} />
+                  </TreeFolder>
+                  <TreeFolder id="cards" label="03-cards">
+                    <TreeFile id="d1" label={<TreeItemLabel>deck.md</TreeItemLabel>} adornment={<Badge variant="secondary">3</Badge>} />
+                  </TreeFolder>
                   <TreeFolder id="notes" label="Notes">
                     <TreeFile id="welcome" label={<TreeItemLabel>Welcome.md</TreeItemLabel>} icon={<TreeItemIcon>{icon("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")}</TreeItemIcon>} />
-                    <TreeFile id="todo" label={<TreeItemLabel>todo.md</TreeItemLabel>} adornment={<Badge variant="secondary">3</Badge>} />
+                    <TreeFile id="todo" label={<TreeItemLabel>todo.md</TreeItemLabel>} adornment={<Badge variant="secondary">2</Badge>} />
                   </TreeFolder>
                   <TreeFolder id="archive" label="Archive">
                     <TreeFile id="old" label={<TreeItemLabel>old-note.md</TreeItemLabel>} />
@@ -153,15 +229,32 @@ export default function Gallery() {
               >
                 <EditorCanvas>
                   <Gutter>
-                    {Array.from({ length: 6 }).map((_, i) => (
+                    {Array.from({ length: 10 }).map((_, i) => (
                       <GutterElement key={i}>{i + 1}</GutterElement>
                     ))}
                   </Gutter>
                   <div className="cm-scroller" style={{ overflow: "auto" }}>
                     <div className="cm-content">
-                      <TextLine headerLevel={1}><SyntaxToken kind="strong">Welcome to Retroma</SyntaxToken></TextLine>
-                      <TextLine>A tribute to the past with an eye toward the future.</TextLine>
-                      <TextLine>Check <SyntaxToken kind="link">[[todo]]</SyntaxToken> or tag <SyntaxToken kind="hashtag" tag="todo">#todo</SyntaxToken>.</TextLine>
+                      <TextLine headerLevel={1}>Obsidian Markdown</TextLine>
+                      <TextLine>
+                        <SyntaxToken kind="hashtag" tag="tags">#tags</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="work">#work</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="home">#home</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="test">#test</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="todo">#todo</SyntaxToken>
+                      </TextLine>
+                      <TextLine>
+                        <SyntaxToken kind="hashtag" tag="low">#low</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="medium">#medium</SyntaxToken>{" "}
+                        <SyntaxToken kind="hashtag" tag="obsidian">#obsidian</SyntaxToken>
+                      </TextLine>
+                      <TextLine headerLevel={2}>Retroma Theme</TextLine>
+                      <TextLine>
+                        A tribute to the past with an eye toward the future —
+                        try <SyntaxToken kind="strong">bold</SyntaxToken>,{" "}
+                        <SyntaxToken kind="em">italic</SyntaxToken>, and{" "}
+                        <SyntaxToken kind="link">[[wiki-links]]</SyntaxToken>.
+                      </TextLine>
                       <TextLine><SyntaxToken kind="code">npm install @retroma/react</SyntaxToken></TextLine>
                     </div>
                   </div>
@@ -287,7 +380,560 @@ export default function Gallery() {
             </div>
           </Row>
 
+          <Row name="Callout" file="composites/callout/">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, width: 520 }}>
+              <Callout variant="note">
+                <CalloutTitle>Note</CalloutTitle>
+                <CalloutContent>Leave a reminder for future you.</CalloutContent>
+              </Callout>
+              <Callout variant="warning">
+                <CalloutTitle>Warning</CalloutTitle>
+                <CalloutContent>Here be dragons.</CalloutContent>
+              </Callout>
+              <Callout variant="success">
+                <CalloutTitle>Success</CalloutTitle>
+                <CalloutContent>Tests passing, vibes intact.</CalloutContent>
+              </Callout>
+              <Callout variant="quote">
+                <CalloutTitle>Quote</CalloutTitle>
+                <CalloutContent>"Choose one color to rule them all."</CalloutContent>
+              </Callout>
+            </div>
+          </Row>
+
+          <Row name="CalendarWidget" file="composites/calendar-widget/">
+            <CalendarWidget />
+          </Row>
+
+          <Row name="BacklinksPanel" file="composites/backlinks/">
+            <div style={{ width: 320 }}>
+              <BacklinksPanel title="Links" count={6}>
+                <BacklinkItem>mark-ryan-perez</BacklinkItem>
+                <BacklinkItem snippet="The way light moves through a prism…">
+                  color-and-light-introduction
+                </BacklinkItem>
+                <BacklinkItem>how-we-perceive-colors</BacklinkItem>
+                <BacklinkItem>Color — Elements of Art</BacklinkItem>
+                <BacklinkItem>psychophysical-color</BacklinkItem>
+                <BacklinkItem>perceived-color</BacklinkItem>
+                <BacklinksSection title="Unlinked mentions">
+                  <BacklinkItem snippet="At its most basic, color is a property of light.">
+                    color-introduction
+                  </BacklinkItem>
+                </BacklinksSection>
+              </BacklinksPanel>
+            </div>
+          </Row>
+
+          <Row name="SearchPanel" file="composites/search-panel/">
+            <div style={{ width: 320 }}>
+              <SearchPanel>
+                <SearchInput
+                  placeholder="Search…"
+                  defaultValue="tag:Art"
+                  adornments={<><span title="Match case">Aa</span><span>⚙</span></>}
+                />
+                <SearchToolbar count="131 results" controls={<span>↕</span>} />
+                <SearchResult title="art-is-a-process" meta={<span>tags: Zettels, Art</span>} />
+                <SearchResult title="art-is-an-expression-of-humanness" meta={<span>tags: Zettels, Art</span>} />
+                <SearchResult title="art-is-communication" meta={<span>tags: Zettels, Art</span>} />
+              </SearchPanel>
+            </div>
+          </Row>
+
+          <Row name="TaskCard" file="composites/task-card/">
+            <TaskCard
+              title="Tasks"
+              controls={<span>⋯</span>}
+              footer={
+                <>
+                  <Badge variant="secondary">#inbox</Badge>
+                  <Badge variant="secondary">#today</Badge>
+                </>
+              }
+            >
+              <TaskItem>Port Retroma theme to React</TaskItem>
+              <TaskItem checked>Build Tier-1 base UI</TaskItem>
+              <TaskItem>Ship Kanban + Bases composites</TaskItem>
+              <TaskItem>Docs and playground</TaskItem>
+            </TaskCard>
+          </Row>
+
+          <Row name="KanbanBoard" file="composites/kanban/">
+            <div style={{ width: 720 }}>
+              <KanbanBoard>
+                <KanbanColumn title="Backlog" count={3}>
+                  <KanbanCard title="Dark mode lightness tuner" footer={<Badge variant="secondary">#theme</Badge>}>
+                    Slider from 0.1 to 0.4.
+                  </KanbanCard>
+                  <KanbanCard title="Typography variants">
+                    Cascadia / W95 / Excalifont.
+                  </KanbanCard>
+                  <KanbanCard title="Mobile polish" />
+                </KanbanColumn>
+                <KanbanColumn title="In Progress" count={2}>
+                  <KanbanCard title="Color Scheme Tuner" footer={<><Badge variant="secondary">#theme</Badge><Badge variant="secondary">#today</Badge></>}>
+                    Analogous / Split / Mono / Triadic.
+                  </KanbanCard>
+                  <KanbanCard title="Retro composites" />
+                </KanbanColumn>
+                <KanbanColumn title="Done" count={5}>
+                  <KanbanCard title="Gallery page">Base + Lab sections</KanbanCard>
+                  <KanbanCard title="Base UI skinning" />
+                </KanbanColumn>
+              </KanbanBoard>
+            </div>
+          </Row>
+
+          <Row name="NotePreviewCard" file="composites/note-preview/">
+            <NotePreviewCard
+              path="07-zettels / what-is-color"
+              controls={<><span>⤓</span><span>↗</span></>}
+              title="What is Color?"
+              image={
+                <div
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcB77, #4d96ff, #9b5de5)",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
+              }
+            >
+              At its most basic, <strong>color is a property of light</strong>.
+              Light is made up of different wavelengths, each corresponding to a
+              different color. When light hits an object, some wavelengths are
+              absorbed and others are reflected.
+            </NotePreviewCard>
+          </Row>
+
+          <Row name="BasesView" file="composites/bases-view/">
+            <div style={{ width: 520 }}>
+              <BasesView toolbar={<span>Table · 70 results · ↕ · ⚙</span>}>
+                <BasesHeader>
+                  <div>Note</div>
+                  <div>Topic</div>
+                </BasesHeader>
+                <BasesRow>
+                  <BasesCell>The Three Aspe…</BasesCell>
+                  <BasesCell>Turn Traditional…</BasesCell>
+                </BasesRow>
+                <BasesRow>
+                  <BasesCell>Value Grouping</BasesCell>
+                  <BasesCell>Value in Art</BasesCell>
+                </BasesRow>
+                <BasesRow>
+                  <BasesCell>Value Keying</BasesCell>
+                  <BasesCell>Value Scale</BasesCell>
+                </BasesRow>
+                <BasesRow>
+                  <BasesCell>Vision is Subjec…</BasesCell>
+                  <BasesCell active>Visual Language</BasesCell>
+                </BasesRow>
+              </BasesView>
+            </div>
+          </Row>
+
         </div>
+
+        {/* ================================================================ */}
+        {/*   CUSTOM RETROMA COMPOSITES                                      */}
+        {/* ================================================================ */}
+        <div className="gallery-section-title">Custom retroma composites</div>
+        <div className="gallery-lab">
+
+          <Row name="TerminalFrame" file="composites/terminal-frame/">
+            <TerminalFrame title="retroma ~ zsh" tone="mint">
+              <TerminalLine prompt="$" kind="cmd">npm run dev</TerminalLine>
+              <TerminalLine kind="out">VITE v6.4.2  ready in 748 ms</TerminalLine>
+              <TerminalLine kind="ok">➜  Local:   http://127.0.0.1:5173/</TerminalLine>
+              <TerminalLine kind="warn">[warn] Some chunks are larger than 500 kB</TerminalLine>
+              <TerminalLine prompt="$" kind="cmd">
+                git push<TerminalCursor />
+              </TerminalLine>
+            </TerminalFrame>
+          </Row>
+
+          <Row name="Chat" file="composites/chat/">
+            <ShowcaseChat />
+          </Row>
+
+          <Row name="CodeLine / CodeBlock" file="composites/code-line/">
+            <div style={{ width: 560 }}>
+              <CodeBlock
+                title="src/composites/editor/Editor.tsx"
+                actions={<ChatCopyButton value={`export const EditorCanvas = ...`}>Copy</ChatCopyButton>}
+              >
+                <CodeLine number={1}>
+                  <CodeToken kind="keyword">import</CodeToken>{" "}
+                  {"{ "}<CodeToken kind="prop">forwardRef</CodeToken>{" }"}{" "}
+                  <CodeToken kind="keyword">from</CodeToken>{" "}
+                  <CodeToken kind="string">"react"</CodeToken>;
+                </CodeLine>
+                <CodeLine number={2}></CodeLine>
+                <CodeLine number={3}>
+                  <CodeToken kind="comment">// retroma editor canvas</CodeToken>
+                </CodeLine>
+                <CodeLine number={4} kind="remove">
+                  <CodeToken kind="keyword">const</CodeToken>{" "}
+                  <CodeToken kind="fn">Canvas</CodeToken> ={" "}
+                  <CodeToken kind="string">"old"</CodeToken>;
+                </CodeLine>
+                <CodeLine number={5} kind="add">
+                  <CodeToken kind="keyword">const</CodeToken>{" "}
+                  <CodeToken kind="fn">EditorCanvas</CodeToken> ={" "}
+                  <CodeToken kind="string">"new"</CodeToken>;
+                </CodeLine>
+                <CodeLine number={6} kind="highlight">
+                  <CodeToken kind="keyword">export default</CodeToken>{" "}
+                  <CodeToken kind="fn">EditorCanvas</CodeToken>;
+                </CodeLine>
+              </CodeBlock>
+            </div>
+          </Row>
+
+          <Row name="RepoCard" file="composites/repo-card/">
+            <RepoCard
+              owner="emarpiee"
+              name="Retroma"
+              href="#"
+              description="A tribute to the past with an eye toward the future — an Obsidian theme + React design system."
+              stars={1245}
+              forks={82}
+              issues={14}
+              language="CSS"
+              languageColor="#563d7c"
+              visibility="public"
+              topics={["obsidian", "theme", "react", "tailwind"]}
+            />
+          </Row>
+
+          <Row name="CommitGraph" file="composites/commit-graph/">
+            <div style={{ width: 720 }}>
+              <CommitGraph days={generateDemoCommits(26, 13)} />
+            </div>
+          </Row>
+
+          <Row name="FileTree" file="composites/file-tree/">
+            <FileTree defaultOpen={["src", "composites"]}>
+              <FileTreeFolder id="src" name="src">
+                <FileTreeFolder id="composites" name="composites">
+                  <FileTreeFile id="ribbon" name="ribbon/" icon="📂" />
+                  <FileTreeFile id="chat" name="chat/" icon="📂" />
+                  <FileTreeFile id="editor" name="editor/" icon="📂" />
+                </FileTreeFolder>
+                <FileTreeFile id="index" name="index.ts" adornment="1.2 kb" />
+              </FileTreeFolder>
+              <FileTreeFile id="pkg" name="package.json" adornment="3.4 kb" />
+              <FileTreeFile id="readme" name="README.md" adornment="2.1 kb" />
+            </FileTree>
+          </Row>
+
+          <Row name="Carousel" file="composites/carousel/">
+            <div style={{ width: 560 }}>
+              <Carousel>
+                <CarouselButton direction="prev" />
+                <CarouselViewport>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <CarouselItem key={i}>
+                      <div
+                        style={{
+                          width: 160,
+                          height: 100,
+                          borderRadius: 12,
+                          border: "1px solid var(--outline-color)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: 700,
+                          background: `oklch(from var(--base-accent) l c calc(h + ${i * 40}) / 18%)`,
+                        }}
+                      >
+                        Slide {i + 1}
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselViewport>
+                <CarouselButton direction="next" />
+              </Carousel>
+            </div>
+          </Row>
+
+          <Row name="InfiniteSlider" file="composites/infinite-slider/">
+            <div style={{ width: 560 }}>
+              <InfiniteSlider duration={24}>
+                {["Retroma", "React", "Obsidian", "Tailwind", "Vite", "OKLCH", "Typescript"].map(
+                  (t) => (
+                    <span
+                      key={t}
+                      style={{
+                        padding: "8px 16px",
+                        borderRadius: 999,
+                        border: "1px solid var(--outline-color)",
+                        background: "var(--background-paper)",
+                        fontWeight: 700,
+                        fontFamily: "var(--font-monospace)",
+                      }}
+                    >
+                      {t}
+                    </span>
+                  ),
+                )}
+              </InfiniteSlider>
+            </div>
+          </Row>
+
+          <Row name="TextScramble" file="composites/text-scramble/">
+            <ShowcaseScramble />
+          </Row>
+
+          <Row name="TextShimmer" file="composites/text-shimmer/">
+            <TextShimmer style={{ fontSize: 24, fontWeight: 700 }}>
+              thinking about the palette…
+            </TextShimmer>
+          </Row>
+
+          <Row name="AnimatedNumber" file="composites/animated-number/">
+            <ShowcaseAnimatedNumber />
+          </Row>
+
+          <Row name="SlidingNumber" file="composites/sliding-number/">
+            <ShowcaseSlidingNumber />
+          </Row>
+
+          <Row name="Sparkline" file="composites/sparkline/">
+            <div style={{ width: 180, color: "var(--color-green, #4caf50)" }}>
+              <Sparkline values={[4, 2, 6, 5, 8, 6, 9, 7, 10, 14, 11, 15]} fill showEndDot />
+            </div>
+            <div style={{ width: 180, color: "var(--color-magenta, #e91e63)" }}>
+              <Sparkline values={[2, 3, 1, 4, 2, 5, 3, 4, 6, 4, 7, 5]} />
+            </div>
+          </Row>
+
+          <Row name="Gauge" file="composites/gauge/">
+            <Gauge value={72} label="CPU" suffix="%" />
+            <Gauge value={412} max={1024} label="Memory" suffix=" MB" size={72} />
+            <Gauge value={9.4} max={10} decimals={1} label="Score" size={72} thickness={8} />
+          </Row>
+
+          <Row name="PopoverCommandSelect" file="composites/popover-command-select/">
+            <ShowcasePopoverCommandSelect />
+          </Row>
+
+          <Row name="PaneGroup" file="composites/pane-group/">
+            <div style={{ width: 720, height: 260 }}>
+              <PaneGroup persistKey="gallery-demo" defaultSizes={[30, 45, 25]}>
+                <Pane>
+                  <strong>Left</strong>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                    Drag the dividers — widths persist to localStorage.
+                  </p>
+                </Pane>
+                <Pane>
+                  <strong>Main</strong>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                    The middle pane takes whatever space is left after its siblings.
+                  </p>
+                </Pane>
+                <Pane>
+                  <strong>Inspector</strong>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                    Resize, reload — the split stays.
+                  </p>
+                </Pane>
+              </PaneGroup>
+            </div>
+          </Row>
+
+          <Row name="StatusRail" file="composites/status-rail/">
+            <div style={{ width: 520 }}>
+              <StatusRail
+                label="voice"
+                showFab={false}
+                onTranscript={(t) => console.log("[voice]", t)}
+              />
+              <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6 }}>
+                Uses <code>window.SpeechRecognition</code> (or webkit prefix). Requires mic permission.
+              </p>
+            </div>
+          </Row>
+
+          <Row name="StatusIndicator" file="composites/status-indicator/">
+            <StatusIndicator tone="ok" variant="pill" label="all checks passed" pulse />
+            <StatusIndicator tone="warn" variant="pill" label="pending review" />
+            <StatusIndicator tone="err" variant="pill" label="build failed" />
+            <StatusIndicator tone="running" variant="bar" label="deploying" />
+          </Row>
+
+          <Row name="GithubButton / StarsButton" file="composites/github-button/">
+            <GithubButtonGroup>
+              <GithubStarsButton stars={1245} starred />
+              <GithubButton icon="⎇" count={82}>Fork</GithubButton>
+              <GithubButton icon="👁" count={31}>Watch</GithubButton>
+            </GithubButtonGroup>
+          </Row>
+
+          <Row name="ContributorGrid" file="composites/contributor-grid/">
+            <ContributorGrid
+              contributors={[
+                { id: "cory", name: "cory", contributions: 148 },
+                { id: "juno", name: "juno", contributions: 92 },
+                { id: "rin", name: "rin", contributions: 63 },
+                { id: "alice", name: "alice", contributions: 40 },
+                { id: "mallory", name: "mallory", contributions: 28 },
+              ]}
+            />
+          </Row>
+
+          <Row name="ActivityGraph" file="composites/activity-graph/">
+            <div style={{ width: 420 }}>
+              <ActivityGraph
+                buckets={[
+                  { label: "w1", value: 2 }, { label: "w2", value: 5 },
+                  { label: "w3", value: 3 }, { label: "w4", value: 9 },
+                  { label: "w5", value: 11 }, { label: "w6", value: 7 },
+                  { label: "w7", value: 14 }, { label: "w8", value: 18 },
+                  { label: "w9", value: 11 }, { label: "w10", value: 22 },
+                  { label: "w11", value: 17 }, { label: "w12", value: 25 },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Stepper" file="composites/stepper/">
+            <div style={{ width: 520 }}>
+              <Stepper
+                steps={[
+                  { id: "install", label: "install",   hint: "npm i @retroma/react" },
+                  { id: "theme",   label: "theme",     hint: "set --interactive-accent" },
+                  { id: "compose", label: "compose",   hint: "build a page" },
+                  { id: "ship",    label: "ship",      hint: "vite build" },
+                ]}
+                current={2}
+              />
+            </div>
+          </Row>
+
+          <Row name="DiffViewer + WorktreeLineage" file="composites/diff-viewer/">
+            <ShowcaseDiff />
+          </Row>
+
+          <Row name="LogViewer" file="composites/log-viewer/">
+            <div style={{ width: 560 }}>
+              <LogViewer
+                height={220}
+                entries={[
+                  { id: "1", ts: "13:02:01", level: "info",   source: "runner", message: "▶ checkout main" },
+                  { id: "2", ts: "13:02:28", level: "info",   source: "runner", message: "▶ npm run typecheck" },
+                  { id: "3", ts: "13:03:01", level: "warn",   source: "vite",   message: "chunk larger than 500 kB" },
+                  { id: "4", ts: "13:03:41", level: "stdout", source: "jest",   message: "PASS  src/DiffViewer.test.tsx" },
+                  { id: "5", ts: "13:03:45", level: "info",   source: "runner", message: "✓ all checks green" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="JsonViewer" file="composites/json-viewer/">
+            <div style={{ width: 420 }}>
+              <JsonViewer
+                value={{
+                  name: "@retroma/react",
+                  version: "0.3.0",
+                  settings: { theme: "groovy", accent: "#8a5cf5" },
+                  components: ["DiffViewer", "LogViewer", "JsonViewer"],
+                  active: true,
+                  lastSeen: null,
+                }}
+              />
+            </div>
+          </Row>
+
+          <Row name="EnvTable" file="composites/env-table/">
+            <div style={{ width: 520 }}>
+              <EnvTable
+                entries={[
+                  { key: "NODE_ENV", value: "production" },
+                  { key: "DATABASE_URL", value: "postgres://host/db", secret: true, hint: "prod · fly" },
+                  { key: "STRIPE_API_KEY", value: "sk_live_8f21a9ab", secret: true },
+                  { key: "VITE_API_BASE", value: "https://api.example.com" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Attachments" file="composites/attachments/">
+            <div style={{ width: 420 }}>
+              <Attachments
+                maxSize={10 * 1024 * 1024}
+                maxFiles={5}
+                value={[
+                  { id: "a1", name: "design-mockup.png",  size: 1_420_331, type: "image/png",       status: "ready" },
+                  { id: "a2", name: "sheet.xlsx",         size: 92_112,    type: "application/vnd.ms-excel", status: "uploading", progress: 0.65 },
+                  { id: "a3", name: "notes.md",           size: 2_311,     type: "text/markdown",   status: "error", error: "scan failed" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Citation" file="composites/citation/">
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 520 }}>
+              <span style={{ fontSize: 13 }}>
+                Retroma derives its palette via oklch
+                <Citation
+                  index={1}
+                  sources={[{ url: "https://oklch.com", title: "oklch color picker" }]}
+                  style={{ margin: "0 4px" }}
+                />
+                and inherits from the CSS working group spec
+                <Citation
+                  index={2}
+                  sources={[{ url: "https://www.w3.org/TR/css-color-4/", title: "CSS Color Module Level 4" }]}
+                  style={{ margin: "0 4px" }}
+                />
+                .
+              </span>
+              <Citation
+                variant="card"
+                sources={[
+                  { url: "https://github.com/maceip/Retroma", title: "Retroma on GitHub" },
+                  { url: "https://obsidian.md", title: "Obsidian notes" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Message family" file="composites/message/">
+            <ShowcaseMessage />
+          </Row>
+
+          <Row name="PromptInput" file="composites/prompt-input/">
+            <ShowcasePromptInput />
+          </Row>
+
+          <Row name="Suggestions" file="composites/suggestions/">
+            <Suggestions title="try one of these">
+              <Suggestion onSelect={() => {}}>explain this diff</Suggestion>
+              <Suggestion onSelect={() => {}}>suggest a test</Suggestion>
+              <Suggestion onSelect={() => {}}>draft a commit message</Suggestion>
+              <Suggestion onSelect={() => {}}>find similar PRs</Suggestion>
+            </Suggestions>
+          </Row>
+
+          <Row name="Thread" file="composites/thread/">
+            <ShowcaseThread />
+          </Row>
+
+          <Row name="ModelSelector" file="composites/model-selector/">
+            <ShowcaseModelSelector />
+          </Row>
+
+        </div>
+
+        {/* ================================================================ */}
+        {/*   BOUNTYNET — FULL APP REASSEMBLED                               */}
+        {/* ================================================================ */}
+        <BountyNetShowcase />
 
         {/* ================================================================ */}
         {/*   BASE UI PRIMITIVES                                             */}
@@ -710,5 +1356,290 @@ export default function Gallery() {
         </SettingsModal>
       </div>
     </TooltipProvider>
+    </ThemeTunerProvider>
+  );
+}
+
+/* ------------------------------------------------------------------------ */
+/*  Local showcase helpers                                                  */
+/* ------------------------------------------------------------------------ */
+
+function ShowcaseChat() {
+  const models: ChatModel[] = [
+    { id: "sonnet", label: "Claude Sonnet 4.6" },
+    { id: "opus", label: "Claude Opus 4.7" },
+    { id: "haiku", label: "Claude Haiku 4.5" },
+  ];
+  const [model, setModel] = useState("sonnet");
+  const [messages, setMessages] = useState<
+    Array<{ id: string; role: "user" | "assistant" | "system"; content: string; t: string }>
+  >([
+    { id: "s", role: "system", content: "Retroma Chat — a cozy place to think.", t: "13:02" },
+    { id: "u1", role: "user", content: "How do I override the accent?", t: "13:03" },
+    { id: "a1", role: "assistant", content: "Set `--interactive-accent` on body — the oklch algorithm derives the whole palette.", t: "13:03" },
+  ]);
+  const send = (value: string) => {
+    const userMsg = {
+      id: String(Date.now()),
+      role: "user" as const,
+      content: value,
+      t: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+    setMessages((ms) => [...ms, userMsg]);
+    setTimeout(() => {
+      setMessages((ms) => [
+        ...ms,
+        {
+          id: String(Date.now() + 1),
+          role: "assistant",
+          content: `Thought about "${value}". (${models.find((m) => m.id === model)?.label})`,
+          t: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ]);
+    }, 500);
+  };
+  return (
+    <div style={{ width: 560 }}>
+      <ChatContainer>
+        <ChatMessageList>
+          {messages.map((m) => (
+            <ChatMessage
+              key={m.id}
+              role={m.role}
+              avatar={m.role === "assistant" ? "🤖" : m.role === "user" ? "🧑" : "ⓘ"}
+              sender={m.role === "assistant" ? models.find((x) => x.id === model)?.label : m.role}
+              timestamp={m.t}
+              actions={
+                m.role !== "system" && (
+                  <ChatCopyButton value={m.content}>Copy</ChatCopyButton>
+                )
+              }
+            >
+              {m.content}
+            </ChatMessage>
+          ))}
+        </ChatMessageList>
+        <ChatInput
+          onSend={send}
+          leading={
+            <ChatModelPicker
+              models={models}
+              value={model}
+              onChange={setModel}
+              label="Model"
+            />
+          }
+          trailing={<ChatSendButton>Send ↵</ChatSendButton>}
+        />
+      </ChatContainer>
+    </div>
+  );
+}
+
+function ShowcaseScramble() {
+  const phrases = ["Retroma React", "One color, many vibes", "Ship your vault", "Obsidian, better"];
+  const [i, setI] = useState(0);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontSize: 22, fontWeight: 700 }}>
+        <TextScramble trigger={i}>{phrases[i]}</TextScramble>
+      </span>
+      <Button variant="outline" size="sm" onClick={() => setI((n) => (n + 1) % phrases.length)}>
+        Scramble
+      </Button>
+    </div>
+  );
+}
+
+function ShowcaseAnimatedNumber() {
+  const [n, setN] = useState(1_245);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontSize: 28 }}>
+        <AnimatedNumber value={n} />
+      </span>
+      <Button variant="outline" size="sm" onClick={() => setN((v) => v + Math.floor(Math.random() * 5000))}>
+        +random
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => setN(0)}>
+        reset
+      </Button>
+    </div>
+  );
+}
+
+function ShowcasePopoverCommandSelect() {
+  const options: PopoverCommandOption[] = [
+    { value: "opus-4-7", label: "Claude Opus 4.7", description: "most capable" },
+    { value: "sonnet-4-6", label: "Claude Sonnet 4.6", description: "balanced" },
+    { value: "haiku-4-5", label: "Claude Haiku 4.5", description: "fastest" },
+    { value: "gpt-5", label: "OpenAI GPT-5" },
+    { value: "gemini-3", label: "Gemini 3", description: "beta" },
+    { value: "grok-4", label: "xAI Grok 4" },
+    { value: "mistral-3", label: "Mistral 3" },
+  ];
+  const [model, setModel] = useState("sonnet-4-6");
+  return (
+    <PopoverCommandSelect
+      label="Model"
+      value={model}
+      onChange={setModel}
+      options={options}
+      placeholder="pick a model"
+    />
+  );
+}
+
+function ShowcaseSlidingNumber() {
+  const [n, setN] = useState(42);
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontSize: 36 }}>
+        <SlidingNumber value={n} minDigits={4} />
+      </span>
+      <Button variant="outline" size="sm" onClick={() => setN((v) => v + 1)}>
+        +1
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => setN((v) => v + 37)}>
+        +37
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => setN(0)}>
+        reset
+      </Button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------ */
+/*  Showcase helpers for the new primitives                                 */
+/* ------------------------------------------------------------------------ */
+
+const DEMO_DIFF = `--- a/src/workers/queue.ts
++++ b/src/workers/queue.ts
+@@ -12,7 +12,10 @@ export class WorkerQueue {
+   }
+
+-  enqueue(job: Job) {
+-    this.items.push(job);
++  enqueue(job: Job, opts: EnqueueOpts = {}) {
++    const priority = opts.priority ?? 0;
++    this.items.push({ ...job, priority });
++    this.metrics.enqueued += 1;
+   }
+
+@@ -29,6 +32,7 @@ export class WorkerQueue {
+   async drain() {
++    if (this.draining) return;
+     while (this.items.length) {`;
+
+function ShowcaseDiff() {
+  const file = parseUnifiedDiff(DEMO_DIFF, "src/workers/queue.ts");
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "220px minmax(0, 1fr)", gap: 12, width: 720 }}>
+      <WorktreeLineage
+        nodes={[
+          { id: "main",   label: "main",                ref: "a3f42c1", state: "base" },
+          { id: "branch", label: "feat/priority-queue", state: "branch", ref: "branch" },
+          { id: "c1",     label: "add priority",        ref: "c4aeb12", state: "branch", note: "2h ago" },
+          { id: "c2",     label: "guard drain",         ref: "9a1c08e", state: "branch", note: "1h ago" },
+          { id: "head",   label: "HEAD",                state: "head", note: "ready" },
+        ]}
+      />
+      <DiffViewer file={{ ...file, additions: 5, deletions: 2 }} defaultView="split" />
+    </div>
+  );
+}
+
+function ShowcaseMessage() {
+  return (
+    <div style={{ width: 560 }}>
+      <MessageStack>
+        <Message from="user">
+          <MessageAvatar fallback="🧑" />
+          <MessageHeader sender="you" timestamp="14:02" />
+          <MessageContent>Walk me through the new queue priority.</MessageContent>
+        </Message>
+        <Message from="assistant">
+          <MessageAvatar fallback="🤖" />
+          <MessageHeader sender="Claude" timestamp="14:02" />
+          <MessageContent>
+            Jobs are pushed with an optional <code>priority</code> field. On
+            enqueue we re-sort; drain is now idempotent via a guard.
+          </MessageContent>
+          <MessageActions>
+            <MessageAction label="Copy"    >copy</MessageAction>
+            <MessageAction label="Retry"   >retry</MessageAction>
+            <MessageAction label="Good"    >👍</MessageAction>
+            <MessageAction label="Bad"     >👎</MessageAction>
+          </MessageActions>
+        </Message>
+      </MessageStack>
+    </div>
+  );
+}
+
+function ShowcasePromptInput() {
+  const [value, setValue] = useState("");
+  return (
+    <div style={{ width: 560 }}>
+      <PromptInput
+        value={value}
+        onValueChange={setValue}
+        onSend={(v) => {
+          console.log("[send]", v);
+          setValue("");
+        }}
+      >
+        <PromptInputTextarea placeholder="Ask anything — enter to send, shift+enter for newline." />
+        <PromptInputActions>
+          <PromptInputActionGroup align="leading">
+            <PromptInputAction tooltip="Attach file">＋</PromptInputAction>
+            <PromptInputAction tooltip="Voice">🎙</PromptInputAction>
+          </PromptInputActionGroup>
+          <PromptInputActionGroup align="trailing">
+            <PromptInputAction tooltip="Open model picker">⎇</PromptInputAction>
+            <PromptInputAction submit tooltip="Send">↵ send</PromptInputAction>
+          </PromptInputActionGroup>
+        </PromptInputActions>
+      </PromptInput>
+    </div>
+  );
+}
+
+function ShowcaseThread() {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  return (
+    <div style={{ width: 520, height: 300 }}>
+      <Thread>
+        <ThreadContent ref={scrollRef}>
+          <MessageStack>
+            {Array.from({ length: 12 }).map((_, i) => (
+              <Message key={i} from={i % 2 === 0 ? "assistant" : "user"}>
+                <MessageAvatar fallback={i % 2 === 0 ? "🤖" : "🧑"} />
+                <MessageContent>
+                  message {i + 1} — the thread sticks to the bottom as new
+                  entries land.
+                </MessageContent>
+              </Message>
+            ))}
+          </MessageStack>
+        </ThreadContent>
+        <ThreadScrollToBottom scrollRef={scrollRef} />
+      </Thread>
+    </div>
+  );
+}
+
+function ShowcaseModelSelector() {
+  const [value, setValue] = useState("sonnet");
+  const models: ModelItemData[] = [
+    { id: "opus",   label: "Claude Opus 4.7",   provider: "Anthropic", contextKb: 1000, tone: "smart" },
+    { id: "sonnet", label: "Claude Sonnet 4.6", provider: "Anthropic", contextKb: 200 },
+    { id: "haiku",  label: "Claude Haiku 4.5",  provider: "Anthropic", contextKb: 200, tone: "fast" },
+    { id: "gpt5",   label: "OpenAI GPT-5",      provider: "OpenAI",    contextKb: 128 },
+    { id: "gem3",   label: "Gemini 3",          provider: "Google",    contextKb: 1000, tone: "beta" },
+  ];
+  return (
+    <ModelSelector models={models} value={value} onChange={setValue} />
   );
 }

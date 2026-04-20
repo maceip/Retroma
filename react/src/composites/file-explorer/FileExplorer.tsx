@@ -222,6 +222,56 @@ export const TreeFile = forwardRef<HTMLDivElement, TreeFileProps>(
 );
 
 /* -------------------------------------------------------------------------- */
+/*  FileExplorerToolbar — the row of action icons above the tree.             */
+/* -------------------------------------------------------------------------- */
+
+export interface FileExplorerToolbarProps extends HTMLAttributes<HTMLDivElement> {}
+
+export const FileExplorerToolbar = forwardRef<HTMLDivElement, FileExplorerToolbarProps>(
+  function FileExplorerToolbar({ className, children, ...rest }, ref) {
+    return (
+      <div
+        ref={ref}
+        role="toolbar"
+        className={cn("nav-header", className)}
+        {...rest}
+      >
+        <div className="nav-buttons-container" style={{ display: "flex", gap: 6 }}>
+          {children}
+        </div>
+      </div>
+    );
+  },
+);
+
+export interface FileExplorerToolbarActionProps
+  extends Omit<HTMLAttributes<HTMLButtonElement>, "type"> {
+  /** Accessible label (also the tooltip / title). */
+  label: string;
+  /** Optional icon (usually a 14×14 SVG). */
+  icon?: ReactNode;
+}
+
+export const FileExplorerToolbarAction = forwardRef<
+  HTMLButtonElement,
+  FileExplorerToolbarActionProps
+>(function FileExplorerToolbarAction({ label, icon, className, children, ...rest }, ref) {
+  return (
+    <button
+      ref={ref}
+      type="button"
+      aria-label={label}
+      title={label}
+      className={cn("nav-action-button", "clickable-icon", className)}
+      {...rest}
+    >
+      {icon}
+      {children}
+    </button>
+  );
+});
+
+/* -------------------------------------------------------------------------- */
 /*  TreeItemIcon / TreeItemLabel                                              */
 /* -------------------------------------------------------------------------- */
 

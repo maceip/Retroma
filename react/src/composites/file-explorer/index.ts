@@ -4,9 +4,13 @@ export {
   TreeFile,
   TreeItemIcon,
   TreeItemLabel,
+  FileExplorerToolbar,
+  FileExplorerToolbarAction,
   type TreeRootProps,
   type TreeFolderProps,
   type TreeFileProps,
   type TreeItemIconProps,
   type TreeItemLabelProps,
+  type FileExplorerToolbarProps,
+  type FileExplorerToolbarActionProps,
 } from "./FileExplorer";

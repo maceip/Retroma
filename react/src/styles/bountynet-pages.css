@@ -1,0 +1,242 @@
+/*
+ * BountyNet page-specific CSS (onboarding steps, settlements, incidents, …).
+ */
+
+/* ----- Onboarding steps ----- */
+.bn-onboarding-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap);
+}
+.bn-onboarding-step {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  column-gap: var(--bn-gap);
+  padding: var(--bn-pad-card);
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  box-shadow: var(--box-shadow-sm);
+}
+.bn-onboarding-step-num {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: oklch(from var(--base-accent) l c h / 22%);
+  color: var(--text-normal);
+  font-weight: var(--font-bold);
+  font-family: var(--font-monospace);
+  font-size: 13px;
+  border: 1px solid oklch(from var(--base-accent) l c h / 40%);
+}
+.bn-onboarding-step > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap-xs);
+  min-width: 0;
+}
+.bn-onboarding-step-title {
+  font-weight: var(--font-bold);
+  font-size: var(--bn-text-card-title);
+  color: var(--text-normal);
+  line-height: 1.25;
+}
+.bn-onboarding-step-body {
+  font-size: var(--bn-text-row);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.bn-onboarding-step code {
+  font-family: var(--font-monospace);
+  background: oklch(from var(--background-secondary) l c h / 60%);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+
+/* ----- Settlement table ----- */
+.bn-settlement-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap-xs);
+  /* Shared column template — head and row cannot drift. */
+  --bn-settlement-cols: 0.8fr 0.8fr 0.7fr minmax(0, 1.4fr) 0.9fr 1fr;
+}
+.bn-settlement-head,
+.bn-settlement-row {
+  display: grid;
+  grid-template-columns: var(--bn-settlement-cols);
+  column-gap: var(--bn-gap);
+  align-items: center;
+  padding: var(--bn-pad-row-y) var(--bn-pad-row-x);
+}
+.bn-settlement-head {
+  padding-top: var(--bn-gap-xs);
+  padding-bottom: var(--bn-gap-xs);
+  font-size: var(--bn-text-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-weight: var(--font-bold);
+  border-bottom: 1px solid var(--outline-color);
+}
+.bn-settlement-row {
+  min-height: var(--bn-row-min-height);
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  font-size: var(--bn-text-row);
+}
+.bn-settlement-row code {
+  font-family: var(--font-monospace);
+  font-size: var(--bn-text-meta);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bn-settlement-amount {
+  font-family: var(--font-monospace);
+  font-weight: var(--font-bold);
+  color: var(--base-accent, var(--interactive-accent));
+  font-variant-numeric: tabular-nums;
+}
+.bn-settlement-row > .bn-status-pill { justify-self: start; }
+.bn-settlement-actions {
+  display: inline-flex;
+  gap: var(--bn-gap-xs);
+  justify-self: end;
+}
+
+/* ----- Disputes ----- */
+.bn-dispute-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap-xs);
+}
+.bn-dispute-row {
+  display: grid;
+  grid-template-columns: minmax(80px, auto) minmax(120px, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--bn-gap);
+  padding: var(--bn-pad-row-y) var(--bn-pad-row-x);
+  min-height: var(--bn-row-min-height);
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  font-size: var(--bn-text-row);
+}
+.bn-dispute-row code {
+  font-family: var(--font-monospace);
+  font-size: var(--bn-text-meta);
+  color: var(--text-muted);
+}
+.bn-dispute-row > .bn-status-pill { justify-self: end; }
+
+/* ----- Incidents ----- */
+.bn-incident-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap-xs);
+}
+.bn-incident-row {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--bn-gap);
+  padding: var(--bn-pad-row-y) var(--bn-pad-row-x);
+  min-height: var(--bn-row-min-height);
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  font-size: var(--bn-text-row);
+}
+.bn-incident-type {
+  font-weight: var(--font-bold);
+  color: var(--text-normal);
+  text-transform: lowercase;
+}
+.bn-incident-target {
+  font-family: var(--font-monospace);
+  font-size: var(--bn-text-meta);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bn-incident-row > .bn-status-pill { justify-self: end; }
+
+/* ----- Control plane panes — extra breathing room inside each pane ----- */
+.bn-page-section .retroma-pane-group .retroma-pane {
+  padding: var(--bn-pad-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap);
+}
+.bn-page-section .retroma-pane-group .retroma-pane > strong {
+  font-size: var(--bn-text-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-weight: var(--font-bold);
+}
+
+/* ----- Inline showcase switcher (used by the Gallery) ----- */
+.bn-showcase {
+  margin: 0 auto;
+  max-width: 1280px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-gap-lg);
+  padding: var(--bn-gap-lg) var(--bn-gap-lg) 0;
+}
+.bn-showcase-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bn-gap-xs);
+  padding: 6px;
+  background: var(--background-secondary);
+  border: 1px solid var(--outline-color);
+  border-radius: 999px;
+  width: fit-content;
+}
+.bn-showcase-nav-link {
+  appearance: none;
+  min-height: 26px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  line-height: 1;
+}
+.bn-showcase-nav-link:hover { color: var(--text-normal); }
+.bn-showcase-nav-link[data-active="true"] {
+  background: var(--background-paper);
+  border-color: var(--outline-color);
+  color: var(--text-normal);
+  box-shadow: var(--box-shadow-sm);
+}
+.bn-showcase-frame {
+  background: var(--background-primary);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--window-border-radius, 12px);
+  overflow: hidden;
+  box-shadow: 0 2px 8px oklch(from black l c h / 10%);
+}
+/* Inside the framed preview, collapse the shell's sticky header to a flat
+ * header and let the page layout breathe without double-scrolling. */
+.bn-showcase-frame .bn-app-header { position: static; }
+.bn-showcase-frame .bn-page-layout {
+  padding: var(--bn-gap-xl) var(--bn-gap-lg) calc(var(--bn-gap-xl) * 1.5);
+}

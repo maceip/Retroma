@@ -1,0 +1,15 @@
+export {
+  DiffViewer,
+  DiffFileList,
+  WorktreeLineage,
+  parseUnifiedDiff,
+  type DiffViewerProps,
+  type DiffFileListProps,
+  type WorktreeLineageProps,
+  type WorktreeLineageNode,
+  type DiffFile,
+  type DiffHunk,
+  type DiffLine,
+  type DiffLineKind,
+  type DiffView,
+} from "./DiffViewer";
