@@ -44,5 +44,25 @@ export * from "./popover-command-select";
 export * from "./pane-group";
 export * from "./status-rail";
 
+/* GitHub-flavored primitives (jal-co/ui-inspired) */
+export * from "./status-indicator";
+export * from "./github-button";
+export * from "./contributor-grid";
+export * from "./activity-graph";
+export * from "./stepper";
+export * from "./diff-viewer";
+export * from "./log-viewer";
+export * from "./json-viewer";
+export * from "./env-table";
+
+/* Chat bolster (nexus-ui-inspired) */
+export * from "./attachments";
+export * from "./citation";
+export * from "./message";
+export * from "./prompt-input";
+export * from "./suggestions";
+export * from "./thread";
+export * from "./model-selector";
+
 /* BountyNet app shell + page templates */
 export * as BountyNet from "./bountynet";

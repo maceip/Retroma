@@ -20,6 +20,7 @@ const ROUTES: {
   { path: "/ops/control-plane",        label: "Control plane", render: () => <BN.ControlPlanePage /> },
   { path: "/ops/simulator",            label: "Simulator",     render: () => <BN.SimulatorPage /> },
   { path: "/agent-track",              label: "Agent track",   render: () => <BN.AgentTrackPage /> },
+  { path: "/pulls/482",                label: "Pull request",  render: () => <BN.GithubDiffPage /> },
   { path: "*",                         label: "404",           render: ({ pathname }) => <BN.NotFoundPage pathname={pathname} /> },
 ];
 
@@ -37,6 +38,8 @@ const NAV_ITEMS: BN.NavItem[] = [
   { path: "/ops/control-plane",       label: "control plane",      paletteOnly: true },
   { path: "/ops/simulator",           label: "simulator",          paletteOnly: true },
   { path: "/agent-track",             label: "agent track" },
+  { path: "/pulls/482",               label: "pull #482",
+    keywords: ["diff", "pr", "pull", "github"] },
 ];
 
 export function BountyNetShowcase() {

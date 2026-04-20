@@ -8,3 +8,4 @@ export { ReputationPage } from "./ReputationPage";
 export { SettlementsPage, DisputesPage } from "./SettlementsPage";
 export { ControlPlanePage, SimulatorPage } from "./OpsPages";
 export { AgentTrackPage } from "./AgentTrackPage";
+export { GithubDiffPage } from "./GithubDiffPage";

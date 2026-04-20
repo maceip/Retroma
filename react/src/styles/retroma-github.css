@@ -1,0 +1,557 @@
+/*
+ * GitHub-flavored composites — status indicators, buttons, diff viewer,
+ * worktree lineage, log / json viewers, env table, stepper, activity graph,
+ * contributor grid.
+ */
+
+/* ====== StatusIndicator ====== */
+.retroma-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  vertical-align: middle;
+}
+.retroma-status-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--rsi-color, currentColor);
+  box-shadow: 0 0 0 3px oklch(from var(--rsi-color, currentColor) l c h / 15%);
+  flex-shrink: 0;
+}
+.retroma-status-indicator--bar { flex-direction: row; gap: 8px; }
+.retroma-status-indicator--bar .retroma-status-indicator-dot {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  box-shadow: none;
+}
+.retroma-status-indicator-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-normal);
+  font-weight: var(--font-bold);
+}
+.retroma-status-indicator--pulse .retroma-status-indicator-dot {
+  animation: retroma-status-pulse 1.6s ease-in-out infinite;
+}
+@keyframes retroma-status-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px oklch(from var(--rsi-color, currentColor) l c h / 15%); }
+  50%      { box-shadow: 0 0 0 8px oklch(from var(--rsi-color, currentColor) l c h / 0%); }
+}
+
+/* ====== GithubButton + Group + Stars ====== */
+.retroma-gh-button-group {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+}
+.retroma-gh-button-group > .retroma-gh-button,
+.retroma-gh-button-group > .retroma-gh-stars {
+  border-radius: 0;
+  margin-left: -1px;
+}
+.retroma-gh-button-group > :first-child {
+  border-top-left-radius: var(--button-border-radius, 8px);
+  border-bottom-left-radius: var(--button-border-radius, 8px);
+  margin-left: 0;
+}
+.retroma-gh-button-group > :last-child {
+  border-top-right-radius: var(--button-border-radius, 8px);
+  border-bottom-right-radius: var(--button-border-radius, 8px);
+}
+
+.retroma-gh-button,
+.retroma-gh-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 4px 12px;
+  background: var(--background-paper);
+  color: var(--text-normal);
+  border: 1px solid var(--outline-color);
+  font: inherit;
+  font-size: 12px;
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  box-shadow: var(--box-shadow-sm);
+  border-radius: var(--button-border-radius, 8px);
+}
+.retroma-gh-button:hover,
+.retroma-gh-stars:hover {
+  background: var(--button-hover, var(--background-primary));
+}
+.retroma-gh-button[data-active="true"] {
+  box-shadow: var(--box-shadow-active-sm);
+  background: oklch(from var(--base-accent) l c h / 15%);
+}
+.retroma-gh-button-count {
+  padding: 1px 8px;
+  border-left: 1px solid var(--outline-color);
+  background: oklch(from var(--background-secondary) l c h / 50%);
+  margin: -4px -12px -4px 0;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+.retroma-gh-stars[data-starred="true"] .retroma-gh-stars-icon {
+  color: var(--color-amber, #ffb300);
+}
+.retroma-gh-stars-icon { font-size: 13px; }
+.retroma-gh-stars-count {
+  font-variant-numeric: tabular-nums;
+  padding: 1px 8px;
+  border-left: 1px solid var(--outline-color);
+  background: oklch(from var(--background-secondary) l c h / 50%);
+  margin: -4px -12px -4px 0;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+/* ====== ContributorGrid ====== */
+.retroma-contributor-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  --rcg-size: 40px;
+}
+.retroma-contributor {
+  position: relative;
+  width: var(--rcg-size);
+  height: var(--rcg-size);
+  display: inline-block;
+}
+.retroma-contributor img,
+.retroma-contributor-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--outline-color);
+  box-shadow: var(--box-shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: var(--font-bold);
+  color: #fff;
+  font-family: var(--font-monospace);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.retroma-contributor-count {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  font-size: 9px;
+  font-weight: var(--font-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+.retroma-contributor-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  background: var(--background-paper);
+  color: var(--text-normal);
+  border: 1px solid var(--outline-color);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+  box-shadow: 0 2px 6px oklch(from black l c h / 15%);
+  z-index: 1;
+}
+.retroma-contributor:hover .retroma-contributor-tooltip { opacity: 1; }
+
+/* ====== ActivityGraph ====== */
+.retroma-activity-graph {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--button-border-radius, 8px);
+  padding: 12px;
+}
+.retroma-activity-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 80px;
+}
+.retroma-activity-bar {
+  position: relative;
+  flex: 1;
+  background: oklch(from var(--base-accent) l c h / 55%);
+  border: 1px solid oklch(from var(--base-accent) l c h / 35%);
+  border-bottom: 0;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 80ms ease;
+}
+.retroma-activity-bar:hover { background: oklch(from var(--base-accent) l c h / 75%); }
+.retroma-activity-bar-value {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transition: opacity 80ms;
+  pointer-events: none;
+}
+.retroma-activity-bar:hover .retroma-activity-bar-value { opacity: 1; }
+.retroma-activity-labels {
+  display: flex;
+  gap: 4px;
+}
+.retroma-activity-label {
+  flex: 1;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-monospace);
+}
+
+/* ====== Stepper ====== */
+.retroma-stepper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0;
+}
+.retroma-stepper--vertical { flex-direction: column; gap: 10px; }
+.retroma-stepper-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+.retroma-stepper-bubble {
+  grid-row: 1;
+  grid-column: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-monospace);
+  font-weight: var(--font-bold);
+  font-size: 12px;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  color: var(--text-muted);
+  box-shadow: var(--box-shadow-sm);
+  z-index: 1;
+}
+.retroma-stepper-item--done .retroma-stepper-bubble {
+  background: oklch(from var(--color-green, #4caf50) l c h / 85%);
+  color: #fff;
+  border-color: oklch(from var(--color-green, #4caf50) l c h / 50%);
+}
+.retroma-stepper-item--current .retroma-stepper-bubble {
+  background: oklch(from var(--base-accent) l c h / 90%);
+  color: #fff;
+  border-color: oklch(from var(--base-accent) l c h / 50%);
+}
+.retroma-stepper-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.retroma-stepper-label {
+  font-size: 13px;
+  font-weight: var(--font-bold);
+  color: var(--text-normal);
+}
+.retroma-stepper-item--upcoming .retroma-stepper-label { color: var(--text-muted); }
+.retroma-stepper-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-monospace);
+}
+.retroma-stepper-connector {
+  position: absolute;
+  top: 14px;
+  left: calc(28px + 8px);
+  right: -8px;
+  height: 2px;
+  background: var(--outline-color);
+}
+.retroma-stepper-item--done + .retroma-stepper-item .retroma-stepper-connector,
+.retroma-stepper-item--done .retroma-stepper-connector {
+  background: oklch(from var(--color-green, #4caf50) l c h / 55%);
+}
+.retroma-stepper--vertical .retroma-stepper-connector {
+  top: 28px;
+  left: 13px;
+  right: auto;
+  width: 2px;
+  height: calc(100% - 16px);
+}
+
+/* ====== DiffViewer ====== */
+.retroma-diff {
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: var(--window-border-radius, 12px);
+  overflow: hidden;
+  font-family: var(--font-monospace);
+  font-size: 12.5px;
+  min-width: 0;
+}
+.retroma-diff-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: oklch(from var(--background-secondary) l c h / 70%);
+  border-bottom: 1px solid var(--outline-color);
+  font-family: var(--font-interface);
+}
+.retroma-diff-kind {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--font-bold);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--outline-color);
+}
+.retroma-diff-kind--added    { background: oklch(from var(--color-green,  #4caf50) l c h / 18%); color: oklch(from var(--color-green, #4caf50) 35% c h); border-color: oklch(from var(--color-green, #4caf50) l c h / 50%); }
+.retroma-diff-kind--deleted  { background: oklch(from var(--color-red,    #d32f2f) l c h / 18%); color: oklch(from var(--color-red,   #d32f2f) 40% c h); border-color: oklch(from var(--color-red, #d32f2f) l c h / 50%); }
+.retroma-diff-kind--modified { background: oklch(from var(--color-orange, #ff9800) l c h / 18%); color: oklch(from var(--color-orange,#ff9800) 40% c h); border-color: oklch(from var(--color-orange, #ff9800) l c h / 50%); }
+.retroma-diff-kind--renamed  { background: oklch(from var(--color-purple, #673ab7) l c h / 18%); color: oklch(from var(--color-purple,#673ab7) 40% c h); border-color: oklch(from var(--color-purple, #673ab7) l c h / 50%); }
+.retroma-diff-kind--binary   { background: oklch(from var(--text-muted) l c h / 15%); color: var(--text-muted); }
+.retroma-diff-path {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  color: var(--text-normal);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.retroma-diff-path-old { color: var(--text-muted); text-decoration: line-through; }
+.retroma-diff-path-sep { color: var(--text-muted); }
+.retroma-diff-stats { display: inline-flex; gap: 6px; font-size: 11px; font-family: var(--font-monospace); font-variant-numeric: tabular-nums; }
+.retroma-diff-stat { padding: 1px 6px; border-radius: 4px; font-weight: var(--font-bold); }
+.retroma-diff-stat--add { background: oklch(from var(--color-green, #4caf50) l c h / 18%); color: oklch(from var(--color-green, #4caf50) 30% c h); }
+.retroma-diff-stat--del { background: oklch(from var(--color-red,   #d32f2f) l c h / 18%); color: oklch(from var(--color-red,   #d32f2f) 35% c h); }
+.retroma-diff-spacer { flex: 1; }
+
+.retroma-diff-view-switch {
+  display: inline-flex;
+  background: var(--background-paper);
+  border: 1px solid var(--outline-color);
+  border-radius: 999px;
+  padding: 2px;
+}
+.retroma-diff-view-tab {
+  appearance: none;
+  padding: 3px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: var(--font-bold);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.retroma-diff-view-tab[data-active="true"] {
+  background: oklch(from var(--base-accent) l c h / 18%);
+  color: var(--text-normal);
+  box-shadow: var(--box-shadow-active-sm);
+}
+.retroma-diff-actions { display: inline-flex; gap: 6px; }
+
+.retroma-diff-body { display: flex; flex-direction: column; }
+.retroma-diff-hunk { border-top: 1px solid var(--outline-color); }
+.retroma-diff-hunk:first-child { border-top: 0; }
+.retroma-diff-hunk-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 4px 12px;
+  background: oklch(from var(--background-secondary) l c h / 45%);
+  border: 0;
+  border-bottom: 1px solid var(--outline-color);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: left;
+}
+.retroma-diff-hunk-head code { font-family: var(--font-monospace); }
+.retroma-diff-hunk-caret { color: var(--text-muted); width: 10px; }
+
+.retroma-diff-hunk-body { display: flex; flex-direction: column; }
+.retroma-diff-row {
+  display: grid;
+  grid-template-columns: 56px 16px minmax(0, 1fr);
+  align-items: start;
+  min-height: 20px;
+  padding: 0;
+}
+.retroma-diff-gutter {
+  padding: 2px 10px;
+  text-align: right;
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  color: var(--text-faint);
+  background: oklch(from var(--background-secondary) l c h / 30%);
+  user-select: none;
+  border-right: 1px solid var(--outline-color);
+}
+.retroma-diff-marker {
+  padding: 2px 0;
+  text-align: center;
+  color: var(--text-faint);
+  user-select: none;
+}
+.retroma-diff-text {
+  padding: 2px 12px;
+  white-space: pre;
+  overflow-x: auto;
+  font-family: var(--font-monospace);
+}
+.retroma-diff--wrap .retroma-diff-text { white-space: pre-wrap; }
+
+.retroma-diff-row--add {
+  background: oklch(from var(--color-green, #4caf50) l c h / 10%);
+}
+.retroma-diff-row--add .retroma-diff-marker,
+.retroma-diff-row--add .retroma-diff-gutter {
+  color: oklch(from var(--color-green, #4caf50) 35% c h);
+}
+.retroma-diff-row--del {
+  background: oklch(from var(--color-red, #d32f2f) l c h / 10%);
+}
+.retroma-diff-row--del .retroma-diff-marker,
+.retroma-diff-row--del .retroma-diff-gutter {
+  color: oklch(from var(--color-red, #d32f2f) 40% c h);
+}
+.retroma-diff-row--empty {
+  background: oklch(from var(--background-secondary) l c h / 35%);
+}
+
+.retroma-diff-hunk-body--split {
+  display: grid;
+  grid-auto-rows: minmax(20px, auto);
+}
+.retroma-diff-split-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid oklch(from var(--outline-color) l c h / 30%);
+}
+.retroma-diff-split-row .retroma-diff-row--left { border-right: 1px solid var(--outline-color); }
+.retroma-diff-split-row .retroma-diff-row { grid-template-columns: 44px 14px minmax(0, 1fr); }
+
+.retroma-diff-binary {
+  padding: 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: var(--font-interface);
+}
+
+.retroma-diff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.retroma-diff-list-summary {
+  display: inline-flex;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  padding: 6px 2px;
+}
+
+/* ====== Worktree lineage ====== */
+.retroma-worktree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.retroma-worktree-node {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  position: relative;
+  padding: 4px 0;
+}
+.retroma-worktree-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin: 6px 0 0 3px;
+  background: var(--text-faint);
+  box-shadow: 0 0 0 2px var(--background-paper);
+  z-index: 1;
+}
+.retroma-worktree-node--base .retroma-worktree-dot { background: var(--text-faint); }
+.retroma-worktree-node--branch .retroma-worktree-dot { background: oklch(from var(--base-accent) l c h); }
+.retroma-worktree-node--head .retroma-worktree-dot { background: oklch(from var(--color-green, #4caf50) l c h); }
+.retroma-worktree-node--merged .retroma-worktree-dot { background: oklch(from var(--color-purple, #673ab7) l c h); }
+.retroma-worktree-connector {
+  position: absolute;
+  left: 7px;
+  top: 18px;
+  bottom: -4px;
+  width: 2px;
+  background: oklch(from var(--outline-color) l c h);
+}
+.retroma-worktree-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.retroma-worktree-title {
+  display: inline-flex;
+  gap: 8px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.retroma-worktree-label { font-weight: var(--font-bold); font-size: 13px; color: var(--text-normal); }
+.retroma-worktree-ref {
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  color: var(--text-muted);
+  background: oklch(from var(--background-secondary) l c h / 60%);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--outline-color);
+}
+.retroma-worktree-note { font-size: 11px; color: var(--text-muted); }

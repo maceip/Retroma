@@ -20,6 +20,8 @@
 @import "./globals.css";
 @import "./retroma-skin.css";
 @import "./retroma-composites.css";
+@import "./retroma-github.css";
+@import "./retroma-chat-plus.css";
 @import "./bountynet-shell.css";
 @import "./bountynet-blocks.css";
 @import "./bountynet-pages.css";

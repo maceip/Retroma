@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 /* ---- Base UI primitives (the full COSS catalog) ------------------------- */
 import { Accordion, AccordionItem, AccordionTrigger, AccordionPanel } from "@retroma/react/components/accordion";
@@ -85,9 +85,28 @@ import {
   PopoverCommandSelect,
   Pane, PaneGroup,
   StatusRail,
+  /* new GitHub primitives */
+  StatusIndicator,
+  GithubButton, GithubButtonGroup, GithubStarsButton,
+  ContributorGrid,
+  ActivityGraph,
+  Stepper,
+  DiffViewer, WorktreeLineage, parseUnifiedDiff,
+  LogViewer,
+  JsonViewer,
+  EnvTable,
+  /* chat bolster */
+  Attachments,
+  Citation,
+  Message, MessageStack, MessageAvatar, MessageHeader, MessageContent, MessageActions, MessageAction,
+  PromptInput, PromptInputTextarea, PromptInputActions, PromptInputActionGroup, PromptInputAction,
+  Suggestions, Suggestion, SuggestionPanel,
+  Thread, ThreadContent, ThreadScrollToBottom,
+  ModelSelector,
   type Command,
   type ChatModel,
   type PopoverCommandOption,
+  type ModelItemData,
 } from "@retroma/react/composites";
 
 const icon = (path: string) => (
@@ -740,6 +759,175 @@ export default function Gallery() {
             </div>
           </Row>
 
+          <Row name="StatusIndicator" file="composites/status-indicator/">
+            <StatusIndicator tone="ok" variant="pill" label="all checks passed" pulse />
+            <StatusIndicator tone="warn" variant="pill" label="pending review" />
+            <StatusIndicator tone="err" variant="pill" label="build failed" />
+            <StatusIndicator tone="running" variant="bar" label="deploying" />
+          </Row>
+
+          <Row name="GithubButton / StarsButton" file="composites/github-button/">
+            <GithubButtonGroup>
+              <GithubStarsButton stars={1245} starred />
+              <GithubButton icon="⎇" count={82}>Fork</GithubButton>
+              <GithubButton icon="👁" count={31}>Watch</GithubButton>
+            </GithubButtonGroup>
+          </Row>
+
+          <Row name="ContributorGrid" file="composites/contributor-grid/">
+            <ContributorGrid
+              contributors={[
+                { id: "cory", name: "cory", contributions: 148 },
+                { id: "juno", name: "juno", contributions: 92 },
+                { id: "rin", name: "rin", contributions: 63 },
+                { id: "alice", name: "alice", contributions: 40 },
+                { id: "mallory", name: "mallory", contributions: 28 },
+              ]}
+            />
+          </Row>
+
+          <Row name="ActivityGraph" file="composites/activity-graph/">
+            <div style={{ width: 420 }}>
+              <ActivityGraph
+                buckets={[
+                  { label: "w1", value: 2 }, { label: "w2", value: 5 },
+                  { label: "w3", value: 3 }, { label: "w4", value: 9 },
+                  { label: "w5", value: 11 }, { label: "w6", value: 7 },
+                  { label: "w7", value: 14 }, { label: "w8", value: 18 },
+                  { label: "w9", value: 11 }, { label: "w10", value: 22 },
+                  { label: "w11", value: 17 }, { label: "w12", value: 25 },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Stepper" file="composites/stepper/">
+            <div style={{ width: 520 }}>
+              <Stepper
+                steps={[
+                  { id: "install", label: "install",   hint: "npm i @retroma/react" },
+                  { id: "theme",   label: "theme",     hint: "set --interactive-accent" },
+                  { id: "compose", label: "compose",   hint: "build a page" },
+                  { id: "ship",    label: "ship",      hint: "vite build" },
+                ]}
+                current={2}
+              />
+            </div>
+          </Row>
+
+          <Row name="DiffViewer + WorktreeLineage" file="composites/diff-viewer/">
+            <ShowcaseDiff />
+          </Row>
+
+          <Row name="LogViewer" file="composites/log-viewer/">
+            <div style={{ width: 560 }}>
+              <LogViewer
+                height={220}
+                entries={[
+                  { id: "1", ts: "13:02:01", level: "info",   source: "runner", message: "▶ checkout main" },
+                  { id: "2", ts: "13:02:28", level: "info",   source: "runner", message: "▶ npm run typecheck" },
+                  { id: "3", ts: "13:03:01", level: "warn",   source: "vite",   message: "chunk larger than 500 kB" },
+                  { id: "4", ts: "13:03:41", level: "stdout", source: "jest",   message: "PASS  src/DiffViewer.test.tsx" },
+                  { id: "5", ts: "13:03:45", level: "info",   source: "runner", message: "✓ all checks green" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="JsonViewer" file="composites/json-viewer/">
+            <div style={{ width: 420 }}>
+              <JsonViewer
+                value={{
+                  name: "@retroma/react",
+                  version: "0.3.0",
+                  settings: { theme: "groovy", accent: "#8a5cf5" },
+                  components: ["DiffViewer", "LogViewer", "JsonViewer"],
+                  active: true,
+                  lastSeen: null,
+                }}
+              />
+            </div>
+          </Row>
+
+          <Row name="EnvTable" file="composites/env-table/">
+            <div style={{ width: 520 }}>
+              <EnvTable
+                entries={[
+                  { key: "NODE_ENV", value: "production" },
+                  { key: "DATABASE_URL", value: "postgres://host/db", secret: true, hint: "prod · fly" },
+                  { key: "STRIPE_API_KEY", value: "sk_live_8f21a9ab", secret: true },
+                  { key: "VITE_API_BASE", value: "https://api.example.com" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Attachments" file="composites/attachments/">
+            <div style={{ width: 420 }}>
+              <Attachments
+                maxSize={10 * 1024 * 1024}
+                maxFiles={5}
+                value={[
+                  { id: "a1", name: "design-mockup.png",  size: 1_420_331, type: "image/png",       status: "ready" },
+                  { id: "a2", name: "sheet.xlsx",         size: 92_112,    type: "application/vnd.ms-excel", status: "uploading", progress: 0.65 },
+                  { id: "a3", name: "notes.md",           size: 2_311,     type: "text/markdown",   status: "error", error: "scan failed" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Citation" file="composites/citation/">
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 520 }}>
+              <span style={{ fontSize: 13 }}>
+                Retroma derives its palette via oklch
+                <Citation
+                  index={1}
+                  sources={[{ url: "https://oklch.com", title: "oklch color picker" }]}
+                  style={{ margin: "0 4px" }}
+                />
+                and inherits from the CSS working group spec
+                <Citation
+                  index={2}
+                  sources={[{ url: "https://www.w3.org/TR/css-color-4/", title: "CSS Color Module Level 4" }]}
+                  style={{ margin: "0 4px" }}
+                />
+                .
+              </span>
+              <Citation
+                variant="card"
+                sources={[
+                  { url: "https://github.com/maceip/Retroma", title: "Retroma on GitHub" },
+                  { url: "https://obsidian.md", title: "Obsidian notes" },
+                ]}
+              />
+            </div>
+          </Row>
+
+          <Row name="Message family" file="composites/message/">
+            <ShowcaseMessage />
+          </Row>
+
+          <Row name="PromptInput" file="composites/prompt-input/">
+            <ShowcasePromptInput />
+          </Row>
+
+          <Row name="Suggestions" file="composites/suggestions/">
+            <Suggestions title="try one of these">
+              <Suggestion onSelect={() => {}}>explain this diff</Suggestion>
+              <Suggestion onSelect={() => {}}>suggest a test</Suggestion>
+              <Suggestion onSelect={() => {}}>draft a commit message</Suggestion>
+              <Suggestion onSelect={() => {}}>find similar PRs</Suggestion>
+            </Suggestions>
+          </Row>
+
+          <Row name="Thread" file="composites/thread/">
+            <ShowcaseThread />
+          </Row>
+
+          <Row name="ModelSelector" file="composites/model-selector/">
+            <ShowcaseModelSelector />
+          </Row>
+
         </div>
 
         {/* ================================================================ */}
@@ -1319,5 +1507,139 @@ function ShowcaseSlidingNumber() {
         reset
       </Button>
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------------ */
+/*  Showcase helpers for the new primitives                                 */
+/* ------------------------------------------------------------------------ */
+
+const DEMO_DIFF = `--- a/src/workers/queue.ts
++++ b/src/workers/queue.ts
+@@ -12,7 +12,10 @@ export class WorkerQueue {
+   }
+
+-  enqueue(job: Job) {
+-    this.items.push(job);
++  enqueue(job: Job, opts: EnqueueOpts = {}) {
++    const priority = opts.priority ?? 0;
++    this.items.push({ ...job, priority });
++    this.metrics.enqueued += 1;
+   }
+
+@@ -29,6 +32,7 @@ export class WorkerQueue {
+   async drain() {
++    if (this.draining) return;
+     while (this.items.length) {`;
+
+function ShowcaseDiff() {
+  const file = parseUnifiedDiff(DEMO_DIFF, "src/workers/queue.ts");
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "220px minmax(0, 1fr)", gap: 12, width: 720 }}>
+      <WorktreeLineage
+        nodes={[
+          { id: "main",   label: "main",                ref: "a3f42c1", state: "base" },
+          { id: "branch", label: "feat/priority-queue", state: "branch", ref: "branch" },
+          { id: "c1",     label: "add priority",        ref: "c4aeb12", state: "branch", note: "2h ago" },
+          { id: "c2",     label: "guard drain",         ref: "9a1c08e", state: "branch", note: "1h ago" },
+          { id: "head",   label: "HEAD",                state: "head", note: "ready" },
+        ]}
+      />
+      <DiffViewer file={{ ...file, additions: 5, deletions: 2 }} defaultView="split" />
+    </div>
+  );
+}
+
+function ShowcaseMessage() {
+  return (
+    <div style={{ width: 560 }}>
+      <MessageStack>
+        <Message from="user">
+          <MessageAvatar fallback="🧑" />
+          <MessageHeader sender="you" timestamp="14:02" />
+          <MessageContent>Walk me through the new queue priority.</MessageContent>
+        </Message>
+        <Message from="assistant">
+          <MessageAvatar fallback="🤖" />
+          <MessageHeader sender="Claude" timestamp="14:02" />
+          <MessageContent>
+            Jobs are pushed with an optional <code>priority</code> field. On
+            enqueue we re-sort; drain is now idempotent via a guard.
+          </MessageContent>
+          <MessageActions>
+            <MessageAction label="Copy"    >copy</MessageAction>
+            <MessageAction label="Retry"   >retry</MessageAction>
+            <MessageAction label="Good"    >👍</MessageAction>
+            <MessageAction label="Bad"     >👎</MessageAction>
+          </MessageActions>
+        </Message>
+      </MessageStack>
+    </div>
+  );
+}
+
+function ShowcasePromptInput() {
+  const [value, setValue] = useState("");
+  return (
+    <div style={{ width: 560 }}>
+      <PromptInput
+        value={value}
+        onValueChange={setValue}
+        onSend={(v) => {
+          console.log("[send]", v);
+          setValue("");
+        }}
+      >
+        <PromptInputTextarea placeholder="Ask anything — enter to send, shift+enter for newline." />
+        <PromptInputActions>
+          <PromptInputActionGroup align="leading">
+            <PromptInputAction tooltip="Attach file">＋</PromptInputAction>
+            <PromptInputAction tooltip="Voice">🎙</PromptInputAction>
+          </PromptInputActionGroup>
+          <PromptInputActionGroup align="trailing">
+            <PromptInputAction tooltip="Open model picker">⎇</PromptInputAction>
+            <PromptInputAction submit tooltip="Send">↵ send</PromptInputAction>
+          </PromptInputActionGroup>
+        </PromptInputActions>
+      </PromptInput>
+    </div>
+  );
+}
+
+function ShowcaseThread() {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  return (
+    <div style={{ width: 520, height: 300 }}>
+      <Thread>
+        <ThreadContent ref={scrollRef}>
+          <MessageStack>
+            {Array.from({ length: 12 }).map((_, i) => (
+              <Message key={i} from={i % 2 === 0 ? "assistant" : "user"}>
+                <MessageAvatar fallback={i % 2 === 0 ? "🤖" : "🧑"} />
+                <MessageContent>
+                  message {i + 1} — the thread sticks to the bottom as new
+                  entries land.
+                </MessageContent>
+              </Message>
+            ))}
+          </MessageStack>
+        </ThreadContent>
+        <ThreadScrollToBottom scrollRef={scrollRef} />
+      </Thread>
+    </div>
+  );
+}
+
+function ShowcaseModelSelector() {
+  const [value, setValue] = useState("sonnet");
+  const models: ModelItemData[] = [
+    { id: "opus",   label: "Claude Opus 4.7",   provider: "Anthropic", contextKb: 1000, tone: "smart" },
+    { id: "sonnet", label: "Claude Sonnet 4.6", provider: "Anthropic", contextKb: 200 },
+    { id: "haiku",  label: "Claude Haiku 4.5",  provider: "Anthropic", contextKb: 200, tone: "fast" },
+    { id: "gpt5",   label: "OpenAI GPT-5",      provider: "OpenAI",    contextKb: 128 },
+    { id: "gem3",   label: "Gemini 3",          provider: "Google",    contextKb: 1000, tone: "beta" },
+  ];
+  return (
+    <ModelSelector models={models} value={value} onChange={setValue} />
   );
 }
