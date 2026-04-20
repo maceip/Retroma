@@ -49,9 +49,10 @@ export function BountyNetShowcase() {
   return (
     <div className="bn-showcase">
       <div className="gallery-section-title">BountyNet — app shell + pages</div>
-      <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 13, maxWidth: "70ch" }}>
+      <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 13, maxWidth: "70ch", lineHeight: 1.5 }}>
         The whole client reassembled from Retroma composites. Click any route
-        below or use the header's command palette (⌘K) to jump around.
+        below or use the header&rsquo;s command palette (⌘K) to jump around.
+        All data is inline demo content.
       </p>
       <nav className="bn-showcase-nav">
         {ROUTES.filter((r) => r.path !== "*").map((r) => (

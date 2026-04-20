@@ -2,6 +2,24 @@
  * BountyNet page shell + layout primitives.
  */
 
+:root {
+  /* Vertical / horizontal rhythm tokens — every bountynet surface uses these
+   * so internal padding / inter-section gaps / row heights stay coherent. */
+  --bn-gap-xs: 4px;
+  --bn-gap-sm: 8px;
+  --bn-gap: 12px;
+  --bn-gap-lg: 16px;
+  --bn-gap-xl: 24px;
+  --bn-pad-card: 20px;
+  --bn-pad-row-y: 10px;
+  --bn-pad-row-x: 14px;
+  --bn-row-min-height: 44px;
+  --bn-text-row: 13px;
+  --bn-text-meta: 11px;
+  --bn-text-title: 15px;
+  --bn-text-card-title: 14px;
+}
+
 .bn-app-shell {
   display: flex;
   flex-direction: column;
@@ -20,15 +38,17 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
-  padding: 10px 18px;
+  gap: var(--bn-gap) var(--bn-gap-lg);
+  padding: var(--bn-gap) var(--bn-gap-xl);
   background: var(--background-secondary);
   border-bottom: 1px solid var(--outline-color);
   box-shadow: 0 1px 2px oklch(from black l c h / 10%);
 }
+.bn-app-header > .bn-app-header-palette { margin-left: auto; }
+.bn-app-header > .bn-app-nav { flex-shrink: 0; }
 .bn-app-header-brand {
   display: inline-flex;
   align-items: center;
@@ -56,8 +76,9 @@
 .bn-app-header-palette {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
+  gap: var(--bn-gap-sm);
+  min-height: 32px;
+  padding: 4px 14px;
   border-radius: 999px;
   background: var(--background-paper);
   color: var(--text-muted);
@@ -67,7 +88,6 @@
   font-size: 12px;
   cursor: pointer;
   max-width: 320px;
-  justify-self: start;
 }
 .bn-app-header-palette:hover {
   background: var(--button-hover, var(--background-primary));
@@ -90,15 +110,15 @@
 /* ----- AppNav ----- */
 .bn-app-nav {
   display: inline-flex;
-  gap: 4px;
-  justify-self: end;
+  gap: var(--bn-gap-xs);
   flex-wrap: wrap;
 }
 .bn-app-nav-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
+  min-height: 28px;
+  padding: 4px 12px;
   border-radius: 999px;
   background: transparent;
   border: 1px solid transparent;
@@ -107,6 +127,7 @@
   font-size: 12px;
   font-weight: var(--font-bold);
   cursor: pointer;
+  line-height: 1;
 }
 .bn-app-nav-link:hover {
   background: oklch(from var(--background-secondary) l c h / 60%);
@@ -207,8 +228,8 @@
 .bn-page-layout {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding: 28px 24px 48px;
+  gap: var(--bn-gap-xl);
+  padding: var(--bn-gap-xl) var(--bn-gap-xl) calc(var(--bn-gap-xl) * 2);
   max-width: 1280px;
   margin: 0 auto;
   width: 100%;
@@ -216,8 +237,8 @@
 .bn-page-hero {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 32px 28px;
+  gap: var(--bn-gap-sm);
+  padding: calc(var(--bn-gap-xl) + 4px) var(--bn-gap-xl);
   background: var(--background-paper);
   border: var(--border-ridge, 4px ridge var(--background-primary));
   border-radius: var(--window-border-radius, 12px);
@@ -254,47 +275,65 @@
 .bn-page-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--bn-gap);
   min-width: 0;
 }
 .bn-page-section-head {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  /* Accent rail sits on the head, not the title, so title + hint align
+   * at the same left edge. */
+  display: grid;
+  grid-template-columns: 4px 1fr auto;
+  align-items: center;
+  column-gap: var(--bn-gap);
+  min-height: 32px;
 }
-.bn-page-section-titles { flex: 1; min-width: 0; }
+.bn-page-section-head::before {
+  content: "";
+  align-self: stretch;
+  background: var(--base-accent);
+  border-radius: 2px;
+  margin: 2px 0;
+}
+.bn-page-section-titles {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .bn-page-section-title {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--bn-text-title);
   font-weight: var(--font-bold);
   color: var(--text-normal);
   letter-spacing: 0.01em;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.bn-page-section-title::before {
-  content: "";
-  width: 4px;
-  height: 14px;
-  background: var(--base-accent);
-  border-radius: 2px;
+  line-height: 1.2;
 }
 .bn-page-section-hint {
-  margin: 4px 0 0;
-  font-size: 12px;
+  margin: 0;
+  font-size: var(--bn-text-meta);
   color: var(--text-muted);
+  line-height: 1.35;
 }
 .bn-page-section-controls {
   display: inline-flex;
   gap: 6px;
   flex-shrink: 0;
+  align-self: center;
 }
 
 .bn-page-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: var(--bn-gap-xl);
+  align-items: stretch;
+}
+.bn-page-grid > .bn-page-section {
+  min-width: 0;
+}
+.bn-page-grid > .bn-page-section > .bn-page-section-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 @media (min-width: 900px) {
   .bn-page-grid--2 { grid-template-columns: 1fr 1fr; }
