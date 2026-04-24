@@ -6,11 +6,24 @@ import path from "node:path";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = (p: string) => path.resolve(here, "src", p);
+const examples = (p: string) => path.resolve(here, "examples", p);
+
+/**
+ * `base` controls the public path prefix for the built static site.
+ *
+ *   - Local dev / preview  → `/`
+ *   - GitHub Pages         → `/<repo-name>/` (passed via VITE_BASE in CI)
+ *
+ * We default to `/` so `npm run build:gallery` without env flags still
+ * produces a locally-servable bundle.
+ */
+const base = process.env.VITE_BASE ?? "/";
 
 export default defineConfig({
   /* index.html lives in examples/; src/ and node_modules/ sit alongside this
    * config so the whole project is one self-contained package. */
   root: path.resolve(here, "examples"),
+  base,
   plugins: [react(), tailwind()],
   resolve: {
     /* Order matters — put the more specific aliases before the catch-all. */
@@ -39,5 +52,13 @@ export default defineConfig({
   build: {
     outDir: path.resolve(here, "dist-gallery"),
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        /* Landing page with links to the showcases. */
+        main: examples("index.html"),
+        /* The single-page Retroma Chat app. */
+        "chat-app": examples("chat-app.html"),
+      },
+    },
   },
 });

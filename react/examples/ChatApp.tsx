@@ -359,6 +359,9 @@ export default function ChatApp() {
             <span className="chat-topbar-meta">
               {activeModel?.provider} · {activeModel?.label}
             </span>
+            <a className="chat-topbar-link" href="./index.html">
+              ← Gallery
+            </a>
           </header>
 
           <Thread>

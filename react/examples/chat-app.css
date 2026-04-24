@@ -173,6 +173,18 @@ body {
 .chat-topbar-spacer { flex: 1; }
 .chat-topbar-meta  { font-size: 12px; color: var(--text-muted); font-family: var(--font-monospace); }
 
+.chat-topbar-link {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-normal);
+  border: 1px solid color-mix(in oklch, var(--text-normal) 14%, transparent);
+  background: var(--background-paper, white);
+  transition: background 0.15s ease;
+}
+.chat-topbar-link:hover { background: color-mix(in oklch, var(--interactive-accent) 10%, white); }
+
 .chat-conversation {
   min-height: 0;
   overflow-y: auto;

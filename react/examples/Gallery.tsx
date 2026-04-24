@@ -160,6 +160,14 @@ export default function Gallery() {
             Top section: the Retroma composites wired up as a mini workspace.
             Below: one row per base UI primitive (COSS catalog, skinned).
           </p>
+          <nav className="gallery-nav">
+            <a className="gallery-nav-link is-active" href="./index.html">
+              Gallery
+            </a>
+            <a className="gallery-nav-link" href="./chat-app.html">
+              Chat app →
+            </a>
+          </nav>
         </div>
 
         {/* ================================================================ */}
