@@ -956,9 +956,13 @@ body[data-retroma-variant="minimalist"] .markdown-source-view {
   color: var(--link-color, var(--text-normal));
   font-weight: var(--font-medium);
   text-decoration: none;
-  padding: 0;
-  background: transparent;
-  border: 0;
+  padding: 2px 6px;
+  /* Beat theme.css's `.search-result .search-result-file-title` rule that paints
+   * a 30%-alpha accent slab on top of the link text. */
+  background: color-mix(in oklch, var(--base-accent) 12%, transparent) !important;
+  border: 1px solid color-mix(in oklch, var(--base-accent) 22%, transparent) !important;
+  border-radius: 6px !important;
+  margin: 0 !important;
 }
 .retroma-backlink-item .search-result-file-title::before { content: "🔗"; opacity: 0.55; font-size: 0.85em; }
 .retroma-backlink-snippet {
@@ -1053,17 +1057,21 @@ body[data-retroma-variant="minimalist"] .markdown-source-view {
   padding: 6px 8px;
   box-shadow: 0 0 0 1px oklch(from var(--text-normal) l c h / 10%);
 }
-.retroma-search-result-title {
+/* Use compound selector + !important to outweigh theme.css's
+ * `.search-result .search-result-file-title` rule, which paints a
+ * 30%-alpha accent slab and a top-only border-radius that overshoots
+ * the surrounding card. */
+.retroma-search-result .retroma-search-result-title {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: oklch(from var(--base-accent) l c h / 20%);
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-weight: var(--font-bold);
-  color: var(--text-normal);
-  border: 0;
-  margin: 0;
+  background: color-mix(in oklch, var(--base-accent) 14%, transparent) !important;
+  border: 1px solid color-mix(in oklch, var(--base-accent) 22%, transparent) !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  font-weight: var(--font-bold) !important;
+  color: var(--text-normal) !important;
+  margin: 0 !important;
 }
 .retroma-search-result-caret {
   font-weight: var(--font-bold);
@@ -1845,16 +1853,27 @@ body[data-retroma-variant="minimalist"] .markdown-source-view {
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  background: oklch(from var(--background-secondary) l c h);
-  border: 1px solid oklch(from var(--text-normal) l c h / 10%);
+  background: color-mix(in oklch, var(--text-normal) 6%, var(--background-paper, var(--background-secondary)));
+  border: 1px solid color-mix(in oklch, var(--text-normal) 10%, transparent);
   padding: 0;
   cursor: pointer;
+  box-shadow: none;
 }
-.retroma-commit-graph-cell--0 { background: oklch(from var(--background-secondary) l c h); }
-.retroma-commit-graph-cell--1 { background: oklch(from var(--base-accent) l c h / 25%); }
-.retroma-commit-graph-cell--2 { background: oklch(from var(--base-accent) l c h / 45%); }
-.retroma-commit-graph-cell--3 { background: oklch(from var(--base-accent) l c h / 70%); }
-.retroma-commit-graph-cell--4 { background: oklch(from var(--base-accent) l c h); }
+.retroma-commit-graph-cell--0 {
+  background: color-mix(in oklch, var(--text-normal) 6%, var(--background-paper, var(--background-secondary)));
+}
+.retroma-commit-graph-cell--1 {
+  background: color-mix(in oklch, var(--base-accent) 25%, var(--background-paper, var(--background-secondary)));
+}
+.retroma-commit-graph-cell--2 {
+  background: color-mix(in oklch, var(--base-accent) 50%, var(--background-paper, var(--background-secondary)));
+}
+.retroma-commit-graph-cell--3 {
+  background: color-mix(in oklch, var(--base-accent) 75%, var(--background-paper, var(--background-secondary)));
+}
+.retroma-commit-graph-cell--4 {
+  background: var(--base-accent);
+}
 .retroma-commit-graph-legend {
   display: flex;
   align-items: center;

@@ -537,7 +537,7 @@ body {
   transform: translateY(-1px) translateX(-1px);
 }
 
-button:active,
+button:not([data-slot]):active,
 .mobile-toolbar-option:active svg,
 .is-mobile .empty-state-action:active,
 .canvas-wrapper .collapse-button:active svg,
@@ -564,7 +564,7 @@ button:active,
   transform: translateY(1px) translateX(1px);
 }
 
-button:not(.excalidraw button),
+button:not(.excalidraw button):not([data-slot]),
 .mobile-toolbar-option:active,
 .is-mobile .empty-state-action,
 .canvas-wrapper .collapse-button,
@@ -579,14 +579,14 @@ button:not(.excalidraw button),
 .metadata-add-button,
 .workspace-tab-header,
 .setting-item-control .clickable-icon,
-.setting-item-control button,
+.setting-item-control button:not([data-slot]),
 .workspace-tab-header-inner .workspace-tab-header-inner-icon,
 .workspace-drawer-vault-switcher-icon {
   color: var(--text-muted) !important;
   border-radius: var(--button-border-radius) !important;
 }
 
-button:not(.excalidraw button),
+button:not(.excalidraw button):not([data-slot]),
 .is-mobile .empty-state-action,
 .collapse-button,
 .close-button,
@@ -606,7 +606,7 @@ button:not(.excalidraw button),
   background-color: var(--button-normal) !important;
 }
 
-button:not(.excalidraw button):hover,
+button:not(.excalidraw button):not([data-slot]):hover,
 .is-mobile .empty-state-action:hover,
 .canvas-wrapper .collapse-button:hover,
 .close-button:hover,
@@ -622,7 +622,7 @@ button:not(.excalidraw button):hover,
   background-color: var(--button-hover) !important;
 }
 
-button:not(.excalidraw button):active,
+button:not(.excalidraw button):not([data-slot]):active,
 .is-mobile .empty-state-action:active,
 .canvas-wrapper .collapse-button:active,
 .collapse-button:active,

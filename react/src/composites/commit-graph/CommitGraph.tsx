@@ -110,6 +110,7 @@ export const CommitGraph = forwardRef<HTMLDivElement, CommitGraphProps>(
                     <button
                       key={d.date}
                       type="button"
+                      data-slot="commit-graph-cell"
                       data-level={lvl}
                       title={`${d.count} commit${d.count === 1 ? "" : "s"} on ${d.date}`}
                       aria-label={`${d.count} commits on ${d.date}`}

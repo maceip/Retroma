@@ -303,12 +303,14 @@ export default function Gallery() {
           </div>
 
           <Row name="AppRibbon" file="composites/ribbon/">
-            <AppRibbon collapsed={false}>
-              <RibbonAction label="Search" icon={icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3")} />
-              <RibbonAction label="New" icon={icon("M12 5v14M5 12h14")} />
-              <RibbonSeparator />
-              <RibbonAction label="Settings" icon={icon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z")} />
-            </AppRibbon>
+            <div className="gallery-ribbon-host">
+              <AppRibbon collapsed={false}>
+                <RibbonAction label="Search" icon={icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-4.3-4.3")} />
+                <RibbonAction label="New" icon={icon("M12 5v14M5 12h14")} />
+                <RibbonSeparator />
+                <RibbonAction label="Settings" icon={icon("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z")} />
+              </AppRibbon>
+            </div>
           </Row>
 
           <Row name="FileExplorer" file="composites/file-explorer/">

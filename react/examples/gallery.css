@@ -133,6 +133,33 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06),
     0 0 0 1px var(--retroma-outline, rgba(0, 0, 0, 0.08));
   min-height: 72px;
+  /* Stop demo content (Thread, Carousel, etc.) from bleeding into siblings. */
+  overflow: hidden;
+}
+
+/* Embedded scroll regions (Thread, ScrollArea) shouldn't push the row taller
+ * than its viewport; clamp them so they actually scroll within their cell. */
+.gallery-row-demo .retroma-thread-content,
+.gallery-row-demo .retroma-thread {
+  max-height: 320px;
+}
+
+/* Standalone AppRibbon row: render the ribbon horizontally so the row
+ * doesn't get a 60px-wide column with everything stacked vertically. */
+.gallery-ribbon-host .workspace-ribbon {
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  padding: 6px 10px;
+}
+.gallery-ribbon-host .side-dock-ribbon-actions {
+  flex-direction: row;
+  align-items: center;
+}
+.gallery-ribbon-host .side-dock-ribbon-separator {
+  width: 1px;
+  height: 24px;
+  margin: 0 6px;
 }
 
 .gallery-row-label {
