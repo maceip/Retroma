@@ -2420,3 +2420,185 @@ body[data-retroma-variant="minimalist"] .markdown-source-view {
 @media (max-width: 700px) {
   .retroma-status-rail-fab { display: inline-flex; align-items: center; justify-content: center; }
 }
+
+/* ============================================================================
+ * Responsive — mobile, foldable, narrow desktop
+ *
+ * Goals:
+ *   - never let a horizontal scroll appear on the page itself; instead make
+ *     the offending composite scroll within its own surface
+ *   - stack key/value rows below ~520px so 5em labels don't cannibalise
+ *     the value column
+ *   - flex-wrap any toolbar / chat-input / message header that ran as a
+ *     single row at desktop widths
+ * ========================================================================== */
+
+/* Properties view — labels above values when there's no room beside. */
+@media (max-width: 520px) {
+  .metadata-property {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    padding: 6px 8px;
+  }
+  .metadata-property-key {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* ThemeTunerPanel — info text was wrapping into 1-word columns next to
+ * a fixed-200-px control. Stack at narrow widths. */
+@media (max-width: 520px) {
+  .retroma-tuner-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .retroma-tuner-row-control {
+    justify-content: flex-start;
+  }
+}
+
+/* Workspace tabs — scroll horizontally instead of overflowing the row. */
+.retroma-workspace-tabs,
+.workspace-tab-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+.retroma-workspace-tabs::-webkit-scrollbar,
+.workspace-tab-container::-webkit-scrollbar { height: 6px; }
+
+/* Kanban — already scrolls; firm up the overflow + add a snap point per col. */
+.retroma-kanban {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+}
+.retroma-kanban-columns {
+  scroll-snap-type: x mandatory;
+}
+.retroma-kanban-column {
+  scroll-snap-align: start;
+}
+@media (max-width: 520px) {
+  .retroma-kanban-column {
+    min-width: min(280px, calc(100vw - 80px));
+  }
+}
+
+/* BasesView — let the cells / rows shrink to zero without overflowing the
+ * surrounding row, and put the scroll on the grid itself. */
+.retroma-bases {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.retroma-bases-grid { min-width: max-content; }
+.retroma-bases-cell { min-width: 0; }
+@media (max-width: 520px) {
+  .retroma-bases-grid { min-width: 0; }
+  .retroma-bases-row,
+  .retroma-bases-header {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .retroma-bases-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* Chat input footer — stack the model picker + send button on narrow. */
+@media (max-width: 520px) {
+  .retroma-chat-input-footer {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .retroma-chat-input-leading,
+  .retroma-chat-input-trailing {
+    flex: 1 1 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+  .retroma-chat-input-trailing { justify-content: flex-end; }
+}
+
+/* Message family — bubble takes more of the column on narrow screens
+ * (85% reads as cramped). */
+@media (max-width: 520px) {
+  .retroma-message { max-width: 100%; }
+  .retroma-message-content { font-size: 13px; }
+  .retroma-message-actions {
+    /* keep actions visible without hover on touch surfaces */
+    opacity: 1;
+  }
+}
+
+/* PromptInput — keep the action footer wrapping tidily on narrow screens. */
+@media (max-width: 520px) {
+  .retroma-prompt-input-actions {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .retroma-prompt-input-action-group--trailing { margin-left: 0; }
+}
+
+/* Search panel + Backlinks — already vertical; just shrink padding. */
+@media (max-width: 520px) {
+  .retroma-search,
+  .retroma-backlinks {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+/* DiffViewer header — long file paths should ellipsis instead of pushing
+ * the view-switch off-screen on narrow widths. */
+@media (max-width: 520px) {
+  .retroma-diff-header { flex-wrap: wrap; gap: 6px; }
+  .retroma-diff-path { flex: 1 1 100%; min-width: 0; }
+  .retroma-diff-spacer { display: none; }
+}
+
+/* Repo card stats / suggestions strip — let chips wrap. */
+@media (max-width: 520px) {
+  .retroma-repocard-stats,
+  .retroma-suggestions-list {
+    flex-wrap: wrap;
+  }
+}
+
+/* Stepper — vertical on narrow, horizontal on wider. */
+@media (max-width: 520px) {
+  .retroma-stepper:not([data-orientation="vertical"]) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* CommitGraph — let it scroll horizontally at narrow widths instead of
+ * forcing the whole page to scroll. */
+.retroma-commit-graph {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+}
+.retroma-commit-graph-grid { min-width: max-content; }
+
+/* GithubButtonGroup — wrap to two rows on narrow if it would overflow. */
+@media (max-width: 520px) {
+  .retroma-github-button-group { flex-wrap: wrap; }
+}
+
+/* Carousel — its viewport already handles its own scroll. Just make sure
+ * the buttons don't push the viewport off-screen. */
+@media (max-width: 520px) {
+  .retroma-carousel-viewport { width: 100%; }
+}
+
+/* Activity graph — keep proportions but allow horizontal scroll for many bars. */
+.retroma-activity-graph {
+  max-width: 100%;
+  overflow-x: auto;
+}

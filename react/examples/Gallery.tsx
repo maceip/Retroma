@@ -570,7 +570,7 @@ export default function Gallery() {
           </Row>
 
           <Row name="CodeLine / CodeBlock" file="composites/code-line/">
-            <div style={{ width: 560 }}>
+            <div style={{ width: "100%", maxWidth: 560 }}>
               <CodeBlock
                 title="src/composites/editor/Editor.tsx"
                 actions={<ChatCopyButton value={`export const EditorCanvas = ...`}>Copy</ChatCopyButton>}
@@ -641,7 +641,7 @@ export default function Gallery() {
           </Row>
 
           <Row name="Carousel" file="composites/carousel/">
-            <div style={{ width: 560 }}>
+            <div style={{ width: "100%", maxWidth: 560 }}>
               <Carousel>
                 <CarouselButton direction="prev" />
                 <CarouselViewport>
@@ -671,7 +671,7 @@ export default function Gallery() {
           </Row>
 
           <Row name="InfiniteSlider" file="composites/infinite-slider/">
-            <div style={{ width: 560 }}>
+            <div style={{ width: "100%", maxWidth: 560 }}>
               <InfiniteSlider duration={24}>
                 {["Retroma", "React", "Obsidian", "Tailwind", "Vite", "OKLCH", "Typescript"].map(
                   (t) => (
@@ -830,7 +830,7 @@ export default function Gallery() {
           </Row>
 
           <Row name="LogViewer" file="composites/log-viewer/">
-            <div style={{ width: 560 }}>
+            <div style={{ width: "100%", maxWidth: 560 }}>
               <LogViewer
                 height={220}
                 entries={[
@@ -1409,7 +1409,7 @@ function ShowcaseChat() {
     }, 500);
   };
   return (
-    <div style={{ width: 560 }}>
+    <div style={{ width: "100%", maxWidth: 560 }}>
       <ChatContainer>
         <ChatMessageList>
           {messages.map((m) => (
@@ -1562,7 +1562,7 @@ function ShowcaseDiff() {
 
 function ShowcaseMessage() {
   return (
-    <div style={{ width: 560 }}>
+    <div style={{ width: "100%", maxWidth: 560 }}>
       <MessageStack>
         <Message from="user">
           <MessageAvatar fallback="🧑" />
@@ -1591,7 +1591,7 @@ function ShowcaseMessage() {
 function ShowcasePromptInput() {
   const [value, setValue] = useState("");
   return (
-    <div style={{ width: 560 }}>
+    <div style={{ width: "100%", maxWidth: 560 }}>
       <PromptInput
         value={value}
         onValueChange={setValue}

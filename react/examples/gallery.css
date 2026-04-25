@@ -137,6 +137,51 @@
   overflow: hidden;
 }
 
+.gallery-row-demo {
+  /* Wide demos (Kanban, BasesView, Diff, long buttons) overflow within
+   * their own cell instead of forcing the row to expand. */
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+}
+.gallery-row-demo::-webkit-scrollbar { height: 8px; }
+.gallery-row-demo::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--text-normal) 22%, transparent);
+  border-radius: 999px;
+}
+
+/* Mobile + narrow foldable: stack the 220-px label column on top of the
+ * demo so the demo gets the full width, then let it scroll. */
+@media (max-width: 640px) {
+  .gallery {
+    padding: 16px 12px 64px;
+  }
+  .gallery-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px 14px;
+  }
+  .gallery-row-label {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .gallery-row-name {
+    font-size: 13px;
+  }
+  .gallery-row-sub {
+    font-size: 11px;
+    opacity: 0.8;
+  }
+  .gallery-section-title {
+    margin: 24px auto 8px;
+    padding: 0 4px;
+    font-size: 16px;
+  }
+  .gallery-header h1 {
+    font-size: 22px;
+  }
+}
+
 /* Embedded scroll regions (Thread, ScrollArea) shouldn't push the row taller
  * than its viewport; clamp them so they actually scroll within their cell. */
 .gallery-row-demo .retroma-thread-content,
