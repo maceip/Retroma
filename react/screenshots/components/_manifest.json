@@ -1,0 +1,1039 @@
+{
+  "url": "https://maceip.github.io/Retroma/",
+  "viewport": {
+    "width": 1280,
+    "height": 1100
+  },
+  "components": [
+    {
+      "name": "ThemeTunerPanel",
+      "file": "001-themetunerpanel.png",
+      "box": {
+        "x": 354,
+        "y": 244.5,
+        "width": 816,
+        "height": 601
+      }
+    },
+    {
+      "name": "AppRibbon",
+      "file": "002-appribbon.png",
+      "box": {
+        "x": 354,
+        "y": 466.5,
+        "width": 816,
+        "height": 166
+      }
+    },
+    {
+      "name": "FileExplorer",
+      "file": "003-fileexplorer.png",
+      "box": {
+        "x": 354,
+        "y": 680.5,
+        "width": 816,
+        "height": 250
+      }
+    },
+    {
+      "name": "WorkspaceTabs",
+      "file": "004-workspacetabs.png",
+      "box": {
+        "x": 354,
+        "y": 978.5,
+        "width": 816,
+        "height": 59
+      }
+    },
+    {
+      "name": "EditorCanvas + Gutter + SyntaxToken",
+      "file": "005-editorcanvas-gutter-syntaxtoken.png",
+      "box": {
+        "x": 354,
+        "y": 923.5,
+        "width": 816,
+        "height": 160
+      }
+    },
+    {
+      "name": "PropertiesView",
+      "file": "006-propertiesview.png",
+      "box": {
+        "x": 354,
+        "y": 503.5,
+        "width": 816,
+        "height": 92
+      }
+    },
+    {
+      "name": "CommandPalette",
+      "file": "007-commandpalette.png",
+      "box": {
+        "x": 354,
+        "y": 646.75,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "SettingsModal",
+      "file": "008-settingsmodal.png",
+      "box": {
+        "x": 354,
+        "y": 737.25,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "StatusBar",
+      "file": "009-statusbar.png",
+      "box": {
+        "x": 354,
+        "y": 827.75,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Callout",
+      "file": "010-callout.png",
+      "box": {
+        "x": 354,
+        "y": 836,
+        "width": 816,
+        "height": 248
+      }
+    },
+    {
+      "name": "CalendarWidget",
+      "file": "011-calendarwidget.png",
+      "box": {
+        "x": 354,
+        "y": 421,
+        "width": 816,
+        "height": 258.5
+      }
+    },
+    {
+      "name": "BacklinksPanel",
+      "file": "012-backlinkspanel.png",
+      "box": {
+        "x": 354,
+        "y": 543.5,
+        "width": 816,
+        "height": 540
+      }
+    },
+    {
+      "name": "SearchPanel",
+      "file": "013-searchpanel.png",
+      "box": {
+        "x": 354,
+        "y": 370.5,
+        "width": 816,
+        "height": 359.5
+      }
+    },
+    {
+      "name": "TaskCard",
+      "file": "014-taskcard.png",
+      "box": {
+        "x": 354,
+        "y": 778,
+        "width": 816,
+        "height": 190
+      }
+    },
+    {
+      "name": "KanbanBoard",
+      "file": "015-kanbanboard.png",
+      "box": {
+        "x": 354,
+        "y": 769,
+        "width": 816,
+        "height": 315
+      }
+    },
+    {
+      "name": "NotePreviewCard",
+      "file": "016-notepreviewcard.png",
+      "box": {
+        "x": 354,
+        "y": 383,
+        "width": 816,
+        "height": 333.5
+      }
+    },
+    {
+      "name": "BasesView",
+      "file": "017-basesview.png",
+      "box": {
+        "x": 354,
+        "y": 764.5,
+        "width": 816,
+        "height": 229
+      }
+    },
+    {
+      "name": "TerminalFrame",
+      "file": "018-terminalframe.png",
+      "box": {
+        "x": 354,
+        "y": 918.5,
+        "width": 816,
+        "height": 165.703125
+      }
+    },
+    {
+      "name": "Chat",
+      "file": "019-chat.png",
+      "box": {
+        "x": 354,
+        "y": 314.203125,
+        "width": 816,
+        "height": 471.25
+      }
+    },
+    {
+      "name": "CodeLine / CodeBlock",
+      "file": "020-codeline-codeblock.png",
+      "box": {
+        "x": 354,
+        "y": 833.453125,
+        "width": 816,
+        "height": 175.84375
+      }
+    },
+    {
+      "name": "RepoCard",
+      "file": "021-repocard.png",
+      "box": {
+        "x": 354,
+        "y": 925.296875,
+        "width": 816,
+        "height": 159
+      }
+    },
+    {
+      "name": "CommitGraph",
+      "file": "022-commitgraph.png",
+      "box": {
+        "x": 354,
+        "y": 462.296875,
+        "width": 816,
+        "height": 175.5
+      }
+    },
+    {
+      "name": "FileTree",
+      "file": "023-filetree.png",
+      "box": {
+        "x": 354,
+        "y": 685.796875,
+        "width": 816,
+        "height": 238
+      }
+    },
+    {
+      "name": "Carousel",
+      "file": "024-carousel.png",
+      "box": {
+        "x": 354,
+        "y": 949.796875,
+        "width": 816,
+        "height": 134
+      }
+    },
+    {
+      "name": "InfiniteSlider",
+      "file": "025-infiniteslider.png",
+      "box": {
+        "x": 354,
+        "y": 525.796875,
+        "width": 816,
+        "height": 48
+      }
+    },
+    {
+      "name": "TextScramble",
+      "file": "026-textscramble.png",
+      "box": {
+        "x": 354,
+        "y": 625.046875,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "TextShimmer",
+      "file": "027-textshimmer.png",
+      "box": {
+        "x": 354,
+        "y": 715.546875,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "AnimatedNumber",
+      "file": "028-animatednumber.png",
+      "box": {
+        "x": 354,
+        "y": 803.046875,
+        "width": 816,
+        "height": 42
+      }
+    },
+    {
+      "name": "SlidingNumber",
+      "file": "029-slidingnumber.png",
+      "box": {
+        "x": 354,
+        "y": 893.296875,
+        "width": 816,
+        "height": 54
+      }
+    },
+    {
+      "name": "Sparkline",
+      "file": "030-sparkline.png",
+      "box": {
+        "x": 354,
+        "y": 996.546875,
+        "width": 816,
+        "height": 40
+      }
+    },
+    {
+      "name": "Gauge",
+      "file": "031-gauge.png",
+      "box": {
+        "x": 354,
+        "y": 1011.796875,
+        "width": 816,
+        "height": 72
+      }
+    },
+    {
+      "name": "PopoverCommandSelect",
+      "file": "032-popovercommandselect.png",
+      "box": {
+        "x": 354,
+        "y": 520.796875,
+        "width": 816,
+        "height": 58.5
+      }
+    },
+    {
+      "name": "PaneGroup",
+      "file": "033-panegroup.png",
+      "box": {
+        "x": 354,
+        "y": 628.296875,
+        "width": 816,
+        "height": 260
+      }
+    },
+    {
+      "name": "StatusRail",
+      "file": "034-statusrail.png",
+      "box": {
+        "x": 354,
+        "y": 936.296875,
+        "width": 816,
+        "height": 80.5
+      }
+    },
+    {
+      "name": "StatusIndicator",
+      "file": "035-statusindicator.png",
+      "box": {
+        "x": 354,
+        "y": 1045.046875,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "GithubButton / StarsButton",
+      "file": "036-githubbutton-starsbutton.png",
+      "box": {
+        "x": 354,
+        "y": 531.796875,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "ContributorGrid",
+      "file": "037-contributorgrid.png",
+      "box": {
+        "x": 354,
+        "y": 631.546875,
+        "width": 816,
+        "height": 40
+      }
+    },
+    {
+      "name": "ActivityGraph",
+      "file": "038-activitygraph.png",
+      "box": {
+        "x": 354,
+        "y": 720.796875,
+        "width": 816,
+        "height": 125
+      }
+    },
+    {
+      "name": "Stepper",
+      "file": "039-stepper.png",
+      "box": {
+        "x": 354,
+        "y": 893.796875,
+        "width": 816,
+        "height": 70
+      }
+    },
+    {
+      "name": "DiffViewer + WorktreeLineage",
+      "file": "040-diffviewer-worktreelineage.png",
+      "box": {
+        "x": 354,
+        "y": 725.796875,
+        "width": 816,
+        "height": 358.25
+      }
+    },
+    {
+      "name": "LogViewer",
+      "file": "041-logviewer.png",
+      "box": {
+        "x": 354,
+        "y": 440.046875,
+        "width": 816,
+        "height": 220
+      }
+    },
+    {
+      "name": "JsonViewer",
+      "file": "042-jsonviewer.png",
+      "box": {
+        "x": 354,
+        "y": 708.046875,
+        "width": 816,
+        "height": 357.5
+      }
+    },
+    {
+      "name": "EnvTable",
+      "file": "043-envtable.png",
+      "box": {
+        "x": 354,
+        "y": 888.546875,
+        "width": 816,
+        "height": 195
+      }
+    },
+    {
+      "name": "Attachments",
+      "file": "044-attachments.png",
+      "box": {
+        "x": 354,
+        "y": 393.546875,
+        "width": 816,
+        "height": 313.5
+      }
+    },
+    {
+      "name": "Citation",
+      "file": "045-citation.png",
+      "box": {
+        "x": 354,
+        "y": 755.046875,
+        "width": 816,
+        "height": 178.59375
+      }
+    },
+    {
+      "name": "Message family",
+      "file": "046-message-family.png",
+      "box": {
+        "x": 354,
+        "y": 815.640625,
+        "width": 816,
+        "height": 268.015625
+      }
+    },
+    {
+      "name": "PromptInput",
+      "file": "047-promptinput.png",
+      "box": {
+        "x": 354,
+        "y": 490.65625,
+        "width": 816,
+        "height": 119
+      }
+    },
+    {
+      "name": "Suggestions",
+      "file": "048-suggestions.png",
+      "box": {
+        "x": 354,
+        "y": 657.65625,
+        "width": 816,
+        "height": 58.5
+      }
+    },
+    {
+      "name": "Thread",
+      "file": "049-thread.png",
+      "box": {
+        "x": 354,
+        "y": 764.15625,
+        "width": 816,
+        "height": 300
+      }
+    },
+    {
+      "name": "ModelSelector",
+      "file": "050-modelselector.png",
+      "box": {
+        "x": 354,
+        "y": 1019.15625,
+        "width": 816,
+        "height": 64.5
+      }
+    },
+    {
+      "name": "Accordion",
+      "file": "051-accordion.png",
+      "box": {
+        "x": 354,
+        "y": 491.765625,
+        "width": 816,
+        "height": 117
+      }
+    },
+    {
+      "name": "Alert",
+      "file": "052-alert.png",
+      "box": {
+        "x": 354,
+        "y": 652.765625,
+        "width": 816,
+        "height": 68
+      }
+    },
+    {
+      "name": "Alert Dialog",
+      "file": "053-alert-dialog.png",
+      "box": {
+        "x": 354,
+        "y": 768.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Autocomplete",
+      "file": "054-autocomplete.png",
+      "box": {
+        "x": 354,
+        "y": 854.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Avatar",
+      "file": "055-avatar.png",
+      "box": {
+        "x": 354,
+        "y": 941.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Badge",
+      "file": "056-badge.png",
+      "box": {
+        "x": 354,
+        "y": 1027.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Breadcrumb",
+      "file": "057-breadcrumb.png",
+      "box": {
+        "x": 354,
+        "y": 1045.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Button",
+      "file": "058-button.png",
+      "box": {
+        "x": 354,
+        "y": 531.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Calendar",
+      "file": "059-calendar.png",
+      "box": {
+        "x": 354,
+        "y": 618.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Card",
+      "file": "060-card.png",
+      "box": {
+        "x": 354,
+        "y": 701.265625,
+        "width": 816,
+        "height": 164
+      }
+    },
+    {
+      "name": "Checkbox",
+      "file": "061-checkbox.png",
+      "box": {
+        "x": 354,
+        "y": 912.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Checkbox Group",
+      "file": "062-checkbox-group.png",
+      "box": {
+        "x": 354,
+        "y": 999.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Collapsible",
+      "file": "063-collapsible.png",
+      "box": {
+        "x": 354,
+        "y": 1044.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Combobox",
+      "file": "064-combobox.png",
+      "box": {
+        "x": 354,
+        "y": 532.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Command",
+      "file": "065-command.png",
+      "box": {
+        "x": 354,
+        "y": 618.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Date Picker",
+      "file": "066-date-picker.png",
+      "box": {
+        "x": 354,
+        "y": 714.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Dialog",
+      "file": "067-dialog.png",
+      "box": {
+        "x": 354,
+        "y": 809.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Drawer",
+      "file": "068-drawer.png",
+      "box": {
+        "x": 354,
+        "y": 896.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Empty",
+      "file": "069-empty.png",
+      "box": {
+        "x": 354,
+        "y": 872.265625,
+        "width": 816,
+        "height": 212
+      }
+    },
+    {
+      "name": "Field",
+      "file": "070-field.png",
+      "box": {
+        "x": 354,
+        "y": 510.265625,
+        "width": 816,
+        "height": 80
+      }
+    },
+    {
+      "name": "Fieldset",
+      "file": "071-fieldset.png",
+      "box": {
+        "x": 354,
+        "y": 637.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Form",
+      "file": "072-form.png",
+      "box": {
+        "x": 354,
+        "y": 724.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Frame",
+      "file": "073-frame.png",
+      "box": {
+        "x": 354,
+        "y": 810.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Group",
+      "file": "074-group.png",
+      "box": {
+        "x": 354,
+        "y": 897.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Input",
+      "file": "075-input.png",
+      "box": {
+        "x": 354,
+        "y": 983.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Input Group",
+      "file": "076-input-group.png",
+      "box": {
+        "x": 354,
+        "y": 1045.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Kbd",
+      "file": "077-kbd.png",
+      "box": {
+        "x": 354,
+        "y": 531.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Label",
+      "file": "078-label.png",
+      "box": {
+        "x": 354,
+        "y": 618.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Menu",
+      "file": "079-menu.png",
+      "box": {
+        "x": 354,
+        "y": 704.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Meter",
+      "file": "080-meter.png",
+      "box": {
+        "x": 354,
+        "y": 790.015625,
+        "width": 816,
+        "height": 38
+      }
+    },
+    {
+      "name": "Number Field",
+      "file": "081-number-field.png",
+      "box": {
+        "x": 354,
+        "y": 877.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "OTP Field",
+      "file": "082-otp-field.png",
+      "box": {
+        "x": 354,
+        "y": 964.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Pagination",
+      "file": "083-pagination.png",
+      "box": {
+        "x": 354,
+        "y": 1044.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Popover",
+      "file": "084-popover.png",
+      "box": {
+        "x": 354,
+        "y": 532.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Preview Card",
+      "file": "085-preview-card.png",
+      "box": {
+        "x": 354,
+        "y": 618.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Progress",
+      "file": "086-progress.png",
+      "box": {
+        "x": 354,
+        "y": 704.015625,
+        "width": 816,
+        "height": 38
+      }
+    },
+    {
+      "name": "Radio Group",
+      "file": "087-radio-group.png",
+      "box": {
+        "x": 354,
+        "y": 791.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Scroll Area",
+      "file": "088-scroll-area.png",
+      "box": {
+        "x": 354,
+        "y": 874.765625,
+        "width": 816,
+        "height": 96
+      }
+    },
+    {
+      "name": "Select",
+      "file": "089-select.png",
+      "box": {
+        "x": 354,
+        "y": 1018.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Separator",
+      "file": "090-separator.png",
+      "box": {
+        "x": 354,
+        "y": 1044.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Sheet",
+      "file": "091-sheet.png",
+      "box": {
+        "x": 354,
+        "y": 532.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Skeleton",
+      "file": "092-skeleton.png",
+      "box": {
+        "x": 354,
+        "y": 615.265625,
+        "width": 816,
+        "height": 64
+      }
+    },
+    {
+      "name": "Slider",
+      "file": "093-slider.png",
+      "box": {
+        "x": 354,
+        "y": 726.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Spinner",
+      "file": "094-spinner.png",
+      "box": {
+        "x": 354,
+        "y": 813.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Switch",
+      "file": "095-switch.png",
+      "box": {
+        "x": 354,
+        "y": 899.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Table",
+      "file": "096-table.png",
+      "box": {
+        "x": 354,
+        "y": 959.765625,
+        "width": 816,
+        "height": 124
+      }
+    },
+    {
+      "name": "Tabs",
+      "file": "097-tabs.png",
+      "box": {
+        "x": 354,
+        "y": 515.765625,
+        "width": 816,
+        "height": 68
+      }
+    },
+    {
+      "name": "Textarea",
+      "file": "098-textarea.png",
+      "box": {
+        "x": 354,
+        "y": 627.765625,
+        "width": 816,
+        "height": 80
+      }
+    },
+    {
+      "name": "Toast",
+      "file": "099-toast.png",
+      "box": {
+        "x": 354,
+        "y": 755.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Toggle",
+      "file": "100-toggle.png",
+      "box": {
+        "x": 354,
+        "y": 841.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Toggle Group",
+      "file": "101-toggle-group.png",
+      "box": {
+        "x": 354,
+        "y": 928.015625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Toolbar",
+      "file": "102-toolbar.png",
+      "box": {
+        "x": 354,
+        "y": 1014.515625,
+        "width": 816,
+        "height": 36
+      }
+    },
+    {
+      "name": "Tooltip",
+      "file": "103-tooltip.png",
+      "box": {
+        "x": 354,
+        "y": 1045.015625,
+        "width": 816,
+        "height": 36
+      }
+    }
+  ]
+}
