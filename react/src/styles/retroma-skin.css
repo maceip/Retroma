@@ -4,91 +4,138 @@
  * Retroma / Obsidian custom properties (`--interactive-accent`,
  * `--background-primary`, `--outline-color`, …) so every primitive in
  * the base-UI catalog automatically adopts the retro visual language.
+ *
+ * The Retroma names referenced here are defined in tokens.css (which
+ * is the selector-free distillation of the upstream theme.css). When
+ * you build with `@retroma/react/styles.css` both files are loaded.
  */
 
 :root {
-  /* Retroma base palette (kept in sync with theme.css). */
-  --retroma-accent: var(--interactive-accent, #2196f3);
-  --retroma-paper: var(--background-paper, #f4f6fa);
-  --retroma-primary-bg: var(--background-primary, #e6ecf3);
-  --retroma-secondary-bg: var(--background-secondary, #d6e0eb);
-  --retroma-tertiary-bg: var(--background-tertiary, #a8b5c1);
-  --retroma-text: var(--text-normal, #1f2328);
-  --retroma-text-muted: var(--text-muted, #57606a);
-  --retroma-text-faint: var(--text-faint, #8c959f);
-  --retroma-outline: var(--outline-color, rgba(0, 0, 0, 0.2));
+  /* Convenience aliases used by retroma-composites / retroma-github /
+   * retroma-chat-plus. Each maps onto the canonical Retroma name from
+   * tokens.css; they exist as fallbacks in case a consumer mounts the
+   * skin without first declaring an --interactive-accent. */
+  --retroma-accent:        var(--base-accent, var(--interactive-accent, #2196f3));
+  --retroma-accent-1:      var(--accent-1, var(--retroma-accent));
+  --retroma-accent-2:      var(--accent-2, var(--retroma-accent));
+  --retroma-paper:         var(--background-paper,     #f4f6fa);
+  --retroma-primary-bg:    var(--background-primary,   #e6ecf3);
+  --retroma-secondary-bg:  var(--background-secondary, #d6e0eb);
+  --retroma-tertiary-bg:   var(--background-tertiary,  #a8b5c1);
+  --retroma-text:          var(--text-normal, #1f2328);
+  --retroma-text-muted:    var(--text-muted,  #57606a);
+  --retroma-text-faint:    var(--text-faint,  #8c959f);
+  --retroma-outline:       var(--outline-color, rgba(0, 0, 0, 0.2));
 }
 
 /* ==== Light tokens ======================================================= */
 :root,
 .theme-light {
-  --background: var(--retroma-paper);
-  --foreground: var(--retroma-text);
-  --card: var(--retroma-paper);
-  --card-foreground: var(--retroma-text);
-  --popover: var(--retroma-paper);
-  --popover-foreground: var(--retroma-text);
-  --primary: var(--retroma-accent);
-  --primary-foreground: var(--text-on-accent, #ffffff);
-  --secondary: var(--retroma-secondary-bg);
+  /* Surfaces */
+  --background:           var(--retroma-paper);
+  --foreground:           var(--retroma-text);
+  --card:                 var(--retroma-paper);
+  --card-foreground:      var(--retroma-text);
+  --popover:              var(--retroma-paper);
+  --popover-foreground:   var(--retroma-text);
+
+  /* Brand. Primary follows the live --interactive-accent; "accent" picks
+   * up --accent-1 (the +30° rotation) so cards / hovers / nav-active
+   * states pull a complementary tone instead of being a flat secondary. */
+  --primary:              var(--retroma-accent);
+  --primary-foreground:   var(--text-on-accent, #ffffff);
+  --secondary:            var(--retroma-secondary-bg);
   --secondary-foreground: var(--retroma-text);
-  --muted: var(--retroma-secondary-bg);
-  --muted-foreground: var(--retroma-text-muted);
-  --accent: var(--retroma-secondary-bg);
-  --accent-foreground: var(--retroma-text);
-  --destructive: var(--color-red, #d32f2f);
+  --muted:                var(--retroma-secondary-bg);
+  --muted-foreground:     var(--retroma-text-muted);
+  --accent:               oklch(from var(--retroma-accent-1) 88% c h);
+  --accent-foreground:    var(--retroma-text);
+  --destructive:          var(--color-red, #d32f2f);
   --destructive-foreground: #ffffff;
-  --border: var(--retroma-outline);
-  --input: var(--retroma-outline);
-  --ring: var(--retroma-accent);
 
-  --sidebar: var(--retroma-secondary-bg);
-  --sidebar-foreground: var(--retroma-text);
-  --sidebar-primary: var(--retroma-accent);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--retroma-primary-bg);
-  --sidebar-accent-foreground: var(--retroma-text);
-  --sidebar-border: var(--retroma-outline);
-  --sidebar-ring: var(--retroma-accent);
+  /* States that need to feel branded but neutral. */
+  --info:                 oklch(from var(--retroma-accent-1)   l c h / 18%);
+  --info-foreground:      var(--retroma-text);
+  --success:              oklch(from var(--color-green, #4caf50) l c h / 18%);
+  --success-foreground:   var(--retroma-text);
+  --warning:              oklch(from var(--color-orange, #ff9800) l c h / 22%);
+  --warning-foreground:   var(--retroma-text);
 
-  --code: var(--code-background, rgba(0, 0, 0, 0.04));
-  --code-foreground: var(--retroma-text);
-  --code-highlight: rgba(0, 0, 0, 0.06);
+  --border:               var(--retroma-outline);
+  --input:                var(--retroma-outline);
+  --ring:                 var(--retroma-accent);
 
-  --radius: var(--window-border-radius, 12px);
+  /* Sidebar (COSS exposes its own slot). */
+  --sidebar:                       var(--retroma-secondary-bg);
+  --sidebar-foreground:            var(--retroma-text);
+  --sidebar-primary:               var(--retroma-accent);
+  --sidebar-primary-foreground:    var(--text-on-accent, #ffffff);
+  --sidebar-accent:                var(--retroma-primary-bg);
+  --sidebar-accent-foreground:     var(--retroma-text);
+  --sidebar-border:                var(--retroma-outline);
+  --sidebar-ring:                  var(--retroma-accent);
+
+  /* Charts — give 5 distinct palette slots that all re-flow with the
+   * live accent, instead of a frozen rainbow. */
+  --chart-1: var(--color-blue,    #2196f3);
+  --chart-2: var(--color-purple,  #673ab7);
+  --chart-3: var(--color-green,   #4caf50);
+  --chart-4: var(--color-orange,  #ff9800);
+  --chart-5: var(--color-magenta, #e91e63);
+
+  --code:                 var(--code-background, rgba(0, 0, 0, 0.04));
+  --code-foreground:      var(--retroma-text);
+  --code-highlight:       rgba(0, 0, 0, 0.06);
+
+  --radius:               var(--window-border-radius, 12px);
 }
 
 /* ==== Dark tokens ======================================================== */
 .theme-dark,
 .dark {
-  --background: var(--retroma-paper);
-  --foreground: var(--retroma-text);
-  --card: var(--retroma-paper);
-  --card-foreground: var(--retroma-text);
-  --popover: var(--retroma-paper);
-  --popover-foreground: var(--retroma-text);
-  --primary: var(--retroma-accent);
-  --primary-foreground: #ffffff;
-  --secondary: var(--retroma-secondary-bg);
-  --secondary-foreground: var(--retroma-text);
-  --muted: var(--retroma-secondary-bg);
-  --muted-foreground: var(--retroma-text-muted);
-  --accent: var(--retroma-secondary-bg);
-  --accent-foreground: var(--retroma-text);
-  --destructive: var(--color-red, #ff6b6b);
-  --destructive-foreground: #ffffff;
-  --border: var(--retroma-outline);
-  --input: var(--retroma-outline);
-  --ring: var(--retroma-accent);
+  --background:           var(--retroma-paper);
+  --foreground:           var(--retroma-text);
+  --card:                 var(--retroma-paper);
+  --card-foreground:      var(--retroma-text);
+  --popover:              var(--retroma-paper);
+  --popover-foreground:   var(--retroma-text);
 
-  --sidebar: var(--retroma-secondary-bg);
-  --sidebar-foreground: var(--retroma-text);
-  --sidebar-primary: var(--retroma-accent);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--retroma-primary-bg);
-  --sidebar-accent-foreground: var(--retroma-text);
-  --sidebar-border: var(--retroma-outline);
-  --sidebar-ring: var(--retroma-accent);
+  --primary:              var(--retroma-accent);
+  --primary-foreground:   var(--text-on-accent, #ffffff);
+  --secondary:            var(--retroma-secondary-bg);
+  --secondary-foreground: var(--retroma-text);
+  --muted:                var(--retroma-secondary-bg);
+  --muted-foreground:     var(--retroma-text-muted);
+  --accent:               oklch(from var(--retroma-accent-1) 35% c h);
+  --accent-foreground:    var(--retroma-text);
+  --destructive:          var(--color-red, #ff6b6b);
+  --destructive-foreground: #ffffff;
+
+  --info:                 oklch(from var(--retroma-accent-1)   l c h / 22%);
+  --info-foreground:      var(--retroma-text);
+  --success:              oklch(from var(--color-green, #4caf50) l c h / 22%);
+  --success-foreground:   var(--retroma-text);
+  --warning:              oklch(from var(--color-orange, #ff9800) l c h / 26%);
+  --warning-foreground:   var(--retroma-text);
+
+  --border:               var(--retroma-outline);
+  --input:                var(--retroma-outline);
+  --ring:                 var(--retroma-accent);
+
+  --sidebar:                    var(--retroma-secondary-bg);
+  --sidebar-foreground:         var(--retroma-text);
+  --sidebar-primary:            var(--retroma-accent);
+  --sidebar-primary-foreground: var(--text-on-accent, #ffffff);
+  --sidebar-accent:             var(--retroma-primary-bg);
+  --sidebar-accent-foreground:  var(--retroma-text);
+  --sidebar-border:             var(--retroma-outline);
+  --sidebar-ring:               var(--retroma-accent);
+
+  --chart-1: var(--color-blue,    #64b5f6);
+  --chart-2: var(--color-purple,  #b39ddb);
+  --chart-3: var(--color-green,   #81c784);
+  --chart-4: var(--color-orange,  #ffb74d);
+  --chart-5: var(--color-magenta, #f06292);
 }
 
 /* ========================================================================

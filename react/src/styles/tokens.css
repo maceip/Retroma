@@ -1,28 +1,109 @@
 /*
- * Retroma design tokens — extracted from theme.css.
+ * Retroma — design tokens & color algorithm.
  *
- * Import this file if you want the Retroma color / sizing variables
- * without pulling in the full Obsidian selector surface. Every custom
- * property here also exists in the full theme.
+ * This is the selector-free distillation of the upstream Obsidian
+ * theme.css (assets/theme.css). Importing it gives a consumer the
+ * Retroma palette, the oklch-based accent algorithm, the light/dark
+ * surface tokens, and all the layout / typography variables needed by
+ * the React composites — without pulling in the full Obsidian DOM
+ * selectors (.workspace-tab-header, .nav-folder, …).
+ *
+ * Override `--interactive-accent` on `:root` (or any ancestor) and the
+ * full palette re-flows.
+ *
+ *   :root { --interactive-accent: #d946ef; }
+ *
+ * Companion files:
+ *   globals.css         — Tailwind v4 layer + COSS @theme tokens
+ *   retroma-skin.css    — maps COSS tokens (--primary, --background, …)
+ *                         onto the Retroma names defined here
+ *   retroma-composites.css / retroma-github.css / retroma-chat-plus.css
+ *                       — composite-level styling
+ *   theme.css           — the full Obsidian theme; pulls these tokens
+ *                         in plus a long tail of Obsidian-DOM rules
  */
 
+/* ========================================================================
+ * 1. Base hue palette — exactly the values from theme.css :root
+ * ====================================================================== */
 :root {
-  /* Base hues */
-  --hue-red: #d32f2f;
-  --hue-orange: #ff9800;
-  --hue-yellow: #ffeb3b;
-  --hue-green: #4caf50;
-  --hue-blue: #2196f3;
-  --hue-indigo: #3f51b5;
-  --hue-violet: #9c27b0;
+  --hue-red:        #d32f2f;
+  --hue-orange:     #ff9800;
+  --hue-yellow:     #ffeb3b;
+  --hue-green:      #4caf50;
+  --hue-blue:       #2196f3;
+  --hue-indigo:     #3f51b5;
+  --hue-violet:     #9c27b0;
   --hue-vermillion: #ff5722;
-  --hue-amber: #ffb300;
-  --hue-lime: #8bc34a;
-  --hue-teal: #009688;
-  --hue-purple: #673ab7;
-  --hue-magenta: #e91e63;
-  --hue-rose: #f48fb1;
-  --hue-cyan: #00bcd4;
+  --hue-amber:      #ffb300;
+  --hue-lime:       #8bc34a;
+  --hue-teal:       #009688;
+  --hue-purple:     #673ab7;
+  --hue-magenta:    #e91e63;
+  --hue-rose:       #f48fb1;
+  --hue-cyan:       #00bcd4;
+}
+
+/* ========================================================================
+ * 2. body — accent algorithm + computed palette + layout tokens
+ *
+ * Override `--interactive-accent` (e.g. `body { --interactive-accent: #d946ef }`)
+ * and `--base-accent` plus the rotational `--accent-1` / `--accent-2`
+ * recompute, which in turn drives every surface, border, link, code and
+ * folder color downstream.
+ * ====================================================================== */
+body {
+  /* Accent algorithm */
+  --interactive-accent: var(--interactive-accent, #2196f3);
+  --base-accent: oklch(from var(--interactive-accent) l c h);
+  --rotation-1: 30;
+  --rotation-2: 330;
+  --accent-1: oklch(from var(--base-accent) l c calc(h + var(--rotation-1)));
+  --accent-2: oklch(from var(--base-accent) l c calc(h + var(--rotation-2)));
+
+  /* Color palette — each --color-* recomputes lightness + chroma per theme
+   * (the theme variants below set --lightness / --chroma). */
+  --color-red:        oklch(from var(--hue-red)        var(--lightness) var(--chroma) h);
+  --color-orange:     oklch(from var(--hue-orange)     var(--lightness) var(--chroma) h);
+  --color-yellow:     oklch(from var(--hue-yellow)     var(--lightness) var(--chroma) h);
+  --color-green:      oklch(from var(--hue-green)      var(--lightness) var(--chroma) h);
+  --color-blue:       oklch(from var(--hue-blue)       var(--lightness) var(--chroma) h);
+  --color-indigo:     oklch(from var(--hue-indigo)     var(--lightness) var(--chroma) h);
+  --color-violet:     oklch(from var(--hue-violet)     var(--lightness) var(--chroma) h);
+  --color-vermillion: oklch(from var(--hue-vermillion) var(--lightness) var(--chroma) h);
+  --color-amber:      oklch(from var(--hue-amber)      var(--lightness) var(--chroma) h);
+  --color-lime:       oklch(from var(--hue-lime)       var(--lightness) var(--chroma) h);
+  --color-teal:       oklch(from var(--hue-teal)       var(--lightness) var(--chroma) h);
+  --color-purple:     oklch(from var(--hue-purple)     var(--lightness) var(--chroma) h);
+  --color-magenta:    oklch(from var(--hue-magenta)    var(--lightness) var(--chroma) h);
+  --color-rose:       oklch(from var(--hue-rose)       var(--lightness) var(--chroma) h);
+  --color-cyan:       oklch(from var(--hue-cyan)       var(--lightness) var(--chroma) h);
+
+  /* Heading colors — H1..H6 cycle through the palette. */
+  --h1-color: var(--color-red);
+  --h2-color: var(--color-orange);
+  --h3-color: var(--color-yellow);
+  --h4-color: var(--color-green);
+  --h5-color: var(--color-blue);
+  --h6-color: var(--color-indigo);
+
+  /* Folder accent palette — used by FileExplorer + similar nested lists. */
+  --folder-accent: var(--base-accent);
+  --folder-color-1:  oklch(from var(--hue-red)        var(--lightness) var(--chroma-folder) h);
+  --folder-color-2:  oklch(from var(--hue-orange)     var(--lightness) var(--chroma-folder) h);
+  --folder-color-3:  oklch(from var(--hue-yellow)     var(--lightness) var(--chroma-folder) h);
+  --folder-color-4:  oklch(from var(--hue-green)      var(--lightness) var(--chroma-folder) h);
+  --folder-color-5:  oklch(from var(--hue-blue)       var(--lightness) var(--chroma-folder) h);
+  --folder-color-6:  oklch(from var(--hue-indigo)     var(--lightness) var(--chroma-folder) h);
+  --folder-color-7:  oklch(from var(--hue-violet)     var(--lightness) var(--chroma-folder) h);
+  --folder-color-8:  oklch(from var(--hue-vermillion) var(--lightness) var(--chroma-folder) h);
+  --folder-color-9:  oklch(from var(--hue-amber)      var(--lightness) var(--chroma-folder) h);
+  --folder-color-10: oklch(from var(--hue-lime)       var(--lightness) var(--chroma-folder) h);
+  --folder-color-11: oklch(from var(--hue-teal)       var(--lightness) var(--chroma-folder) h);
+  --folder-color-12: oklch(from var(--hue-purple)     var(--lightness) var(--chroma-folder) h);
+  --folder-color-13: oklch(from var(--hue-magenta)    var(--lightness) var(--chroma-folder) h);
+  --folder-color-14: oklch(from var(--hue-rose)       var(--lightness) var(--chroma-folder) h);
+  --folder-color-15: oklch(from var(--hue-cyan)       var(--lightness) var(--chroma-folder) h);
 
   /* Layout */
   --header-height: 48px;
@@ -30,25 +111,151 @@
   --button-border-radius: 8px;
   --border-width: 1px;
 
-  /* Rotations driving the accent algorithm */
-  --rotation-1: 30;
-  --rotation-2: 330;
+  /* Borders & dividers (depend on the accent + theme palette below) */
+  --hr-color: oklch(from var(--text-normal) l c h / 25%);
+  --divider-width: 0px;
+  --outline-color: oklch(from var(--base-accent) 25% c h);
+  --border-solid: 4px solid var(--titlebar-background);
+  --border-groove: 4px groove var(--background-primary-alt);
+  --border-ridge:  4px ridge  var(--background-primary);
 
-  /* Interactive accent (override this one to re-skin the whole UI) */
-  --interactive-accent: #2196f3;
+  /* Buttons */
+  --button-normal: var(--background-primary);
+  --button-hover:  oklch(from var(--background-paper) l c h);
+  --button-text:   var(--text-normal);
+
+  /* Misc interactive */
+  --interactive-active: oklch(from var(--base-accent) 50% c h / 50%);
+  --slider-track-background: var(--interactive-active);
+  --dropdown-background: var(--background-paper);
+
+  /* Status bar / ribbon */
+  --status-bar-background: var(--background-tertiary);
+  --ribbon-background:           var(--background-secondary);
+  --ribbon-background-collapsed: var(--ribbon-background);
+
+  /* Tag pill */
+  --tag-radius: var(--button-border-radius);
+  --tag-border-width: 1px;
 }
 
+/* ========================================================================
+ * 3. Light theme — lightness + chroma + every surface / typography token
+ * ====================================================================== */
+:root,
 .theme-light {
   --lightness: 50%;
   --chroma: 30%;
   --chroma-folder: 30%;
   --chroma-accent: 0.4;
+
+  /* Surface ramp */
+  --background-paper:        oklch(from var(--accent-2)    98% calc(c * var(--chroma-accent)) h);
+  --background-primary:      oklch(from var(--accent-2)    93% calc(c * var(--chroma-accent)) h);
+  --background-primary-alt:  oklch(from var(--base-accent) 75% calc(c * var(--chroma-accent)) h);
+  --background-secondary:    oklch(from var(--base-accent) 80% calc(c * var(--chroma-accent)) h);
+  --background-secondary-alt:oklch(from var(--accent-1)    65% calc(c * var(--chroma-accent)) h);
+  --background-tertiary:     oklch(from var(--accent-2)    60% calc(c * var(--chroma-accent)) h);
+  --titlebar-background:     oklch(from var(--accent-1)    65% calc(c * var(--chroma-accent)) h);
+  --titlebar-text-color-focused: oklch(from var(--background-paper) 100% c h);
+
+  /* Typography */
+  --text-normal: oklch(from var(--base-accent) 25% c h);
+  --text-muted:  oklch(from var(--base-accent) 40% c h);
+  --text-faint:  oklch(from var(--base-accent) 55% c h);
+  --text-on-accent: #ffffff;
+  --bold-color:   oklch(from var(--base-accent) calc(var(--lightness) - 15%) var(--chroma) calc(h + 100));
+  --italic-color: oklch(from var(--base-accent) calc(var(--lightness) - 15%) var(--chroma) calc(h + 200));
+
+  /* Links */
+  --link-color:            oklch(from var(--base-accent) calc(var(--lightness) - 15%) var(--chroma) h);
+  --link-weight: 700;
+  --link-color-hover:      oklch(from var(--link-color) var(--lightness) var(--chroma) h / 80%);
+  --link-unresolved-color: oklch(from var(--link-color) var(--lightness) var(--chroma) h / 60%);
+  --link-external-color:   var(--color-red);
+  --link-external-color-hover: oklch(from var(--link-external-color) var(--lightness) var(--chroma) h / 80%);
+
+  /* Code */
+  --code-background: oklch(from var(--background-secondary) 85% c h / 50%);
+
+  /* Miscellaneous */
+  --tag-color:       oklch(from var(--base-accent) 40% c h / 75%);
+  --text-selection:  oklch(from var(--accent-2)    80% var(--chroma) h / 75%);
+  --text-highlight-bg: oklch(from var(--accent-1)  80% var(--chroma) h / 75%);
+  --button-active:   oklch(from var(--background-secondary-alt) 85% c h);
+  --bases-cards-background: oklch(from var(--background-tertiary) 85% c h);
+
+  /* Retroma signature inset bevel — light variant. */
+  --box-shadow:
+    inset -2px -2px oklch(from var(--background-secondary)  50% c h),
+    inset  2px  2px oklch(from var(--background-secondary) 100% c h);
+  --box-shadow-active:
+    inset  2px  2px oklch(from var(--background-secondary)  50% c h),
+    inset -2px -2px oklch(from var(--background-secondary) 100% c h);
+  --box-shadow-sm:
+    inset -1px -1px oklch(from var(--background-secondary)  50% c h),
+    inset  1px  1px oklch(from var(--background-secondary) 100% c h);
+  --box-shadow-active-sm:
+    inset  1px  1px oklch(from var(--background-secondary)  50% c h),
+    inset -1px -1px oklch(from var(--background-secondary) 100% c h);
 }
 
-.theme-dark {
+/* ========================================================================
+ * 4. Dark theme
+ * ====================================================================== */
+.theme-dark,
+.dark {
   --lightness: 70%;
   --lightness-accent: 0.24;
   --chroma: 20%;
   --chroma-folder: 20%;
   --chroma-accent: 0.3;
+
+  /* Surface ramp — drop down the lightness scale by 0.02..0.12 steps. */
+  --background-paper:         oklch(from var(--accent-2)    var(--lightness-accent)              calc(c * var(--chroma-accent)) h);
+  --background-primary:       oklch(from var(--accent-2)    calc(var(--lightness-accent) - 0.02) calc(c * var(--chroma-accent)) h);
+  --background-primary-alt:   oklch(from var(--base-accent) calc(var(--lightness-accent) - 0.04) calc(c * var(--chroma-accent)) h);
+  --background-secondary:     oklch(from var(--base-accent) calc(var(--lightness-accent) - 0.06) calc(c * var(--chroma-accent)) h);
+  --background-secondary-alt: oklch(from var(--accent-1)    calc(var(--lightness-accent) - 0.08) calc(c * var(--chroma-accent)) h);
+  --background-tertiary:      oklch(from var(--accent-2)    calc(var(--lightness-accent) - 0.10) calc(c * var(--chroma-accent)) h);
+  --titlebar-background:      oklch(from var(--accent-1)    calc(var(--lightness-accent) - 0.12) calc(c * var(--chroma-accent)) h);
+
+  /* Typography (lighter, since surfaces are dark). */
+  --text-normal: oklch(from var(--base-accent) 92% c h);
+  --text-muted:  oklch(from var(--base-accent) 75% c h);
+  --text-faint:  oklch(from var(--base-accent) 60% c h);
+  --text-on-accent: #ffffff;
+  --bold-color:   oklch(from var(--base-accent) calc(var(--lightness) + 10%) var(--chroma) calc(h + 100));
+  --italic-color: oklch(from var(--base-accent) calc(var(--lightness) + 10%) var(--chroma) calc(h + 200));
+
+  /* Links */
+  --link-color:            oklch(from var(--base-accent) calc(var(--lightness) + 10%) var(--chroma) h);
+  --link-color-hover:      oklch(from var(--link-color) calc(var(--lightness) + 10%) var(--chroma) h / 80%);
+  --link-unresolved-color: oklch(from var(--link-color) calc(var(--lightness) + 10%) var(--chroma) h / 60%);
+  --link-external-color:   var(--color-red);
+  --link-external-color-hover: oklch(from var(--link-external-color) var(--lightness) var(--chroma) h / 80%);
+
+  /* Code */
+  --code-background: oklch(from var(--background-secondary) 10% c h / 50%);
+
+  /* Miscellaneous */
+  --tag-color:       oklch(from var(--base-accent) 80% c h / 75%);
+  --text-selection:  oklch(from var(--accent-2) 45% c h / 75%);
+  --text-highlight-bg: oklch(from var(--accent-1) 50% var(--chroma) h / 75%);
+  --button-active:   oklch(from var(--background-secondary) 25% c h);
+  --bases-cards-background: oklch(from var(--background-tertiary) 25% c h);
+
+  /* Retroma signature inset bevel — dark variant (darker shadow corner). */
+  --box-shadow:
+    inset -2px -2px oklch(from var(--background-secondary)  0% c h),
+    inset  2px  2px oklch(from var(--background-secondary) 50% c h);
+  --box-shadow-active:
+    inset  2px  2px oklch(from var(--background-secondary)  0% c h),
+    inset -2px -2px oklch(from var(--base-accent)          50% c h);
+  --box-shadow-sm:
+    inset -1px -1px oklch(from var(--background-secondary)  0% c h),
+    inset  1px  1px oklch(from var(--background-secondary) 50% c h);
+  --box-shadow-active-sm:
+    inset  1px  1px oklch(from var(--background-secondary)  0% c h),
+    inset -1px -1px oklch(from var(--base-accent)          50% c h);
 }

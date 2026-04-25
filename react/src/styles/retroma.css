@@ -1,22 +1,26 @@
 /*
  * Retroma React — full theme stylesheet.
  *
- * Imports the base COSS Tailwind v4 globals (primitives + tokens) and
- * then layers the Retroma / Obsidian theme on top so:
- *
- *   1. All base components (Button, Dialog, Tooltip, …) pick up the
- *      Retroma palette via the shared token names COSS already uses
- *      (`--primary`, `--background`, `--border`, …).
- *   2. The Retroma composites (AppRibbon, FileExplorer, …) and the
- *      canonical `theme.css` that targets Obsidian's DOM class names
- *      (`.workspace-tab-header`, `.nav-folder`, …) still apply.
- *
- * Import order matters: globals first (defines tokens + Tailwind layers),
- * then the Retroma re-skin overrides, then the legacy theme.css.
+ *   1. tokens.css      — selector-free Retroma palette + oklch algorithm
+ *                        (1:1 distillation of the upstream theme.css token
+ *                        block — the part with no Obsidian-DOM selectors).
+ *   2. globals.css     — Tailwind v4 layer + COSS @theme tokens.
+ *   3. retroma-skin    — maps COSS tokens (--primary, --background, …)
+ *                        onto Retroma names defined in tokens.css.
+ *   4. composite CSS   — composites / GitHub / chat-plus / BountyNet
+ *                        stylesheets that consume the resolved tokens.
+ *   5. theme.css       — the full Obsidian theme with its DOM-targeted
+ *                        rules; intentionally last so anything above can
+ *                        selectively override its !important declarations.
  *
  *   import "@retroma/react/styles.css";
+ *
+ * To override the whole palette in your own app:
+ *
+ *   :root { --interactive-accent: #d946ef; }
  */
 
+@import "./tokens.css";
 @import "./globals.css";
 @import "./retroma-skin.css";
 @import "./retroma-composites.css";

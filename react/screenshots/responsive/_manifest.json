@@ -1,245 +1,45 @@
 {
-  "url": "http://127.0.0.1:5190/",
+  "url": "http://127.0.0.1:5191/",
   "runs": [
     {
-      "viewport": "mobile",
-      "name": "ThemeTunerPanel",
-      "file": "001-themetunerpanel.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "WorkspaceTabs",
-      "file": "002-workspacetabs.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "BacklinksPanel",
-      "file": "003-backlinkspanel.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "SearchPanel",
-      "file": "004-searchpanel.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "KanbanBoard",
-      "file": "005-kanbanboard.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "BasesView",
-      "file": "006-basesview.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "Chat",
-      "file": "007-chat.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "RepoCard",
-      "file": "008-repocard.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "CommitGraph",
-      "file": "009-commitgraph.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "Stepper",
-      "file": "010-stepper.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "DiffViewer + WorktreeLineage",
-      "file": "011-diffviewer-worktreelineage.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "JsonViewer",
-      "file": "012-jsonviewer.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "Message family",
-      "file": "013-message-family.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "PromptInput",
-      "file": "014-promptinput.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "Suggestions",
-      "file": "015-suggestions.png"
-    },
-    {
-      "viewport": "mobile",
-      "name": "Button",
-      "file": "016-button.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "ThemeTunerPanel",
-      "file": "001-themetunerpanel.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "WorkspaceTabs",
-      "file": "002-workspacetabs.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "BacklinksPanel",
-      "file": "003-backlinkspanel.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "SearchPanel",
-      "file": "004-searchpanel.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "KanbanBoard",
-      "file": "005-kanbanboard.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "BasesView",
-      "file": "006-basesview.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "Chat",
-      "file": "007-chat.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "RepoCard",
-      "file": "008-repocard.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "CommitGraph",
-      "file": "009-commitgraph.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "Stepper",
-      "file": "010-stepper.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "DiffViewer + WorktreeLineage",
-      "file": "011-diffviewer-worktreelineage.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "JsonViewer",
-      "file": "012-jsonviewer.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "Message family",
-      "file": "013-message-family.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "PromptInput",
-      "file": "014-promptinput.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "Suggestions",
-      "file": "015-suggestions.png"
-    },
-    {
-      "viewport": "foldable",
-      "name": "Button",
-      "file": "016-button.png"
-    },
-    {
       "viewport": "desktop",
       "name": "ThemeTunerPanel",
       "file": "001-themetunerpanel.png"
     },
     {
       "viewport": "desktop",
-      "name": "WorkspaceTabs",
-      "file": "002-workspacetabs.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "BacklinksPanel",
-      "file": "003-backlinkspanel.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "SearchPanel",
-      "file": "004-searchpanel.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "KanbanBoard",
-      "file": "005-kanbanboard.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "BasesView",
-      "file": "006-basesview.png"
+      "name": "Callout",
+      "file": "002-callout.png"
     },
     {
       "viewport": "desktop",
       "name": "Chat",
-      "file": "007-chat.png"
+      "file": "003-chat.png"
     },
     {
       "viewport": "desktop",
       "name": "RepoCard",
-      "file": "008-repocard.png"
+      "file": "004-repocard.png"
     },
     {
       "viewport": "desktop",
       "name": "CommitGraph",
-      "file": "009-commitgraph.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "Stepper",
-      "file": "010-stepper.png"
+      "file": "005-commitgraph.png"
     },
     {
       "viewport": "desktop",
       "name": "DiffViewer + WorktreeLineage",
-      "file": "011-diffviewer-worktreelineage.png"
+      "file": "006-diffviewer-worktreelineage.png"
     },
     {
       "viewport": "desktop",
       "name": "JsonViewer",
-      "file": "012-jsonviewer.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "Message family",
-      "file": "013-message-family.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "PromptInput",
-      "file": "014-promptinput.png"
-    },
-    {
-      "viewport": "desktop",
-      "name": "Suggestions",
-      "file": "015-suggestions.png"
+      "file": "007-jsonviewer.png"
     },
     {
       "viewport": "desktop",
       "name": "Button",
-      "file": "016-button.png"
+      "file": "008-button.png"
     }
   ]
 }
