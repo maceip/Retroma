@@ -67,6 +67,7 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(
             {showCopy ? (
               <button
                 type="button"
+                data-slot="json-copy"
                 className="retroma-json-copy"
                 onClick={copy}
                 data-copied={copied ? "true" : undefined}
@@ -118,6 +119,7 @@ function JsonNode({
       <div className="retroma-json-row">
         <button
           type="button"
+          data-slot="json-toggle"
           className="retroma-json-toggle"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}

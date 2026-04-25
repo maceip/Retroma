@@ -64,13 +64,16 @@
   overflow: hidden;
   font-family: var(--font-monospace);
   font-size: 12.5px;
+  /* Long string values still need a horizontal scroll, but only at the
+   * outer container so the indent rail stays clean. */
+  max-width: 100%;
 }
 .retroma-json-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
-  background: oklch(from var(--background-secondary) l c h / 60%);
+  padding: 8px 12px;
+  background: color-mix(in oklch, var(--background-secondary) 50%, var(--background-paper));
   border-bottom: 1px solid var(--outline-color);
   color: var(--text-muted);
   font-family: var(--font-interface);
@@ -78,29 +81,59 @@
 }
 .retroma-json-title {
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   font-weight: var(--font-bold);
+  color: var(--text-normal);
 }
+/* Copy pill — data-slot keeps theme.css's global button rule from
+ * painting it as a chunky obsidian button. */
 .retroma-json-copy {
   margin-left: auto;
   appearance: none;
   background: transparent;
   border: 1px solid var(--outline-color);
   border-radius: 999px;
-  padding: 1px 10px;
+  padding: 2px 12px;
   font: inherit;
   font-size: 11px;
   color: var(--text-muted);
   cursor: pointer;
+  transition: background 80ms ease, color 80ms ease, border-color 80ms ease;
 }
-.retroma-json-copy:hover { background: oklch(from var(--text-normal) l c h / 8%); }
+.retroma-json-copy:hover {
+  background: color-mix(in oklch, var(--text-normal) 6%, transparent);
+  color: var(--text-normal);
+}
 .retroma-json-copy[data-copied] {
   color: oklch(from var(--color-green, #4caf50) 35% c h);
-  border-color: oklch(from var(--color-green, #4caf50) l c h / 60%);
+  border-color: color-mix(in oklch, var(--color-green, #4caf50) 60%, transparent);
+  background: color-mix(in oklch, var(--color-green, #4caf50) 12%, transparent);
 }
-.retroma-json-body { padding: 8px 12px; }
-.retroma-json-row { display: block; line-height: 1.6; }
-.retroma-json-row--leaf { padding-left: 14px; }
+
+.retroma-json-body {
+  padding: 10px 14px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: clamp(220px, 60vh, 520px);
+  scrollbar-gutter: stable;
+}
+.retroma-json-body::-webkit-scrollbar { height: 8px; width: 8px; }
+.retroma-json-body::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--text-normal) 22%, transparent);
+  border-radius: 999px;
+}
+.retroma-json-body::-webkit-scrollbar-track { background: transparent; }
+
+.retroma-json-row {
+  display: block;
+  line-height: 1.65;
+  white-space: nowrap;          /* one node per line — long strings cause body scroll */
+}
+.retroma-json-row--leaf { padding-left: 18px; }
+
+/* Toggle — pure inline button, no shadow / padding / border. The
+ * data-slot exempts it from theme.css's global obsidian button chrome
+ * which was painting every key as a purple slab. */
 .retroma-json-toggle {
   appearance: none;
   background: transparent;
@@ -109,22 +142,50 @@
   color: var(--text-normal);
   cursor: pointer;
   text-align: left;
-  padding: 0;
+  padding: 1px 4px 1px 0;
+  border-radius: 4px;
+  transition: background 80ms ease;
+}
+.retroma-json-toggle:hover {
+  background: color-mix(in oklch, var(--text-normal) 5%, transparent);
+}
+.retroma-json-toggle:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--base-accent) 60%, transparent);
+  outline-offset: 1px;
 }
 .retroma-json-caret {
   display: inline-block;
   width: 14px;
+  text-align: center;
   color: var(--text-muted);
 }
-.retroma-json-children { padding-left: 14px; border-left: 1px dashed oklch(from var(--outline-color) l c h / 70%); }
-.retroma-json-key { color: var(--base-accent); }
-.retroma-json-sep { color: var(--text-muted); }
-.retroma-json-comma { color: var(--text-muted); }
+
+/* Dashed indent rail — clearly visible, anchored to the dot column. */
+.retroma-json-children {
+  padding-left: 16px;
+  margin-left: 6px;
+  border-left: 1px dashed color-mix(in oklch, var(--outline-color) 80%, transparent);
+}
+
+/* Tokens — use accent for keys, full color spectrum for primitives. */
+.retroma-json-key {
+  color: oklch(from var(--base-accent) 38% c h);
+  font-weight: var(--font-medium);
+}
+.retroma-json-sep,
+.retroma-json-comma,
 .retroma-json-punct { color: var(--text-muted); }
-.retroma-json-preview { color: var(--text-muted); font-style: italic; }
-.retroma-json-value--str  { color: oklch(from var(--color-green, #4caf50) 35% c h); }
-.retroma-json-value--num  { color: oklch(from var(--color-cyan, #00bcd4)  40% c h); }
-.retroma-json-value--bool { color: oklch(from var(--color-orange, #ff9800) 40% c h); }
+.retroma-json-preview {
+  color: var(--text-faint);
+  font-style: italic;
+  font-size: 0.92em;
+  padding: 0 4px;
+}
+.retroma-json-value--str  {
+  color: oklch(from var(--color-green, #4caf50) 35% c h);
+}
+.retroma-json-value--num  { color: oklch(from var(--color-cyan, #00bcd4)  40% c h); font-variant-numeric: tabular-nums; }
+.retroma-json-value--bool { color: oklch(from var(--color-orange, #ff9800) 40% c h); font-weight: var(--font-bold); }
 .retroma-json-value--null { color: var(--text-faint); font-style: italic; }
 
 /* ====== EnvTable ====== */
@@ -466,8 +527,8 @@
 .retroma-prompt-input {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 10px 12px;
+  gap: 10px;
+  padding: 12px 14px 10px;
   background: var(--background-paper);
   border: 1px solid var(--outline-color);
   border-radius: var(--window-border-radius, 12px);
@@ -475,8 +536,8 @@
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 .retroma-prompt-input:focus-within {
-  border-color: oklch(from var(--base-accent) l c h / 60%);
-  box-shadow: 0 0 0 3px oklch(from var(--base-accent) l c h / 20%);
+  border-color: color-mix(in oklch, var(--base-accent) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--base-accent) 20%, transparent);
 }
 .retroma-prompt-input[data-disabled="true"] { opacity: 0.6; pointer-events: none; }
 .retroma-prompt-input-textarea {
@@ -486,50 +547,102 @@
   outline: 0;
   font: inherit;
   font-size: 14px;
+  line-height: 1.5;
   color: var(--text-normal);
   resize: vertical;
-  min-height: 44px;
-  padding: 0;
+  min-height: 56px;
+  /* Inset the text from the surrounding card so the cursor isn't kissing
+   * the border and long messages don't collide with the focus ring. */
+  padding: 4px 4px 6px;
 }
+.retroma-prompt-input-textarea::placeholder {
+  color: color-mix(in oklch, var(--text-muted) 80%, transparent);
+}
+
+/* Footer divider — replace the dashed line (which read as scuffed) with
+ * a clean hairline that picks up the accent on focus. */
 .retroma-prompt-input-actions {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding-top: 6px;
-  border-top: 1px dashed oklch(from var(--outline-color) l c h / 70%);
+  padding: 8px 0 0;
+  border-top: 1px solid color-mix(in oklch, var(--outline-color) 70%, transparent);
+  transition: border-color 120ms ease;
+}
+.retroma-prompt-input:focus-within .retroma-prompt-input-actions {
+  border-top-color: color-mix(in oklch, var(--base-accent) 35%, transparent);
 }
 .retroma-prompt-input-action-group {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 .retroma-prompt-input-action-group--trailing { margin-left: auto; }
+
+/* Icon actions: square 32×32 hit target, no border by default; hover
+ * fills with a soft accent tint. Matches modern chat composers
+ * (ChatGPT / Claude.ai / Slack). */
 .retroma-prompt-input-action {
   appearance: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-height: 26px;
-  min-width: 26px;
-  padding: 3px 10px;
+  gap: 6px;
+  min-height: 32px;
+  min-width: 32px;
+  padding: 0 8px;
   background: transparent;
-  border: 1px solid var(--outline-color);
-  border-radius: 999px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   color: var(--text-muted);
   font: inherit;
   font-size: 12px;
   cursor: pointer;
+  transition: background 100ms ease, color 100ms ease, border-color 100ms ease, transform 80ms ease;
 }
-.retroma-prompt-input-action:hover:not(:disabled) { color: var(--text-normal); background: oklch(from var(--text-normal) l c h / 6%); }
+.retroma-prompt-input-action svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+.retroma-prompt-input-action:hover:not(:disabled) {
+  color: var(--text-normal);
+  background: color-mix(in oklch, var(--base-accent) 10%, transparent);
+  border-color: color-mix(in oklch, var(--base-accent) 18%, transparent);
+}
+.retroma-prompt-input-action:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.retroma-prompt-input-action:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--base-accent) 55%, transparent);
+  outline-offset: 1px;
+}
+
+/* Submit button: distinct accent pill so it reads as the primary CTA
+ * even at a glance, with a subtle drop shadow to lift it from peers. */
 .retroma-prompt-input-action--submit {
   background: var(--base-accent, var(--interactive-accent));
   color: var(--text-on-accent, #fff);
-  border-color: oklch(from var(--base-accent) l c h / 60%);
+  border-color: color-mix(in oklch, var(--base-accent) 60%, transparent);
+  border-radius: 999px;
+  padding: 0 14px;
   font-weight: var(--font-bold);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 2px color-mix(in oklch, var(--base-accent) 30%, transparent);
 }
-.retroma-prompt-input-action--submit:hover:not(:disabled) { filter: brightness(1.05); background: var(--base-accent); color: var(--text-on-accent, #fff); }
-.retroma-prompt-input-action:disabled { opacity: 0.5; cursor: not-allowed; }
+.retroma-prompt-input-action--submit:hover:not(:disabled) {
+  filter: brightness(1.06);
+  background: var(--base-accent);
+  color: var(--text-on-accent, #fff);
+  border-color: color-mix(in oklch, var(--base-accent) 75%, transparent);
+}
+.retroma-prompt-input-action--submit svg { width: 14px; height: 14px; }
+.retroma-prompt-input-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
 
 /* ====== Suggestions ====== */
 .retroma-suggestions {

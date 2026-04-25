@@ -395,6 +395,19 @@
 }
 .retroma-diff-actions { display: inline-flex; gap: 6px; }
 
+/* Kill the global Obsidian `code:not(pre code)` rule (1px box-shadow +
+ * 6px inline padding from theme.css) inside the diff, so each gutter,
+ * marker and source line stops rendering as a separate inline badge. */
+.retroma-diff code,
+.retroma-diff .retroma-diff-text,
+.retroma-diff .retroma-diff-hunk-head code {
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
 .retroma-diff-body { display: flex; flex-direction: column; }
 .retroma-diff-hunk { border-top: 1px solid var(--outline-color); }
 .retroma-diff-hunk:first-child { border-top: 0; }
@@ -404,7 +417,7 @@
   gap: 6px;
   width: 100%;
   padding: 4px 12px;
-  background: oklch(from var(--background-secondary) l c h / 45%);
+  background: color-mix(in oklch, var(--background-secondary) 60%, transparent);
   border: 0;
   border-bottom: 1px solid var(--outline-color);
   color: var(--text-muted);
@@ -412,17 +425,49 @@
   font-size: 11px;
   cursor: pointer;
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.retroma-diff-hunk-head code { font-family: var(--font-monospace); }
-.retroma-diff-hunk-caret { color: var(--text-muted); width: 10px; }
+.retroma-diff-hunk-head code {
+  font-family: var(--font-monospace);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+.retroma-diff-hunk-caret { color: var(--text-muted); width: 10px; flex-shrink: 0; }
 
-.retroma-diff-hunk-body { display: flex; flex-direction: column; }
+/* The whole hunk body is the horizontal-scroll container.
+ * Rows expand to `max-content`, gutter + marker are `position: sticky`
+ * so they stay pinned to the viewport's left edge while code scrolls. */
+.retroma-diff-hunk-body {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  /* Keep the diff height predictable inside galleries / cards; this is a
+   * sensible cap, the inner rows can scroll within the body if longer. */
+  max-height: clamp(240px, 60vh, 560px);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+.retroma-diff-hunk-body::-webkit-scrollbar { height: 8px; width: 8px; }
+.retroma-diff-hunk-body::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--text-normal) 22%, transparent);
+  border-radius: 999px;
+}
+.retroma-diff-hunk-body::-webkit-scrollbar-track { background: transparent; }
 .retroma-diff-row {
   display: grid;
   grid-template-columns: 56px 16px minmax(0, 1fr);
   align-items: start;
   min-height: 20px;
   padding: 0;
+  /* Force the row to grow to its content width, so the body — not the row —
+   * is the thing that scrolls. */
+  width: max-content;
+  min-width: 100%;
 }
 .retroma-diff-gutter {
   padding: 2px 10px;
@@ -430,53 +475,93 @@
   font-family: var(--font-monospace);
   font-size: 11px;
   color: var(--text-faint);
-  background: oklch(from var(--background-secondary) l c h / 30%);
+  background: color-mix(in oklch, var(--background-secondary) 35%, var(--background-paper));
   user-select: none;
   border-right: 1px solid var(--outline-color);
+  /* Pin to left while the code area scrolls horizontally. */
+  position: sticky;
+  left: 0;
+  z-index: 2;
 }
 .retroma-diff-marker {
   padding: 2px 0;
   text-align: center;
   color: var(--text-faint);
   user-select: none;
+  background: var(--background-paper);
+  position: sticky;
+  left: 56px;
+  z-index: 1;
 }
 .retroma-diff-text {
   padding: 2px 12px;
   white-space: pre;
-  overflow-x: auto;
+  overflow: visible;
   font-family: var(--font-monospace);
+  /* Allow horizontal expansion — parent body handles the scroll. */
+  display: block;
 }
-.retroma-diff--wrap .retroma-diff-text { white-space: pre-wrap; }
+.retroma-diff--wrap .retroma-diff-row { width: auto; min-width: 0; }
+.retroma-diff--wrap .retroma-diff-text { white-space: pre-wrap; word-break: break-word; }
+.retroma-diff--wrap .retroma-diff-gutter,
+.retroma-diff--wrap .retroma-diff-marker { position: static; }
 
+/* Row colors — keep the sticky gutter/marker tinted so they don't punch
+ * a white hole through a green/red row. */
 .retroma-diff-row--add {
-  background: oklch(from var(--color-green, #4caf50) l c h / 10%);
+  background: color-mix(in oklch, var(--color-green, #4caf50) 10%, var(--background-paper));
+}
+.retroma-diff-row--add .retroma-diff-marker {
+  background: color-mix(in oklch, var(--color-green, #4caf50) 10%, var(--background-paper));
 }
 .retroma-diff-row--add .retroma-diff-marker,
 .retroma-diff-row--add .retroma-diff-gutter {
   color: oklch(from var(--color-green, #4caf50) 35% c h);
 }
 .retroma-diff-row--del {
-  background: oklch(from var(--color-red, #d32f2f) l c h / 10%);
+  background: color-mix(in oklch, var(--color-red, #d32f2f) 10%, var(--background-paper));
+}
+.retroma-diff-row--del .retroma-diff-marker {
+  background: color-mix(in oklch, var(--color-red, #d32f2f) 10%, var(--background-paper));
 }
 .retroma-diff-row--del .retroma-diff-marker,
 .retroma-diff-row--del .retroma-diff-gutter {
   color: oklch(from var(--color-red, #d32f2f) 40% c h);
 }
 .retroma-diff-row--empty {
-  background: oklch(from var(--background-secondary) l c h / 35%);
+  background: color-mix(in oklch, var(--background-secondary) 35%, var(--background-paper));
+}
+.retroma-diff-row--empty .retroma-diff-marker {
+  background: color-mix(in oklch, var(--background-secondary) 35%, var(--background-paper));
 }
 
+/* Split view — the per-side mini-diff also needs its own scroll. */
 .retroma-diff-hunk-body--split {
   display: grid;
   grid-auto-rows: minmax(20px, auto);
+  overflow: visible;        /* outer body handles vertical scroll only */
+  max-height: clamp(240px, 60vh, 560px);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 .retroma-diff-split-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid oklch(from var(--outline-color) l c h / 30%);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  border-bottom: 1px solid color-mix(in oklch, var(--outline-color) 30%, transparent);
 }
 .retroma-diff-split-row .retroma-diff-row--left { border-right: 1px solid var(--outline-color); }
-.retroma-diff-split-row .retroma-diff-row { grid-template-columns: 44px 14px minmax(0, 1fr); }
+.retroma-diff-split-row .retroma-diff-row {
+  grid-template-columns: 44px 14px minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.retroma-diff-split-row .retroma-diff-text {
+  white-space: pre;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.retroma-diff-split-row .retroma-diff-gutter { position: static; }
+.retroma-diff-split-row .retroma-diff-marker { position: static; left: auto; }
 
 .retroma-diff-binary {
   padding: 16px;
@@ -507,35 +592,69 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  /* Anchor for the through-line so connectors aren't fighting per-node
+   * absolute offsets. Each node draws its own segment between dots. */
+  position: relative;
 }
 .retroma-worktree-node {
   display: grid;
-  grid-template-columns: 16px 1fr;
-  gap: 8px;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 10px;
   position: relative;
-  padding: 4px 0;
+  padding: 6px 0;
 }
 .retroma-worktree-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 999px;
-  margin: 6px 0 0 3px;
+  margin: 4px 0 0 2px;
   background: var(--text-faint);
-  box-shadow: 0 0 0 2px var(--background-paper);
+  box-shadow:
+    0 0 0 2px var(--background-paper),
+    0 0 0 3px color-mix(in oklch, var(--text-faint) 35%, transparent);
   z-index: 1;
 }
-.retroma-worktree-node--base .retroma-worktree-dot { background: var(--text-faint); }
-.retroma-worktree-node--branch .retroma-worktree-dot { background: oklch(from var(--base-accent) l c h); }
-.retroma-worktree-node--head .retroma-worktree-dot { background: oklch(from var(--color-green, #4caf50) l c h); }
-.retroma-worktree-node--merged .retroma-worktree-dot { background: oklch(from var(--color-purple, #673ab7) l c h); }
+.retroma-worktree-node--base .retroma-worktree-dot {
+  background: var(--text-faint);
+  box-shadow:
+    0 0 0 2px var(--background-paper),
+    0 0 0 3px color-mix(in oklch, var(--text-faint) 30%, transparent);
+}
+.retroma-worktree-node--branch .retroma-worktree-dot {
+  background: var(--base-accent);
+  box-shadow:
+    0 0 0 2px var(--background-paper),
+    0 0 0 3px color-mix(in oklch, var(--base-accent) 35%, transparent);
+}
+.retroma-worktree-node--head .retroma-worktree-dot {
+  background: var(--color-green, #4caf50);
+  box-shadow:
+    0 0 0 2px var(--background-paper),
+    0 0 0 3px color-mix(in oklch, var(--color-green, #4caf50) 35%, transparent);
+}
+.retroma-worktree-node--merged .retroma-worktree-dot {
+  background: var(--color-purple, #673ab7);
+  box-shadow:
+    0 0 0 2px var(--background-paper),
+    0 0 0 3px color-mix(in oklch, var(--color-purple, #673ab7) 35%, transparent);
+}
+/* Connector — a 2px line behind the dot column, drawn only when the
+ * node has a successor. Centered on dot center (margin-left:2 + dot/2 = 8px). */
 .retroma-worktree-connector {
   position: absolute;
   left: 7px;
-  top: 18px;
-  bottom: -4px;
+  top: 22px;
+  bottom: -10px;
   width: 2px;
-  background: oklch(from var(--outline-color) l c h);
+  border-radius: 2px;
+  background: color-mix(in oklch, var(--outline-color) 80%, transparent);
+}
+.retroma-worktree-node--branch .retroma-worktree-connector {
+  background: color-mix(in oklch, var(--base-accent) 55%, transparent);
+}
+.retroma-worktree-node--merged .retroma-worktree-connector {
+  background: color-mix(in oklch, var(--color-purple, #673ab7) 50%, transparent);
 }
 .retroma-worktree-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .retroma-worktree-title {
@@ -545,13 +664,16 @@
   flex-wrap: wrap;
 }
 .retroma-worktree-label { font-weight: var(--font-bold); font-size: 13px; color: var(--text-normal); }
+/* Ref pill — override theme.css's global `code:not(pre code)` 1px box-shadow
+ * so it doesn't draw a doubled border around the SHA. */
 .retroma-worktree-ref {
   font-family: var(--font-monospace);
   font-size: 11px;
   color: var(--text-muted);
-  background: oklch(from var(--background-secondary) l c h / 60%);
-  padding: 1px 6px;
-  border-radius: 4px;
-  border: 1px solid var(--outline-color);
+  background: color-mix(in oklch, var(--background-secondary) 60%, var(--background-paper));
+  padding: 1px 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--outline-color) !important;
+  box-shadow: none !important;
 }
 .retroma-worktree-note { font-size: 11px; color: var(--text-muted); }

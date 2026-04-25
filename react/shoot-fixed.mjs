@@ -13,23 +13,19 @@ import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
 const EXEC = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
-const URL = process.env.GALLERY_URL ?? "http://127.0.0.1:5184/";
+const URL = process.env.GALLERY_URL ?? "http://127.0.0.1:5185/";
 const OUT = path.resolve("screenshots/components-fixed");
 await mkdir(OUT, { recursive: true });
 
 const TARGETS = [
-  "CommitGraph",      // #1
-  "Button",           // #2
-  "Thread",           // #3
-  "ModelSelector",    // #3 (was being overlapped by Thread)
-  "SearchPanel",      // #4
-  "BacklinksPanel",   // #4
-  "AppRibbon",        // #5
-  "Message family",   // #6
-  // unchanged controls — should still look fine
-  "Switch",
-  "Tabs",
-  "Sparkline",
+  "DiffViewer + WorktreeLineage",   // batch 2
+  "JsonViewer",                     // batch 2
+  "PromptInput",                    // batch 2
+  // regression check
+  "Message family",
+  "Suggestions",
+  "Thread",
+  "LogViewer",
 ];
 
 const browser = await chromium.launch({ executablePath: EXEC });
