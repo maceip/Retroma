@@ -1,0 +1,3 @@
+# Stray Vite dep cache if dev server is started from repo root.
+# (Normally Vite writes its cache under react/node_modules/.vite.)
+.vite/
